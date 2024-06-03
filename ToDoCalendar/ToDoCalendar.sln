@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoCalendar", "ToDoCalendar\ToDoCalendar.csproj", "{D81A787D-E595-4331-B626-23FC4AEC2382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoCalendarControl", "ToDoCalendarControl\ToDoCalendarControl.csproj", "{1AC98CE2-EF56-4146-AC29-2C46188D48CC}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://userware.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ToDoCalendar\\ToDoCalendar.csproj
+		SccProjectName1 = ToDoCalendar
+		SccLocalPath1 = ToDoCalendar
+		SccProjectUniqueName2 = ToDoCalendarControl\\ToDoCalendarControl.csproj
+		SccProjectName2 = ToDoCalendarControl
+		SccLocalPath2 = ToDoCalendarControl
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
+		DebugTrial|Any CPU = DebugTrial|Any CPU
+		DebugTrial|ARM = DebugTrial|ARM
+		DebugTrial|x86 = DebugTrial|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|ARM.Build.0 = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|x86.ActiveCfg = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|x86.Build.0 = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Debug|x86.Deploy.0 = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|Any CPU.ActiveCfg = DebugTrial|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|Any CPU.Build.0 = DebugTrial|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|Any CPU.Deploy.0 = DebugTrial|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|ARM.ActiveCfg = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|ARM.Build.0 = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|ARM.Deploy.0 = Debug|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|x86.ActiveCfg = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|x86.Build.0 = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.DebugTrial|x86.Deploy.0 = Debug|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|ARM.ActiveCfg = Release|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|ARM.Build.0 = Release|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|ARM.Deploy.0 = Release|ARM
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|x86.ActiveCfg = Release|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|x86.Build.0 = Release|x86
+		{D81A787D-E595-4331-B626-23FC4AEC2382}.Release|x86.Deploy.0 = Release|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|ARM.ActiveCfg = Debug|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|ARM.Build.0 = Debug|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|x86.ActiveCfg = Debug|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Debug|x86.Build.0 = Debug|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|Any CPU.ActiveCfg = DebugTrial|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|Any CPU.Build.0 = DebugTrial|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|ARM.ActiveCfg = Debug|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|ARM.Build.0 = Debug|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|x86.ActiveCfg = Debug|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.DebugTrial|x86.Build.0 = Debug|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|ARM.ActiveCfg = Release|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|ARM.Build.0 = Release|ARM
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|x86.ActiveCfg = Release|x86
+		{1AC98CE2-EF56-4146-AC29-2C46188D48CC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
