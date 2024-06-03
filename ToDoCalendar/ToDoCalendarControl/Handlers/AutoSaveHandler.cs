@@ -56,6 +56,7 @@ namespace ToDoCalendarControl
 
         void Save(object objectToSave)
         {
+#if !OPENSILVER
             if (!_isAutoSaving && !TrialHelpers.IsTrial_CachedValue)
             {
                 _isAutoSaving = true;
@@ -77,6 +78,7 @@ namespace ToDoCalendarControl
 
                 _isAutoSaving = false;
             }
+#endif
         }
     }
 }

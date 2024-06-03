@@ -9,12 +9,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+#if !OPENSILVER
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+#endif
 
 namespace ToDoCalendar
 {
-    public partial class MainPage : PhoneApplicationPage
+    public partial class MainPage : Page
     {
         // Constructor
         public MainPage()
@@ -26,9 +28,11 @@ namespace ToDoCalendar
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+#if !OPENSILVER
             SystemTray.BackgroundColor = Colors.White;
             SystemTray.ForegroundColor = Color.FromArgb(255, 50, 50, 50);
             SystemTray.Opacity = 0;
+#endif
         }
 
     }

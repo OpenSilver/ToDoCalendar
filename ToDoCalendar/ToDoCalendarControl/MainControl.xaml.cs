@@ -62,6 +62,11 @@ namespace ToDoCalendarControl
                 _autoSaveHandler.Start();
             }
 
+#if OPENSILVER
+            // Mock data for testing:
+            _controller.Model = CreateMockData();
+#endif
+
             // Render the calendar:
             RefreshAll();
 
@@ -189,6 +194,7 @@ namespace ToDoCalendarControl
 
         private void ButtonSendBackupByEmail_Click(object sender, RoutedEventArgs e)
         {
+#if !OPENSILVER
             try
             {
                 var emailSubject = string.Format("Backup of calendar ({0:0000}-{1:00}-{2:00})", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
@@ -204,6 +210,9 @@ namespace ToDoCalendarControl
             {
                 MessageBox.Show(ex.ToString());
             }
+#else
+            MessageBox.Show("This feature is currently unavailable");
+#endif
         }
 
         private void ButtonImportFromBackup_Click(object sender, RoutedEventArgs e)
@@ -220,6 +229,7 @@ namespace ToDoCalendarControl
 
         private void ButtonStartImportingFromBackup_Click(object sender, RoutedEventArgs e)
         {
+#if !OPENSILVER
             try
             {
                 // Attempt to load the model from the backup:
@@ -239,6 +249,9 @@ namespace ToDoCalendarControl
             {
                 MessageBox.Show(ex.ToString());
             }
+#else
+            MessageBox.Show("This feature is currently unavailable.");
+#endif
         }
 
         private void CheckBoxForDisablingAutoScreenOff_Click(object sender, RoutedEventArgs e)
@@ -246,7 +259,9 @@ namespace ToDoCalendarControl
             bool isScreenAutoOffDisabled = CheckBoxForDisablingAutoScreenOff.IsChecked.HasValue ? CheckBoxForDisablingAutoScreenOff.IsChecked.Value : false;
 
             ScreenAutoOffHelpers.SaveScreenAutoOffSetting(isScreenAutoOffDisabled);
+#if !OPENSILVER
             ScreenAutoOffHelpers.ApplyScreenAutoOffSetting();
+#endif
         }
 
         void Controller_QuitEditingModeRequested(object sender, EventArgs e)
@@ -300,6 +315,7 @@ namespace ToDoCalendarControl
             _isMainScrollViewerLocked = false;
         }
 
+#if !OPENSILVER
         private void MainContainer_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
         {
             // This lets us temporary lock the ScrollViewer without affecting the current HorizontalOffset and VertialOffset.
@@ -313,5 +329,51 @@ namespace ToDoCalendarControl
                 e.Complete();
             }
         }
+#endif
+
+#if OPENSILVER
+        private static Model CreateMockData()
+        {
+            // Initialize the Model
+            var model = new Model();
+
+            // Create some dates for the events
+            DateTime[] dates = new DateTime[]
+            {
+                new DateTime(2024, 6, 1),
+                new DateTime(2024, 6, 2),
+                new DateTime(2024, 6, 3),
+                new DateTime(2024, 6, 4),
+                new DateTime(2024, 6, 5),
+                new DateTime(2024, 6, 6),
+                new DateTime(2024, 6, 7),
+                new DateTime(2024, 6, 8),
+                new DateTime(2024, 6, 9),
+                new DateTime(2024, 6, 10)
+            };
+
+            // Create some mock events
+            for (int i = 0; i < 10; i++)
+            {
+                var eventModel = new EventModel
+                {
+                    Title = $"Event {i + 1}",
+                    IsMarkedAsDone = (i % 2 == 0), // Mark every second event as done
+                    EventType = (EventType)(i % 4) // Cycle through EventType enum values
+                };
+
+                var day = dates[i];
+
+                if (!model.Days.ContainsKey(day))
+                {
+                    model.Days[day] = new DayModel();
+                }
+
+                model.Days[day].Events.Add(eventModel);
+            }
+
+            return model;
+        }
+#endif
     }
 }

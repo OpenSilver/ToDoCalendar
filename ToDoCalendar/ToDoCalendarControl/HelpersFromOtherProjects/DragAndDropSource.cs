@@ -86,13 +86,18 @@ namespace MetroStyleApps
             {
                 _layoutRoot.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown), true);
                 _layoutRoot.AddHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp), true);
+#if !OPENSILVER
                 _layoutRoot.AddHandler(UIElement.HoldEvent, new EventHandler<GestureEventArgs>(LayoutRoot_Hold), true);
+#endif
                 _layoutRoot.MouseMove += LayoutRoot_MouseMove;
+#if !OPENSILVER
                 _layoutRoot.Hold += LayoutRoot_Hold;
-                
+#endif
+
             }
         }
 
+#if !OPENSILVER
         void LayoutRoot_Hold(object sender, GestureEventArgs e)
         {
             if (HoldToStartDrag)
@@ -106,6 +111,7 @@ namespace MetroStyleApps
                 e.Handled = true;
             }
         }
+#endif
 
         void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -261,5 +267,5 @@ namespace MetroStyleApps
         }
 
 #endif
-    }
-}
+            }
+        }

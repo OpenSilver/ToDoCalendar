@@ -1,4 +1,6 @@
-﻿using Microsoft.Phone.Shell;
+﻿#if !OPENSILVER
+using Microsoft.Phone.Shell;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
@@ -25,10 +27,12 @@ namespace ToDoCalendarControl
             return isScreenAutoOffDisabled;
         }
 
+#if !OPENSILVER
         public static void ApplyScreenAutoOffSetting()
         {
             var isScreenAutoOffDisabled = GetScreenAutoOffSetting();
             PhoneApplicationService.Current.UserIdleDetectionMode = (isScreenAutoOffDisabled ? IdleDetectionMode.Disabled : IdleDetectionMode.Enabled);
         }
+#endif
     }
 }

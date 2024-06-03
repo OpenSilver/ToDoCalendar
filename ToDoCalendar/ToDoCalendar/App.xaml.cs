@@ -11,14 +11,27 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+#if !OPENSILVER
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+#endif
 using ToDoCalendarControl;
 
 namespace ToDoCalendar
 {
     public partial class App : Application
     {
+    
+        public App()
+        {
+            this.InitializeComponent();
+
+            // Enter construction logic here...
+            var mainPage = new MainPage();
+            Window.Current.Content = mainPage;
+        }
+    
+    /*
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -144,5 +157,6 @@ namespace ToDoCalendar
         }
 
         #endregion
+        */
     }
 }

@@ -12,6 +12,7 @@ namespace ToDoCalendarControl
 
         public static bool TryLoadModelFromFileSystem(out Model model)
         {
+#if !OPENSILVER
             // Load the AutoSave from the disk:
             var serializedModel = FileSystemHelpers.ReadTextFromFile(AutoSaveHandler.FileNameForAutoSave);
 
@@ -26,12 +27,17 @@ namespace ToDoCalendarControl
                 model = null;
                 return false;
             }
+#else
+            model = null;
+            return false;
+#endif
         }
 
+#if !OPENSILVER
         public static Model LoadModelFromTextAndRaiseExceptionIfError(string serializedText)
         {
             return SerializationHelpers.Deserialize<Model>(serializedText);
         }
-
+#endif
     }
 }
