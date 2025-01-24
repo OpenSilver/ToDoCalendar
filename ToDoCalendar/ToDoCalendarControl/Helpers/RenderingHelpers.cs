@@ -310,14 +310,12 @@ namespace ToDoCalendarControl
                     return (eventModel.EventType == EventType.Info ? (DatesHelpers.GetDateWithoutTime(day) <= DatesHelpers.GetTodayDateWithoutTime() ? EventTextColorWhenInfoBeforeCurrentDate : EventTextColorWhenInfoAfterCurrentDate) : EventTextColor);
                 };
 
-#if !OPENSILVER
             var dragAndDropSource = new DragAndDropSource()
             {
                 HoldToStartDrag = true,
                 EnlargeSourceDuringDrag = true,
                 DataContext = new InformationAboutEventBeingDragged(eventModel, dayModel, day)
             };
-#endif
 
             var mainBorder = new Border()
             {
@@ -346,6 +344,8 @@ namespace ToDoCalendarControl
                 Foreground = functionToDetermineEventForeground(),
 #if !OPENSILVER
                 InputScope = new InputScope() { Names = { new InputScopeName() { NameValue = InputScopeNameValue.Text } } }, // This will enable spell check and word auto-completion.
+#else
+                IsSpellCheckEnabled = true,
 #endif
                 BorderThickness = new Thickness(0),
                 Margin = EventTextBoxMargin,
@@ -408,7 +408,6 @@ namespace ToDoCalendarControl
                         controller.QuitEditingMode();
                 };
 
-#if !OPENSILVER
             dragAndDropSource.DragAndDropStarted += (object sender, EventArgs e) =>
                 {
                     controller.QuitEditingMode();
@@ -419,7 +418,6 @@ namespace ToDoCalendarControl
             {
                 controller.UnlockMainScrollViewer();
             };
-#endif
 
             //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
             //Action<EditEventRequestedEventArgs> actionToEditEvent = (e) =>
@@ -451,13 +449,9 @@ namespace ToDoCalendarControl
             mainContainer.Children.Add(lineToStrikethrough);
             mainContainer.Children.Add(borderToStartEditingOnMouseUpRatherThanMouseDown);
             mainBorder.Child = mainContainer;
-#if !OPENSILVER
             dragAndDropSource.Content = mainBorder;
 
             return dragAndDropSource;
-#else
-            return mainBorder;
-#endif
         }
 
         public static FrameworkElement RenderMonthHeader(DateTime firstDayOfMonth)

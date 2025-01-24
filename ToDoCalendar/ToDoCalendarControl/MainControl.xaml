@@ -44,8 +44,8 @@
                     </Grid>
                 </ScrollViewer>
                 <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,1">
-                    <Image Visibility="Collapsed" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="223" Height="165" Margin="0,0,0,-1"/>
-                    <ScrollViewer Visibility="Collapsed" x:Name="ScrollViewerToPreventMainScrollViewerFromScrolling" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                    <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="223" Height="165" Margin="0,0,0,-1"/>
+                    <ScrollViewer Visibility="Visible" x:Name="ScrollViewerToPreventMainScrollViewerFromScrolling" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
                         <metrostyleapps:DragAndDropSource Background="Yellow" x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" Margin="0,28,0,10" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" DragAndDropStarted="DragAndDropSource_DragAndDropStarted" DragAndDropStopped="DragAndDropSource_DragAndDropStopped">
                             <Grid Width="80" Height="80">
                                 <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>

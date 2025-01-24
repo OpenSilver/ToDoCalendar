@@ -42,8 +42,10 @@ namespace ToDoCalendarControl
             _controller.EditingModeStarted += Controller_EditingModeStarted;
             _controller.EditingModeStopped += Controller_EditingModeStopped;
             _controller.QuitEditingModeRequested += Controller_QuitEditingModeRequested;
+#if !OPENSILVER
             _controller.LockMainScrollViewerRequested += Controller_LockMainScrollViewerRequested;
             _controller.UnlockMainScrollViewerRequested += Controller_UnlockMainScrollViewerRequested;
+#endif
 
             // If we are not at Design Time:
             bool isInDesignMode = System.ComponentModel.DesignerProperties.IsInDesignTool;
@@ -278,16 +280,20 @@ namespace ToDoCalendarControl
 
         void DragAndDropSource_DragAndDropStarted(object sender, EventArgs e)
         {
+#if !OPENSILVER
             // Bug fix to keep the display refreshing while the user is dragging the button to add an event:
             var storyboard = (Storyboard)this.Resources["BugFixToKeepDisplayRefreshingWhileDragging"];
             storyboard.Begin();
+#endif
         }
 
         void DragAndDropSource_DragAndDropStopped(object sender, EventArgs e)
         {
+#if !OPENSILVER
             // Bug fix to keep the display refreshing while the user is dragging the button to add an event:
             var storyboard = (Storyboard)this.Resources["BugFixToKeepDisplayRefreshingWhileDragging"];
             storyboard.Stop();
+#endif
         }
 
         void ExplanationOverlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -305,6 +311,7 @@ namespace ToDoCalendarControl
             TrialHelpers.BuyFullVersion();
         }
 
+#if !OPENSILVER
         void Controller_LockMainScrollViewerRequested(object sender, EventArgs e)
         {
             _isMainScrollViewerLocked = true;
@@ -315,7 +322,6 @@ namespace ToDoCalendarControl
             _isMainScrollViewerLocked = false;
         }
 
-#if !OPENSILVER
         private void MainContainer_ManipulationDelta(object sender, ManipulationDeltaEventArgs e)
         {
             // This lets us temporary lock the ScrollViewer without affecting the current HorizontalOffset and VertialOffset.

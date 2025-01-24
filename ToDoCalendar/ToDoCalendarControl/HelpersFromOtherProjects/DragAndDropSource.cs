@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Threading;
 #elif WINRT
 using System;
 using Windows.Foundation;
@@ -48,6 +49,12 @@ namespace MetroStyleApps
         public event EventHandler DragAndDropStarted;
         public event EventHandler DragAndDropStopped;
 
+#if OPENSILVER
+        private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+        private object _mouseLeftButtonDownSender;
+        private MouseEventArgs _mouseLeftButtonDownEventArgs;
+#endif
+
         public DragAndDropSource()
         {
             this.Template = (ControlTemplate)XamlReader.Load(@"
@@ -55,7 +62,7 @@ namespace MetroStyleApps
                     xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
                     xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
                         <Border x:Name=""PART_LayoutRoot"" Background=""Transparent"">
-                            <ContentPresenter/>
+                            <ContentPresenter Content=""{TemplateBinding Content}""/>
                         </Border>
                 </ControlTemplate>");
 
@@ -126,7 +133,37 @@ namespace MetroStyleApps
                         e.GetPosition((FrameworkElement)sender));
                 }
             }
+#if OPENSILVER
+            else
+            {
+                _mouseLeftButtonDownSender = sender;
+                _mouseLeftButtonDownEventArgs = e;
+                _holdTimer.Tick += OnHoldTimerTick;
+                _holdTimer.Start();
+            }
+#endif
         }
+
+#if OPENSILVER
+        private void OnHoldTimerTick(object sender, EventArgs e)
+        {
+            ResetHoldTimer();
+
+            StartDragOperation(_mouseLeftButtonDownSender,
+                    _mouseLeftButtonDownEventArgs.GetPosition(MetroHelpers.GetRootVisual()),
+                    _mouseLeftButtonDownEventArgs.GetPosition((FrameworkElement)_mouseLeftButtonDownSender));
+            OnMouseMove(new Point(_dragDeltaOrigin.X, _dragDeltaOrigin.Y), distanceForDragOperationToBeConsideredIntentional: 0);
+
+            _mouseLeftButtonDownSender = null;
+            _mouseLeftButtonDownEventArgs = null;
+        }
+
+        private void ResetHoldTimer()
+        {
+            _holdTimer.Tick -= OnHoldTimerTick;
+            _holdTimer.Stop();
+        }
+#endif
 
         void StartDragOperation(object sender, Point dragDeltaOrigin, Point cursorPositionRelativeToSource)
         {
@@ -155,6 +192,13 @@ namespace MetroStyleApps
                 if (DragAndDropStopped != null)
                     DragAndDropStopped(this, new EventArgs());
             }
+
+#if OPENSILVER
+            if (_holdTimer.IsEnabled)
+            {
+                ResetHoldTimer();
+            }
+#endif
         }
 
         void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
