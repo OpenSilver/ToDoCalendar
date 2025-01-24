@@ -340,16 +340,16 @@ namespace ToDoCalendarControl
             // Create some dates for the events
             DateTime[] dates = new DateTime[]
             {
-                new DateTime(2024, 6, 1),
-                new DateTime(2024, 6, 2),
-                new DateTime(2024, 6, 3),
-                new DateTime(2024, 6, 4),
-                new DateTime(2024, 6, 5),
-                new DateTime(2024, 6, 6),
-                new DateTime(2024, 6, 7),
-                new DateTime(2024, 6, 8),
-                new DateTime(2024, 6, 9),
-                new DateTime(2024, 6, 10)
+                new DateTime(2025, 2, 1),
+                new DateTime(2025, 2, 2),
+                new DateTime(2025, 2, 3),
+                new DateTime(2025, 2, 4),
+                new DateTime(2025, 2, 5),
+                new DateTime(2025, 2, 6),
+                new DateTime(2025, 2, 7),
+                new DateTime(2025, 2, 8),
+                new DateTime(2025, 2, 9),
+                new DateTime(2025, 2, 10)
             };
 
             // Create some mock events
