@@ -96,53 +96,56 @@ namespace ToDoCalendarControl
         // note: state pulled from http://en.wikipedia.org/wiki/Workweek_and_weekend
         public static WeekdayState GetWeekdayState(CultureInfo ci, DayOfWeek day)
         {
-            string[] items = ci.Name.Split(new[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
-            switch (items[items.Length - 1])
+            if (ci.Name != string.Empty)
             {
-                case "DZ": // Algeria
-                case "BH": // Bahrain
-                case "BD": // Bangladesh
-                case "EG": // Egypt
-                case "IQ": // Iraq
-                case "IL": // Israel
-                case "JO": // Jordan
-                case "KW": // Kuwait
-                case "LY": // Libya
-                // Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
-                case "MV": // Maldives
-                case "MR": // Mauritania
-                case "NP": // Nepal
-                case "OM": // Oman
-                case "QA": // Qatar
-                case "SA": // Saudi Arabia
-                case "SD": // Sudan
-                case "SY": // Syria
-                case "AE": // U.A.E.
-                case "YE": // Yemen
-                    return day == DayOfWeek.Thursday || day == DayOfWeek.Friday
-                        ? WeekdayState.Weekend
-                        : WeekdayState.Workday;
+                string[] items = ci.Name.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                switch (items[items.Length - 1])
+                {
+                    case "DZ": // Algeria
+                    case "BH": // Bahrain
+                    case "BD": // Bangladesh
+                    case "EG": // Egypt
+                    case "IQ": // Iraq
+                    case "IL": // Israel
+                    case "JO": // Jordan
+                    case "KW": // Kuwait
+                    case "LY": // Libya
+                               // Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
+                    case "MV": // Maldives
+                    case "MR": // Mauritania
+                    case "NP": // Nepal
+                    case "OM": // Oman
+                    case "QA": // Qatar
+                    case "SA": // Saudi Arabia
+                    case "SD": // Sudan
+                    case "SY": // Syria
+                    case "AE": // U.A.E.
+                    case "YE": // Yemen
+                        return day == DayOfWeek.Thursday || day == DayOfWeek.Friday
+                            ? WeekdayState.Weekend
+                            : WeekdayState.Workday;
 
-                case "AF": // Afghanistan
-                case "IR": // Iran
-                    if (day == DayOfWeek.Thursday)
-                        return WeekdayState.WorkdayMorning;
-                    return day == DayOfWeek.Friday ? WeekdayState.Weekend : WeekdayState.Workday;
+                    case "AF": // Afghanistan
+                    case "IR": // Iran
+                        if (day == DayOfWeek.Thursday)
+                            return WeekdayState.WorkdayMorning;
+                        return day == DayOfWeek.Friday ? WeekdayState.Weekend : WeekdayState.Workday;
 
-                case "BN": // Brunei Darussalam
-                    return day == DayOfWeek.Friday || day == DayOfWeek.Sunday
-                        ? WeekdayState.Weekend
-                        : WeekdayState.Workday;
+                    case "BN": // Brunei Darussalam
+                        return day == DayOfWeek.Friday || day == DayOfWeek.Sunday
+                            ? WeekdayState.Weekend
+                            : WeekdayState.Workday;
 
-                case "MX": // Mexico
-                case "TH": // Thailand
-                    if (day == DayOfWeek.Saturday)
-                        return WeekdayState.WorkdayMorning;
-                    return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday
-                        ? WeekdayState.Weekend
-                        : WeekdayState.Workday;
+                    case "MX": // Mexico
+                    case "TH": // Thailand
+                        if (day == DayOfWeek.Saturday)
+                            return WeekdayState.WorkdayMorning;
+                        return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday
+                            ? WeekdayState.Weekend
+                            : WeekdayState.Workday;
 
-            }
+                }
+            }            
 
             // most common Saturday/Sunday
             return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday ? WeekdayState.Weekend : WeekdayState.Workday;
