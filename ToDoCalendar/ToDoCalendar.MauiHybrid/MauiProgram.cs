@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.Logging;
 using OpenSilver.MauiHybrid.Runner;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.MauiHybrid;
 
@@ -27,6 +28,15 @@ public static class MauiProgram
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
+#endif
+
+        // Register platform-specific services
+#if ANDROID
+        builder.Services.AddSingleton<ICalendarService, Platforms.Android.CalendarService>();
+#elif IOS
+    builder.Services.AddSingleton<ICalendarService, Platforms.iOS.CalendarService>();
+#elif WINDOWS
+    builder.Services.AddSingleton<ICalendarService, Platforms.Windows.CalendarService>();
 #endif
 
         return builder.Build();

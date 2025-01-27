@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
     <DefineSilverlight>true</DefineSilverlight>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +39,8 @@
     <Compile Include="Model\DayModel.cs" />
     <Compile Include="Model\EventModel.cs" />
     <Compile Include="Model\EventType.cs" />
+    <Compile Include="Services\DeviceEvent.cs" />
+    <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="Other\HashSet.cs" />
     <Compile Include="Other\Tuple.cs" />

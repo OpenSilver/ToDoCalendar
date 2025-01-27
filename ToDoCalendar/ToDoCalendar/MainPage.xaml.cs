@@ -1,29 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using ToDoCalendarControl.Services;
 #if !OPENSILVER
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using System.Windows.Media;
 #endif
 
 namespace ToDoCalendar
 {
     public partial class MainPage : Page
     {
-        // Constructor
-        public MainPage()
+        public MainPage(ICalendarService calendarService)
         {
             InitializeComponent();
 
-            this.Loaded += MainPage_Loaded;
+            mainControl.CalendarService = calendarService;
+            Loaded += MainPage_Loaded;
         }
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -34,6 +27,5 @@ namespace ToDoCalendar
             SystemTray.Opacity = 0;
 #endif
         }
-
     }
 }

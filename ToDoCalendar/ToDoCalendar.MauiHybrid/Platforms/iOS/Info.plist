@@ -28,5 +28,7 @@
     </array>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/appicon.appiconset</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>We need access to your calendar to fetch events.</string>
 </dict>
 </plist>

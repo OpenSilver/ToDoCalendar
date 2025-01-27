@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using MetroStyleApps;
+using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using System.Windows.Media;
-using MetroStyleApps;
-using System.Windows.Media.Animation;
 using System.Windows.Input;
+using System.Windows.Media;
 using ToDoCalendarControl.Resources;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
 {
@@ -28,6 +25,8 @@ namespace ToDoCalendarControl
         DateTime _firstDayOfCalendar;
         DateTime _lastDayOfCalendar;
         bool _isMainScrollViewerLocked;
+
+        public ICalendarService CalendarService { get; set; }
 
         public MainControl()
         {
@@ -64,7 +63,7 @@ namespace ToDoCalendarControl
                 _autoSaveHandler.Start();
             }
 
-#if OPENSILVER
+#if OPENSILVER && DEBUG
             // Mock data for testing:
             _controller.Model = CreateMockData();
 #endif
@@ -73,19 +72,49 @@ namespace ToDoCalendarControl
             RefreshAll();
 
             // Register the "Loaded" event, which occurs after the controls have been added to the Visual Tree:
-            this.Loaded += MainControl_Loaded;
+            Loaded += MainControl_Loaded;
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(Button.MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
         }
 
-        void MainControl_Loaded(object sender, RoutedEventArgs e)
+        async void MainControl_Loaded(object sender, RoutedEventArgs e)
         {
+            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+
             // Set initial scroll offset:
             Dispatcher.BeginInvoke(() =>
             {
                 MainScrollViewer.ScrollToVerticalOffset(InitialVerticalScrollOffset);
             });
+        }
+
+        private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
+        {
+            if (CalendarService == null)
+                return;
+
+            var model = _controller.Model;
+
+            try
+            {
+                await foreach (var item in CalendarService.GetCalendarEvents(startDate, endDate))
+                {
+                    var date = item.DateTime.Date;
+                    if (!model.Days.ContainsKey(date))
+                    {
+                        model.Days[date] = new DayModel();
+                    }
+
+                    model.Days[date].Events.Add(new EventModel { Title = item.Title });
+                    _controller.RequestRefreshOfDay(date);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                MessageBox.Show(ex.ToString(), "Cannot read calendar events");
+            }
         }
 
         void RefreshAll()
@@ -99,7 +128,7 @@ namespace ToDoCalendarControl
             RenderingHelpers.AddDaysToContainer(DaysContainer, _firstDayOfCalendar, _lastDayOfCalendar, _controller);
         }
 
-        private void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
         {
             var firstDayToAdd = _firstDayOfCalendar.AddDays(-NumberOfAdditionalDaysToLoadBefore);
             var lastDayToAdd = _firstDayOfCalendar.AddDays(-1);
@@ -107,9 +136,11 @@ namespace ToDoCalendarControl
             RenderingHelpers.AddDaysToContainer(DaysContainer, firstDayToAdd, lastDayToAdd, _controller, insertAtBeginningRatherThanAddToEnd: true);
 
             _firstDayOfCalendar = firstDayToAdd;
+
+            await LoadCalendarEvents(_firstDayOfCalendar, lastDayToAdd);
         }
 
-        private void ButtonLoadMoreDaysAfter_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLoadMoreDaysAfter_Click(object sender, RoutedEventArgs e)
         {
             var firstDayToAdd = _lastDayOfCalendar.AddDays(1);
             var lastDayToAdd = _lastDayOfCalendar.AddDays(NumberOfAdditionalDaysToLoadAfter);
@@ -117,6 +148,8 @@ namespace ToDoCalendarControl
             RenderingHelpers.AddDaysToContainer(DaysContainer, firstDayToAdd, lastDayToAdd, _controller);
 
             _lastDayOfCalendar = lastDayToAdd;
+
+            await LoadCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
         }
 
         void Controller_EditingModeStopped(object sender, EventArgs e)
