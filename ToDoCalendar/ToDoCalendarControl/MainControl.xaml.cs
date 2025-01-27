@@ -17,8 +17,7 @@ namespace ToDoCalendarControl
         const int InitialDayCountAfterCurrentDate = 140;
         const int NumberOfAdditionalDaysToLoadBefore = 60;
         const int NumberOfAdditionalDaysToLoadAfter = 200;
-
-        const double InitialVerticalScrollOffset = 800;
+        const int ItemHeight = 16;
 
         Controller _controller;
         AutoSaveHandler _autoSaveHandler;
@@ -85,7 +84,7 @@ namespace ToDoCalendarControl
             // Set initial scroll offset:
             Dispatcher.BeginInvoke(() =>
             {
-                MainScrollViewer.ScrollToVerticalOffset(InitialVerticalScrollOffset);
+                MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
             });
         }
 
