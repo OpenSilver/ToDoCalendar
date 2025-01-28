@@ -34,9 +34,11 @@ public static class MauiProgram
 #if ANDROID
         builder.Services.AddSingleton<ICalendarService, Platforms.Android.CalendarService>();
 #elif IOS
-    builder.Services.AddSingleton<ICalendarService, Platforms.iOS.CalendarService>();
+        builder.Services.AddSingleton<ICalendarService, Platforms.iOS.CalendarService>();
+#elif MACCATALYST
+        builder.Services.AddSingleton<ICalendarService, Platforms.MacCatalyst.CalendarService>();
 #elif WINDOWS
-    builder.Services.AddSingleton<ICalendarService, Platforms.Windows.CalendarService>();
+        builder.Services.AddSingleton<ICalendarService, Platforms.Windows.CalendarService>();
 #endif
 
         return builder.Build();
