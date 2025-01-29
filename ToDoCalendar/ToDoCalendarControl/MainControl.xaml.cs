@@ -1,4 +1,5 @@
 ﻿using MetroStyleApps;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,7 +26,7 @@ namespace ToDoCalendarControl
         DateTime _lastDayOfCalendar;
         bool _isMainScrollViewerLocked;
 
-        public ICalendarService CalendarService { get; set; }
+        private readonly ICalendarService _calendarService = ServiceLocator.Provider?.GetRequiredService<ICalendarService>();
 
         public MainControl()
         {
@@ -90,14 +91,14 @@ namespace ToDoCalendarControl
 
         private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
         {
-            if (CalendarService == null)
+            if (_calendarService == null)
                 return;
 
             var model = _controller.Model;
 
             try
             {
-                await foreach (var item in CalendarService.GetCalendarEvents(startDate, endDate))
+                await foreach (var item in _calendarService.GetCalendarEvents(startDate, endDate))
                 {
                     var date = item.DateTime.Date;
                     if (!model.Days.ContainsKey(date))

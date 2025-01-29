@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using OpenSilver.MauiHybrid.Runner;
-using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.MauiHybrid.Components
 {
@@ -10,15 +9,12 @@ namespace ToDoCalendar.MauiHybrid.Components
         [Inject]
         private IMauiHybridRunner? Runner { get; set; }
 
-        [Inject]
-        private ICalendarService? CalendarService { get; set; }
-
         protected async override Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
             ArgumentNullException.ThrowIfNull(Runner);
-            await Runner.RunApplicationAsync(() => new ToDoCalendar.App(CalendarService));
+            await Runner.RunApplicationAsync<ToDoCalendar.App>();
         }
     }
 }

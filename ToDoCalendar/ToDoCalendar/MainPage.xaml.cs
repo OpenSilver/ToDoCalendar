@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using ToDoCalendarControl.Services;
 #if !OPENSILVER
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -11,11 +10,10 @@ namespace ToDoCalendar
 {
     public partial class MainPage : Page
     {
-        public MainPage(ICalendarService calendarService)
+        public MainPage()
         {
             InitializeComponent();
 
-            mainControl.CalendarService = calendarService;
             Loaded += MainPage_Loaded;
         }
 

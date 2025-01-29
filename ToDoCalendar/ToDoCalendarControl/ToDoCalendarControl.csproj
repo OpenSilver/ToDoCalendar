@@ -45,6 +45,7 @@
     <Compile Include="Other\HashSet.cs" />
     <Compile Include="Other\Tuple.cs" />
     <Compile Include="Resources\AppResources1.Designer.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -67,7 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenSilver" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

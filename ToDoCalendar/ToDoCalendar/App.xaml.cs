@@ -3,19 +3,16 @@
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 #endif
-using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar
 {
     public partial class App : Application
     {
-        public App() : this((ICalendarService)null) { }
-
-        public App(ICalendarService calendarService)
+        public App()
         {
             InitializeComponent();
 
-            var mainPage = new MainPage(calendarService);
+            var mainPage = new MainPage();
             Window.Current.Content = mainPage;
         }
 
