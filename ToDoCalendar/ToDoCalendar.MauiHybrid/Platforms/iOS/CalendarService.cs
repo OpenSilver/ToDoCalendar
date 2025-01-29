@@ -1,5 +1,5 @@
 ﻿using EventKit;
-using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
+using Microsoft.Maui.Platform;
 using ToDoCalendarControl.Services;
 using UIKit;
 
