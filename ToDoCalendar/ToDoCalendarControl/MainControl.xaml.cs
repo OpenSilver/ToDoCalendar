@@ -14,10 +14,10 @@ namespace ToDoCalendarControl
     public partial class MainControl : UserControl
     {
         const int AutoSaveIntervalInSeconds = 2;
-        const int InitialDayCountBeforeCurrentDate = 40;
-        const int InitialDayCountAfterCurrentDate = 140;
-        const int NumberOfAdditionalDaysToLoadBefore = 60;
-        const int NumberOfAdditionalDaysToLoadAfter = 200;
+        const int InitialDayCountBeforeCurrentDate = 10;
+        const int InitialDayCountAfterCurrentDate = 80;
+        const int NumberOfAdditionalDaysToLoadBefore = 30;
+        const int NumberOfAdditionalDaysToLoadAfter = 120;
         const int ItemHeight = 16;
 
         Controller _controller;
@@ -31,9 +31,6 @@ namespace ToDoCalendarControl
         public MainControl()
         {
             InitializeComponent();
-
-            // If we are in Trial mode, show the alert:
-            TrialAlert.Visibility = (TrialHelpers.IsTrial() ? Visibility.Visible : Visibility.Collapsed);
 
             // Prepare the controller:
             _controller = new Controller();
@@ -59,8 +56,10 @@ namespace ToDoCalendarControl
 
                 // Initialize the Auto-Save handler:
                 _autoSaveHandler = new AutoSaveHandler(AutoSaveIntervalInSeconds, () => _controller.Model, () => _controller.ContainsUnsavedChanges);
+#if !OPENSILVER
                 _autoSaveHandler.AutoSaveTookPlace += AutoSaveHandler_AutoSaveTookPlace;
                 _autoSaveHandler.Start();
+#endif
             }
 
 #if OPENSILVER && DEBUG
@@ -80,13 +79,10 @@ namespace ToDoCalendarControl
 
         async void MainControl_Loaded(object sender, RoutedEventArgs e)
         {
-            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
-
             // Set initial scroll offset:
-            Dispatcher.BeginInvoke(() =>
-            {
-                MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
-            });
+            MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
+
+            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
         }
 
         private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
@@ -108,6 +104,7 @@ namespace ToDoCalendarControl
 
                     model.Days[date].Events.Add(new EventModel { Title = item.Title });
                     _controller.RequestRefreshOfDay(date);
+                    await Task.Delay(1);
                 }
             }
             catch (Exception ex)
@@ -211,6 +208,7 @@ namespace ToDoCalendarControl
             NotificationControl.Visibility = System.Windows.Visibility.Collapsed;
         }
 
+        #if !OPENSILVER
         private void ButtonForOptions_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             PopupForOptions.IsOpen = !PopupForOptions.IsOpen;
@@ -226,6 +224,7 @@ namespace ToDoCalendarControl
         {
             PopupForOptions.IsOpen = false;
         }
+#endif
 
         private void ButtonSendBackupByEmail_Click(object sender, RoutedEventArgs e)
         {
@@ -250,6 +249,7 @@ namespace ToDoCalendarControl
 #endif
         }
 
+        #if !OPENSILVER
         private void ButtonImportFromBackup_Click(object sender, RoutedEventArgs e)
         {
             TextBoxForImportingFromBackup.Text = string.Empty;
@@ -261,6 +261,7 @@ namespace ToDoCalendarControl
         {
             PopupForImportingFromBackup.IsOpen = false;
         }
+#endif
 
         private void ButtonStartImportingFromBackup_Click(object sender, RoutedEventArgs e)
         {
@@ -291,10 +292,10 @@ namespace ToDoCalendarControl
 
         private void CheckBoxForDisablingAutoScreenOff_Click(object sender, RoutedEventArgs e)
         {
+#if !OPENSILVER
             bool isScreenAutoOffDisabled = CheckBoxForDisablingAutoScreenOff.IsChecked.HasValue ? CheckBoxForDisablingAutoScreenOff.IsChecked.Value : false;
 
             ScreenAutoOffHelpers.SaveScreenAutoOffSetting(isScreenAutoOffDisabled);
-#if !OPENSILVER
             ScreenAutoOffHelpers.ApplyScreenAutoOffSetting();
 #endif
         }

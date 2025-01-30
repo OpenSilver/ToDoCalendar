@@ -12,9 +12,5 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     uwp:SupportedOrientations="Portrait" uwp:Orientation="Portrait">
 
-    <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <todocalendarcontrol:MainControl Name="mainControl" Grid.ColumnSpan="2"/>
-    </Grid>
-
+    <todocalendarcontrol:MainControl Name="mainControl" Grid.ColumnSpan="2"/>
 </Page>
