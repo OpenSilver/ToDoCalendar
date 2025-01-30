@@ -4,10 +4,14 @@
              xmlns:local="clr-namespace:ToDoCalendar.MauiHybrid"
              x:Class="ToDoCalendar.MauiHybrid.MainPage">
 
-    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
-
+    <Grid x:Name="RootGrid">
+        <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+            <BlazorWebView.RootComponents>
+                <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
+            </BlazorWebView.RootComponents>
+        </BlazorWebView>
+        <Grid x:Name="Loader" Background="#512BD4">
+            <ActivityIndicator IsRunning="True" VerticalOptions="Center" HorizontalOptions="Center"/>
+        </Grid>
+    </Grid>
 </ContentPage>

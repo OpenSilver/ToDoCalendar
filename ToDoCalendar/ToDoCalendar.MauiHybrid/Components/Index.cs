@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using OpenSilver.MauiHybrid.Runner;
+using System.Windows.Controls.Primitives;
 
 namespace ToDoCalendar.MauiHybrid.Components
 {
@@ -14,7 +15,13 @@ namespace ToDoCalendar.MauiHybrid.Components
             await base.OnInitializedAsync();
 
             ArgumentNullException.ThrowIfNull(Runner);
-            await Runner.RunApplicationAsync<ToDoCalendar.App>();
+
+            var app = await Runner.RunApplicationAsync<ToDoCalendar.App>();
+
+            if (Application.Current?.MainPage is MainPage mainPage)
+            {
+                app.MainWindow?.InvokeOnLayoutUpdated(mainPage.HideLoader);
+            }
         }
     }
 }
