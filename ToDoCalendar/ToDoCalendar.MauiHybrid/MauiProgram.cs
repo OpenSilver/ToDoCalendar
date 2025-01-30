@@ -41,8 +41,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICalendarService, Platforms.Windows.CalendarService>();
 #endif
 
-        ServiceLocator.Initialize(builder.Services.BuildServiceProvider());
+        var app = builder.Build();
 
-        return builder.Build();
+        ServiceLocator.Initialize(app.Services);
+
+        return app;
     }
 }
