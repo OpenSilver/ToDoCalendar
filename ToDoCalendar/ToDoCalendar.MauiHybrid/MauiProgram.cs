@@ -41,6 +41,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICalendarService, Platforms.Windows.CalendarService>();
 #endif
 
+        builder.Services.AddSingleton<IDispatcher>(provider =>
+        {
+            var dispatcher = Application.Current?.Dispatcher;
+            return dispatcher ?? throw new InvalidOperationException("Dispatcher is not available.");
+        });
+
         var app = builder.Build();
 
         ServiceLocator.Initialize(app.Services);

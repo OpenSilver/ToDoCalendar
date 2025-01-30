@@ -14,13 +14,13 @@ public class CalendarService : ICalendarService
 
         if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
         {
-            // Use the new methods for iOS 17+
+            // Use the new methods for MacCatalyst 17+
             var access = await eventStore.RequestFullAccessToEventsAsync();
             accessGranted = access.Item1; // Tuple: (accessGranted, error)
         }
         else
         {
-            // Use the older method for iOS < 17
+            // Use the older method for MacCatalyst < 17
             var access = await eventStore.RequestAccessAsync(EKEntityType.Event);
             accessGranted = access.Item1; // Tuple: (accessGranted, error)
         }
