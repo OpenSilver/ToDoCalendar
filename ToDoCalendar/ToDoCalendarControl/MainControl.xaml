@@ -33,7 +33,7 @@
                 <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" Margin="0,28,0,10" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" DragAndDropStarted="DragAndDropSource_DragAndDropStarted" DragAndDropStopped="DragAndDropSource_DragAndDropStopped">
                     <Grid Width="80" Height="80">
                         <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
-                        <TextBlock Text="+" Padding="0" Margin="-19,-22,-21,5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="96" FontWeight="Bold"/>
+                        <TextBlock Text="+" Padding="0" Margin="-19,-22,-21,5" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="96" FontWeight="Bold" IsHitTestVisible="False"/>
                     </Grid>
                 </metrostyleapps:DragAndDropSource>
             </Grid>

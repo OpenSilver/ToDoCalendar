@@ -25,6 +25,10 @@
         <Style x:Key="StyleForOptionsButtons" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Margin" Value="0,5,5,5"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="5"/>
         </Style>
         <local:LocalizedStrings x:Key="ToDoCalendarControl_LocalizedStrings"/>
     </UserControl.Resources>
@@ -32,7 +36,7 @@
     <Grid x:Name="LayoutRoot"
           HorizontalAlignment="Left"
           VerticalAlignment="Top">
-        <Border CornerRadius="20" Background="{StaticResource PhoneAccentBrush}">
+        <Border CornerRadius="20" Background="{StaticResource PhoneAccentBrush}" Padding="10,10,10,5">
             <StackPanel Orientation="Vertical">
                 <Border Background="#44000000" CornerRadius="20,20,0,0">
                     <Viewbox Width="400" Stretch="Uniform" Margin="10,0,0,0" HorizontalAlignment="Left">

@@ -1,8 +1,5 @@
 ﻿using MetroStyleApps;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using System.Windows;
 using System.Windows.Controls;
@@ -161,6 +158,7 @@ namespace ToDoCalendarControl
 
             var eventsContainer = new Border()
             {
+                MinHeight = 30,
                 Margin = new Thickness(Column1Width + column2Width, 1, 1, 1)
             };
 
@@ -238,7 +236,7 @@ namespace ToDoCalendarControl
 
                 // Get the frameworkelement of the event:
                 DragAndDropSource source = (DragAndDropSource)e.Source;
-                
+
                 // Get the information about the event being dragged:
                 InformationAboutEventBeingDragged info = (InformationAboutEventBeingDragged)source.DataContext;
 
@@ -268,9 +266,9 @@ namespace ToDoCalendarControl
             else
             {
                 mainContainer = new StandAloneWrapPanel()
-                 {
-                     Orientation = Orientation.Horizontal
-                 };
+                {
+                    Orientation = Orientation.Horizontal
+                };
             }
 
             if (dayModelIfAny != null)
@@ -322,10 +320,11 @@ namespace ToDoCalendarControl
                 CornerRadius = EventCornerRadius,
                 Background = (eventModel.EventType == EventType.Info ? EventBackgroundColorWhenInfo : (eventModel.IsMarkedAsDone && !isToday ? EventBackgroundColorWhenDone : (eventModel.EventType == EventType.HighPriority ? EventBackgroundColorWhenHighPriority : EventBackgroundColor))),
                 Opacity = (eventModel.EventType == EventType.LowPriority ? (isToday ? EventOpacityWhenLowPriorityIfToday : EventOpacityWhenLowPriority) : (eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d)),
+                Padding = new Thickness(15, 2, 15, 2),
                 Margin = EventMargin
             };
 
-            var mainContainer = new Grid();
+            var mainContainer = new Grid() { Height = 20 };
 
             var lineToStrikethrough = new Rectangle()
             {
@@ -353,6 +352,7 @@ namespace ToDoCalendarControl
                 FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize),
                 MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity),
                 TextWrapping = TextWrapping.NoWrap,
+                Height = double.NaN,
                 IsHitTestVisible = false
             };
 
@@ -463,6 +463,7 @@ namespace ToDoCalendarControl
 
             var outerContainer = new Border()
             {
+                Height = 32,
                 Background = MonthHeaderBackgroundColor
             };
 
