@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WinRTForSilverlight;
+using static ToDoCalendarControl.RenderingHelpers;
 #elif WINRT
 using System;
 using System.Collections.Generic;
@@ -91,7 +91,7 @@ namespace MetroStyleApps
             // Make sure the previous drag and drop operation is stopped:
             if (_informationAboutElementBeingDragged != null)
                 StopDragAndDrop();
-            
+
             // Start the auto-scroller (to scroll automatically if near the edge of a scrollviewer):
             _autoScrollIfAtEdgeOfScrollViewer.ThresholdForScrollViewerAutomaticScroll = _thresholdForScrollViewerAutomaticScroll;
             _autoScrollIfAtEdgeOfScrollViewer.StartDetectionBySettingAbsolutePositionOnARegularBasis();
@@ -184,7 +184,9 @@ namespace MetroStyleApps
                 _autoScrollIfAtEdgeOfScrollViewer.SetAbsolutePosition(absolutePositionOfCursorPositionOrOfCenterOfControl);
 
                 // Move the ghost control:
-                UpdateTranslateTransform(_informationAboutElementBeingDragged.GhostWhileDragging, absolutePositionOfTopLeftCornerOfSource.X, absolutePositionOfTopLeftCornerOfSource.Y);
+                var popup = _informationAboutElementBeingDragged.GhostWhileDragging;
+                popup.HorizontalOffset = absolutePositionOfTopLeftCornerOfSource.X;
+                popup.VerticalOffset = absolutePositionOfTopLeftCornerOfSource.Y;
 
                 // Find closest target:
                 DragAndDropTarget closestTarget = null;
@@ -266,14 +268,14 @@ namespace MetroStyleApps
                 ApplyActualSizeToWidthAndHeight(_informationAboutElementBeingDragged.Source);
 
                 AnimationsHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Width)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Width, (instantly ? 0 : DefaultDurationOfAnimations), actionWhenCompleted: () =>
-                    {
-                        source.Width = sourceWidthBeforeDrag;
-                    });
+                {
+                    source.Width = sourceWidthBeforeDrag;
+                });
 
                 AnimationsHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Height)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Height, (instantly ? 0 : DefaultDurationOfAnimations), actionWhenCompleted: () =>
-                    {
-                        source.Height = sourceHeightBeforeDrag;
-                    });
+                {
+                    source.Height = sourceHeightBeforeDrag;
+                });
 
                 // Note: when the "instantly" value is True, we could have set the properties directly without using an animation. However, using an animation (with a duration of 0 seconds) has the advantage that it stops all the other animations that are pending on the same property.
 
@@ -287,19 +289,6 @@ namespace MetroStyleApps
                 element.Width = element.ActualWidth;
             if (double.IsNaN(element.Height) && !double.IsNaN(element.ActualHeight))
                 element.Height = element.ActualHeight;
-        }
-
-        static void UpdateTranslateTransform(UIElement element, double x, double y)
-        {
-            if (!(element.RenderTransform is TranslateTransform))
-            {
-                element.RenderTransform = new TranslateTransform() { X = x, Y = y };
-            }
-            else
-            {
-                ((TranslateTransform)element.RenderTransform).X = x;
-                ((TranslateTransform)element.RenderTransform).Y = y;
-            }
         }
 
         static bool TryGetElementRect(FrameworkElement element, UIElement rootControl, out Rect rect)
@@ -413,13 +402,18 @@ namespace MetroStyleApps
             }
             else
             {
-                var writableBitmap = new WriteableBitmap(source, null);
-                writableBitmap.Invalidate();
-                var image = new Image()
+                var image = new Border
                 {
-                    Source = writableBitmap,
-                    Width = sourceWidth,
-                    Height = sourceHeight,
+                    Child = new TextBlock
+                    {
+                        Text = (source.DataContext as InformationAboutEventBeingDragged)?.EventModel.Title,
+                        VerticalAlignment = VerticalAlignment.Center
+                    },
+                    Background = new SolidColorBrush(Color.FromRgb(210, 210, 210)),
+                    CornerRadius = new CornerRadius(10),
+                    Padding = new Thickness(5),
+                    MinWidth = 30,
+                    MinHeight = 20,
                     Opacity = GhostOpacityDuringDragAndDrop,
                     RenderTransformOrigin = new Point(0.5, 0.5),
                     RenderTransform = sourceShouldBeEnlargedDuringDrag ? new ScaleTransform() { ScaleX = 1.5, ScaleY = 1.5 } : null
