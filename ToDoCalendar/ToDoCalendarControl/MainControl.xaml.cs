@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using ToDoCalendarControl.Resources;
 using ToDoCalendarControl.Services;
 
@@ -159,17 +158,6 @@ namespace ToDoCalendarControl
 
         void Controller_EditingModeStarted(object sender, EditingModeStartedEventArgs e)
         {
-            // Position and show the options just below the control for editing the event:
-            var generalTransform = e.TextBox.TransformToVisual(MainContainer);
-            Point coordinates = MetroHelpers.TransformPoint(generalTransform, new Point());
-            Dispatcher.BeginInvoke(() =>
-                {
-                    // We do the positioning with the Dispatcher so that "ActualHeight" is not NaN.
-                    EventOptionsControl.RenderTransform = new TranslateTransform()
-                    {
-                        Y = coordinates.Y - (!double.IsNaN(EventOptionsControl.ActualHeight) ? EventOptionsControl.ActualHeight : 0d) // + (!double.IsNaN(e.ControlThatShowsTheEvent.ActualHeight) ? e.ControlThatShowsTheEvent.ActualHeight : 0d)
-                    };
-                });
             EventOptionsControl.Controller = _controller;
             EventOptionsControl.EventModel = e.EventModel;
             EventOptionsControl.DayModel = e.DayModel;
@@ -177,6 +165,8 @@ namespace ToDoCalendarControl
             EventOptionsControl.TextBox = e.TextBox;
             EventOptionsControl.UpdateButtonsVisibility();
             EventOptionsControl.Visibility = Visibility.Visible;
+            OptionsPopup.PlacementTarget = e.TextBox;
+            OptionsPopup.IsOpen = true;
 
             // Hide the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Collapsed;
@@ -208,7 +198,7 @@ namespace ToDoCalendarControl
             NotificationControl.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        #if !OPENSILVER
+#if !OPENSILVER
         private void ButtonForOptions_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             PopupForOptions.IsOpen = !PopupForOptions.IsOpen;
@@ -249,7 +239,7 @@ namespace ToDoCalendarControl
 #endif
         }
 
-        #if !OPENSILVER
+#if !OPENSILVER
         private void ButtonImportFromBackup_Click(object sender, RoutedEventArgs e)
         {
             TextBoxForImportingFromBackup.Text = string.Empty;

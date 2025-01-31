@@ -129,7 +129,7 @@
     <value>Отправить резервную копию по электронной почте</value>
   </data>
   <data name="ActionsDeleteTask_ButtonContent" xml:space="preserve">
-    <value>УДАЛЯТЬ</value>
+    <value>УДАЛИТЬ</value>
   </data>
   <data name="ActionsMarkTaskAsDone_ButtonContent" xml:space="preserve">
     <value>ВЫПОЛНЕНО</value>

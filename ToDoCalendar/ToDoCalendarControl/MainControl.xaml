@@ -25,7 +25,9 @@
                         <StackPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"/>
                         <Button FontSize="14" Padding="20,10,20,10" Foreground="#FFCCCCCC" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Margin="5"/>
                     </StackPanel>
-                    <local:EventOptions x:Name="EventOptionsControl" Margin="10,0,0,0" Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Popup Name="OptionsPopup" Placement="Top">
+                        <local:EventOptions x:Name="EventOptionsControl"/>
+                    </Popup>
                 </Grid>
             </ScrollViewer>
             <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,1">
