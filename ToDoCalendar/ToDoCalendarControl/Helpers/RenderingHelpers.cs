@@ -68,7 +68,7 @@ namespace ToDoCalendarControl
         // METHODS
         //----------------
 
-        public static void AddDaysToContainer(Panel container, DateTime firstDay, DateTime lastDay, Controller controller, bool insertAtBeginningRatherThanAddToEnd = false)
+        public static void AddDaysToContainer(Panel container, DateTime firstDay, DateTime lastDay, Controller controller, bool renderEvents = true, bool insertAtBeginningRatherThanAddToEnd = false)
         {
             //----------------
             // ADD EACH DAY
@@ -92,13 +92,13 @@ namespace ToDoCalendarControl
 
                 // Display the day:
                 if (insertAtBeginningRatherThanAddToEnd)
-                    container.Children.Insert(i + numberOfHeadersRendered, RenderDay(day, controller));
+                    container.Children.Insert(i + numberOfHeadersRendered, RenderDay(day, controller, renderEvents));
                 else
-                    container.Children.Add(RenderDay(day, controller));
+                    container.Children.Add(RenderDay(day, controller, renderEvents));
             }
         }
 
-        public static FrameworkElement RenderDay(DateTime day, Controller controller)
+        public static FrameworkElement RenderDay(DateTime day, Controller controller, bool renderEvents)
         {
             var isWorkDay = DatesHelpers.IsWorkDay(day);
             var isToday = (day == DatesHelpers.GetTodayDateWithoutTime());
@@ -202,9 +202,11 @@ namespace ToDoCalendarControl
             //controller.RefreshDayRequested += WeakEventsHelpers.MakeWeakHandlerForRefreshDayRequestedEvent(refreshDayRequestedHandler.Controller_RefreshDayRequested, h => controller.RefreshDayRequested -= h);
 
             // Refresh the day events once:
-            //actionToRefreshDay(new RefreshDayRequestedEventArgs(day));
-            refreshDayRequestedHandler.Controller_RefreshDayRequested(new RefreshDayRequestedEventArgs(day));
-
+            if (renderEvents)
+            {
+                //actionToRefreshDay(new RefreshDayRequestedEventArgs(day));
+                refreshDayRequestedHandler.Controller_RefreshDayRequested(new RefreshDayRequestedEventArgs(day));
+            }
 
             //----------------
             // ADD ELEMENTS TO OUTER CONTAINER

@@ -1,6 +1,7 @@
 ﻿using MetroStyleApps;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +15,7 @@ namespace ToDoCalendarControl
     {
         const int AutoSaveIntervalInSeconds = 2;
         const int InitialDayCountBeforeCurrentDate = 10;
-        const int InitialDayCountAfterCurrentDate = 80;
+        const int InitialDayCountAfterCurrentDate = 60;
         const int NumberOfAdditionalDaysToLoadBefore = 30;
         const int NumberOfAdditionalDaysToLoadAfter = 120;
         const int ItemHeight = 16;
@@ -81,10 +82,20 @@ namespace ToDoCalendarControl
             // Set initial scroll offset:
             MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
 
-            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+            await LoadSavedEvents();
+            await LoadNativeCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
         }
 
-        private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
+        private async Task LoadSavedEvents()
+        {
+            foreach (var date in _controller.Model.Days.Keys.OrderBy(x => x))
+            {
+                _controller.RequestRefreshOfDay(date);
+                await Task.Delay(1);
+            }
+        }
+
+        private async Task LoadNativeCalendarEvents(DateTime startDate, DateTime endDate)
         {
             if (_calendarService == null)
                 return;
@@ -125,7 +136,7 @@ namespace ToDoCalendarControl
             _firstDayOfCalendar = today.AddDays(-InitialDayCountBeforeCurrentDate);
             _lastDayOfCalendar = today.AddDays(InitialDayCountAfterCurrentDate);
 
-            RenderingHelpers.AddDaysToContainer(DaysContainer, _firstDayOfCalendar, _lastDayOfCalendar, _controller);
+            RenderingHelpers.AddDaysToContainer(DaysContainer, _firstDayOfCalendar, _lastDayOfCalendar, _controller, renderEvents: false);
         }
 
         private async void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
@@ -137,7 +148,7 @@ namespace ToDoCalendarControl
 
             _firstDayOfCalendar = firstDayToAdd;
 
-            await LoadCalendarEvents(_firstDayOfCalendar, lastDayToAdd);
+            await LoadNativeCalendarEvents(_firstDayOfCalendar, lastDayToAdd);
         }
 
         private async void ButtonLoadMoreDaysAfter_Click(object sender, RoutedEventArgs e)
@@ -149,7 +160,7 @@ namespace ToDoCalendarControl
 
             _lastDayOfCalendar = lastDayToAdd;
 
-            await LoadCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
+            await LoadNativeCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
         }
 
         void Controller_EditingModeStopped(object sender, EventArgs e)
