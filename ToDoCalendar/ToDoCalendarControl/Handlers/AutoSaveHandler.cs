@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using System.Windows.Threading;
 
@@ -56,7 +53,6 @@ namespace ToDoCalendarControl
 
         void Save(object objectToSave)
         {
-#if !OPENSILVER
             if (!_isAutoSaving && !TrialHelpers.IsTrial_CachedValue)
             {
                 _isAutoSaving = true;
@@ -67,7 +63,7 @@ namespace ToDoCalendarControl
                 {
                     // Serialize the object to save:
                     var objectAsString = SerializationHelpers.Serialize(objectToSave);
-                    
+
                     // Save the object to disk:
                     FileSystemHelpers.WriteTextToFile(FileNameForAutoSave, objectAsString);
 
@@ -78,7 +74,6 @@ namespace ToDoCalendarControl
 
                 _isAutoSaving = false;
             }
-#endif
         }
     }
 }

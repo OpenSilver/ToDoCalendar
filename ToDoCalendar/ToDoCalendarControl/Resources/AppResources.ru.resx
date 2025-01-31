@@ -171,7 +171,7 @@
     <value>УВИДЕТЬ БОЛЬШЕ</value>
   </data>
   <data name="Notification_Saved" xml:space="preserve">
-    <value>СОХРАНЕННЫЕ</value>
+    <value>СОХРАНЕНО</value>
   </data>
   <data name="OptionsRestoreButtonGo_Content" xml:space="preserve">
     <value>ВОССТАНОВЛЕНИЕ</value>

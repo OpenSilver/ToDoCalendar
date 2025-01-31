@@ -52,19 +52,19 @@ namespace ToDoCalendarControl
                 {
                     _controller.Model = model;
                 }
+#if OPENSILVER && DEBUG
+                else
+                {
+                    // Mock data for testing:
+                    _controller.Model = CreateMockData();
+                }
+#endif
 
                 // Initialize the Auto-Save handler:
                 _autoSaveHandler = new AutoSaveHandler(AutoSaveIntervalInSeconds, () => _controller.Model, () => _controller.ContainsUnsavedChanges);
-#if !OPENSILVER
                 _autoSaveHandler.AutoSaveTookPlace += AutoSaveHandler_AutoSaveTookPlace;
                 _autoSaveHandler.Start();
-#endif
             }
-
-#if OPENSILVER && DEBUG
-            // Mock data for testing:
-            _controller.Model = CreateMockData();
-#endif
 
             // Render the calendar:
             RefreshAll();
@@ -101,9 +101,13 @@ namespace ToDoCalendarControl
                         model.Days[date] = new DayModel();
                     }
 
-                    model.Days[date].Events.Add(new EventModel { Title = item.Title });
-                    _controller.RequestRefreshOfDay(date);
-                    await Task.Delay(1);
+                    var events = model.Days[date].Events;
+                    if (events.Find(x => x.Id == item.Id) == null)
+                    {
+                        events.Add(new EventModel { Title = item.Title, Id = item.Id });
+                        _controller.RequestRefreshOfDay(date);
+                        await Task.Delay(1);
+                    }
                 }
             }
             catch (Exception ex)

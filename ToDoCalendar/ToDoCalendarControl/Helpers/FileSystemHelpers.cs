@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenSilver;
 using System.IO;
 using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Text;
-
 
 namespace ToDoCalendarControl
 {
@@ -12,48 +8,62 @@ namespace ToDoCalendarControl
     {
         public static void WriteTextToFile(string fileName, string fileContent)
         {
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+            if (Interop.IsRunningInTheSimulator)
             {
-                IsolatedStorageFileStream fs = null;
-                using (fs = storage.CreateFile(fileName))
+                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    if (fs != null)
+                    IsolatedStorageFileStream fs = null;
+                    using (fs = storage.CreateFile(fileName))
                     {
-                        using (StreamWriter sw = new StreamWriter(fs))
+                        if (fs != null)
                         {
-                            sw.Write(fileContent);
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                sw.Write(fileContent);
+                            }
+                            //byte[] bytes = System.BitConverter.GetBytes(number);
+                            //fs.Write(bytes, 0, bytes.Length);
                         }
-                        //byte[] bytes = System.BitConverter.GetBytes(number);
-                        //fs.Write(bytes, 0, bytes.Length);
                     }
                 }
+            }
+            else // IsolatedStorage is not supported on Browser
+            {
+                Interop.ExecuteJavaScript($"localStorage.setItem('{fileName}', '{fileContent}')");
             }
         }
 
         public static string ReadTextFromFile(string fileName)
         {
-            using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+            if (Interop.IsRunningInTheSimulator)
             {
-                if (storage.FileExists(fileName))
+                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    using (IsolatedStorageFileStream fs = storage.OpenFile(fileName, System.IO.FileMode.Open))
+                    if (storage.FileExists(fileName))
                     {
-                        if (fs != null)
+                        using (IsolatedStorageFileStream fs = storage.OpenFile(fileName, System.IO.FileMode.Open))
                         {
-                            using (StreamReader sr = new StreamReader(fs))
+                            if (fs != null)
                             {
-                                return sr.ReadToEnd();
-                            }
+                                using (StreamReader sr = new StreamReader(fs))
+                                {
+                                    return sr.ReadToEnd();
+                                }
 
-                            //byte[] saveBytes = new byte[4];
-                            //int count = fs.Read(saveBytes, 0, 4);
-                            //if (count > 0)
-                            //{
-                            //    number = System.BitConverter.ToInt32(saveBytes, 0);
-                            //}
+                                //byte[] saveBytes = new byte[4];
+                                //int count = fs.Read(saveBytes, 0, 4);
+                                //if (count > 0)
+                                //{
+                                //    number = System.BitConverter.ToInt32(saveBytes, 0);
+                                //}
+                            }
                         }
                     }
                 }
+            }
+            else // IsolatedStorage is not supported on Browser
+            {
+                return Interop.ExecuteJavaScriptGetResult<string>($"localStorage.getItem('{fileName}')");
             }
             return null;
         }

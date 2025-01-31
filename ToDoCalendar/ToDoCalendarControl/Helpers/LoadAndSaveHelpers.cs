@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 
 namespace ToDoCalendarControl
 {
@@ -12,32 +8,29 @@ namespace ToDoCalendarControl
 
         public static bool TryLoadModelFromFileSystem(out Model model)
         {
-#if !OPENSILVER
             // Load the AutoSave from the disk:
             var serializedModel = FileSystemHelpers.ReadTextFromFile(AutoSaveHandler.FileNameForAutoSave);
+            model = null;
 
             if (serializedModel != null)
             {
                 // Deserialize the Model:
-                model = LoadModelFromTextAndRaiseExceptionIfError(serializedModel);
-                return true;
+                try
+                {
+                    model = LoadModelFromTextAndRaiseExceptionIfError(serializedModel);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
-            else
-            {
-                model = null;
-                return false;
-            }
-#else
-            model = null;
-            return false;
-#endif
+
+            return model != null;
         }
 
-#if !OPENSILVER
         public static Model LoadModelFromTextAndRaiseExceptionIfError(string serializedText)
         {
             return SerializationHelpers.Deserialize<Model>(serializedText);
         }
-#endif
     }
 }
