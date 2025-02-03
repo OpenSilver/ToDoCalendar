@@ -42,7 +42,7 @@ namespace ToDoCalendarControl
         const double EventOpacityWhenDone = 0.5;
         const double EventOpacityWhenLowPriority = 0.3;
         const double EventOpacityWhenLowPriorityIfToday = 0.6;
-        static readonly Thickness StrikethroughMargin = new Thickness(3, 2, 3, 0);
+        static readonly Thickness StrikethroughMargin = new Thickness(-5, 2, -5, 0);
         static readonly Brush StrikethroughLineColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
         static readonly Brush EventBackgroundColor = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
         static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
@@ -328,16 +328,6 @@ namespace ToDoCalendarControl
 
             var mainContainer = new Grid() { Height = 20 };
 
-            var lineToStrikethrough = new Rectangle()
-            {
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Height = (isToday ? StrikethroughLineHeightIfToday : StrikethroughLineHeight),
-                Fill = StrikethroughLineColor,
-                Margin = StrikethroughMargin,
-                Visibility = (eventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed),
-            };
-
             var eventTitle = new TextBox()
             {
                 Text = eventModel.Title,
@@ -448,7 +438,20 @@ namespace ToDoCalendarControl
             //----------------
 
             mainContainer.Children.Add(eventTitle);
-            mainContainer.Children.Add(lineToStrikethrough);
+
+            if (eventModel.IsMarkedAsDone)
+            {
+                var lineToStrikethrough = new Rectangle
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    Height = (isToday ? StrikethroughLineHeightIfToday : StrikethroughLineHeight),
+                    Fill = StrikethroughLineColor,
+                    Margin = StrikethroughMargin,
+                };
+                mainContainer.Children.Add(lineToStrikethrough);
+            }
+
             mainContainer.Children.Add(borderToStartEditingOnMouseUpRatherThanMouseDown);
             mainBorder.Child = mainContainer;
             dragAndDropSource.Content = mainBorder;
