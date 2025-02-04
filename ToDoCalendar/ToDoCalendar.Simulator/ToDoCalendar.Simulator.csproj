@@ -1,12 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
 
+  <!-- On non‑Windows, build as a normal library to prevent build errors-->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="OpenSilver.Simulator" Version="3.1.2" />
+    <PackageReference Include="OpenSilver.Simulator" Version="3.1.2" Condition="'$(OS)' == 'Windows_NT'"/>
   </ItemGroup>
 
   <ItemGroup>
