@@ -34,7 +34,7 @@ namespace ToDoCalendarControl
 
         // Rendering an event:
         const double EventFontSize = 18;
-        const double EventFontSizeWhenEditing = 36;
+        const double EventFontSizeWhenEditing = 32;
         const double EventFontSizeWhenToday = 30;
         const double StrikethroughLineHeight = 5;
         const double StrikethroughLineHeightIfToday = 9;
@@ -214,8 +214,8 @@ namespace ToDoCalendarControl
 
             dayContainer.Children.Add(dayNumber);
             dayContainer.Children.Add(dayOfWeek);
-            dayContainer.Children.Add(eventsContainer);
             dayContainer.Children.Add(topSeparator);
+            dayContainer.Children.Add(eventsContainer);
             mainContainer.Children.Add(dayContainer);
             mainContainer.Children.Add(dragAndDropTarget);
             rootControl.Children.Add(mainContainer);
@@ -326,7 +326,7 @@ namespace ToDoCalendarControl
                 Margin = EventMargin
             };
 
-            var mainContainer = new Grid() { Height = 20 };
+            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
 
             var eventTitle = new TextBox()
             {
@@ -350,6 +350,7 @@ namespace ToDoCalendarControl
 
             var borderToStartEditingOnMouseUpRatherThanMouseDown = new Border()
             {
+                Margin = new Thickness(-10, 0, -10, 0),
                 Background = new SolidColorBrush(Colors.Transparent)
             };
 
@@ -367,6 +368,7 @@ namespace ToDoCalendarControl
                 eventTitle.Background = EventTextBackgroundWhenEditing;
                 eventTitle.Foreground = EventTextColorWhenEditing;
                 eventTitle.TextWrapping = TextWrapping.Wrap;
+                eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
                 eventTitle.MaxWidth = double.PositiveInfinity;
                 eventTitle.IsHitTestVisible = true;
                 borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Collapsed;
@@ -379,6 +381,7 @@ namespace ToDoCalendarControl
                 eventTitle.Background = EventTextBackgroundWhenNotEditing;
                 eventTitle.Foreground = functionToDetermineEventForeground();
                 eventTitle.TextWrapping = TextWrapping.NoWrap;
+                eventTitle.MinWidth = 0;
                 eventTitle.MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity);
                 eventTitle.IsHitTestVisible = false;
                 borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Visible;
