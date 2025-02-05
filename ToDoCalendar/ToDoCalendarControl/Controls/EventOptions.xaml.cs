@@ -40,11 +40,11 @@ namespace ToDoCalendarControl
                 Controller.QuitEditingMode();
         }
 
-        void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             if (DayModel != null && EventModel != null && Controller != null && Day != default(DateTime))
             {
-                Controller.DeleteEvent(EventModel, DayModel, Day);
+                await Controller.DeleteEvent(EventModel, DayModel, Day);
             }
         }
 

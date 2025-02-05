@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace ToDoCalendarControl.Services
+namespace ToDoCalendarControl.Services;
+
+public interface ICalendarService
 {
-    public interface ICalendarService
-    {
-        IAsyncEnumerable<DeviceEvent> GetCalendarEvents(DateTime startDate, DateTime endDate);
-    }
+    Task<IEnumerable<DeviceEvent>> GetCalendarEvents(DateTime startDate, DateTime endDate);
+
+    Task<string> CreateCalendarEvent(DeviceEvent calendarEvent);
+
+    Task UpdateCalendarEvent(DeviceEvent calendarEvent);
+
+    Task DeleteCalendarEvent(string eventId);
 }

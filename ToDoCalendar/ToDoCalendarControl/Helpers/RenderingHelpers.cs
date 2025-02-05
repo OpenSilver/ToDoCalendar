@@ -223,14 +223,14 @@ namespace ToDoCalendarControl
             return rootControl;
         }
 
-        static void DragAndDropTarget_SourceDropped(object sender, DragAndDropEventArgs e)
+        static async void DragAndDropTarget_SourceDropped(object sender, DragAndDropEventArgs e)
         {
             var customDragAndDropTarget = (CustomDragAndDropTarget)sender;
 
             // Check if the user has dragged the control for adding an event or he/she has dragged another event:
             if (e.Source.Name == "DRAGSOURCE_NewEvent")
             {
-                customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
+                await customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
             }
             else
             {
@@ -243,7 +243,7 @@ namespace ToDoCalendarControl
                 InformationAboutEventBeingDragged info = (InformationAboutEventBeingDragged)source.DataContext;
 
                 // Move the event:
-                customDragAndDropTarget.Controller.MoveEvent(info.EventModel, info.DayModel, info.Day, customDragAndDropTarget.Day);
+                await customDragAndDropTarget.Controller.MoveEvent(info.EventModel, info.DayModel, info.Day, customDragAndDropTarget.Day);
             }
         }
 
