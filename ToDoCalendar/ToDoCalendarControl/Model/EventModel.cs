@@ -7,7 +7,7 @@ namespace ToDoCalendarControl
         public EventModel()
         {
             Title = string.Empty;
-            Id = Guid.NewGuid().ToString();
+            Id = string.Empty;
             EventType = EventType.Normal;
         }
 

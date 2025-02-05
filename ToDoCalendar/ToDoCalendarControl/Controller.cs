@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Windows;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
 {
@@ -21,6 +19,8 @@ namespace ToDoCalendarControl
         public event EventHandler QuitEditingModeRequested;
         public event EventHandler LockMainScrollViewerRequested;
         public event EventHandler UnlockMainScrollViewerRequested;
+
+        public ICalendarService CalendarService { get; } = ServiceLocator.Provider?.GetRequiredService<ICalendarService>();
 
         public Controller()
         {
@@ -48,7 +48,7 @@ namespace ToDoCalendarControl
             }
         }
 
-        public void AddEvent(DateTime day)
+        public async Task AddEvent(DateTime day)
         {
             // Create or reuse the model for the day:
             DayModel dayModel;
@@ -63,9 +63,10 @@ namespace ToDoCalendarControl
             // Create the model for the event:
             var newEventModel = new EventModel()
             {
+                Id = await CalendarService?.CreateCalendarEvent(new DeviceEvent { DateTime = day })
             };
             dayModel.Events.Add(newEventModel);
-            
+
             // Refresh the day:
             RequestRefreshOfDay(day, true);
 
@@ -73,8 +74,10 @@ namespace ToDoCalendarControl
             RememberThatThereAreUnsavedChanges();
         }
 
-        public void DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day)
+        public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day)
         {
+            await CalendarService?.DeleteCalendarEvent(eventModel.Id);
+
             // Delete the event from the model:
             dayModel.Events.Remove(eventModel);
 
@@ -92,7 +95,7 @@ namespace ToDoCalendarControl
             RememberThatThereAreUnsavedChanges();
         }
 
-        public void MoveEvent(EventModel eventModel, DayModel previousDayModel, DateTime previousDay, DateTime newDay)
+        public async Task MoveEvent(EventModel eventModel, DayModel previousDayModel, DateTime previousDay, DateTime newDay)
         {
             if (previousDay != newDay)
             {
@@ -125,6 +128,8 @@ namespace ToDoCalendarControl
 
                 // Remember that there are unsaved changes:
                 RememberThatThereAreUnsavedChanges();
+
+                await CalendarService?.UpdateCalendarEvent(new DeviceEvent(eventModel, newDay));
             }
         }
 

@@ -30,5 +30,7 @@
     <string>Assets.xcassets/appicon.appiconset</string>
     <key>NSCalendarsUsageDescription</key>
     <string>We need access to your calendar to fetch events.</string>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>This app needs your permission to fully manage events on your calendars. This includes reading, writing, modifying and deleting events.</string>
 </dict>
 </plist>

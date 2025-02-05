@@ -1,5 +1,4 @@
 ﻿using MetroStyleApps;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,8 +24,6 @@ namespace ToDoCalendarControl
         DateTime _firstDayOfCalendar;
         DateTime _lastDayOfCalendar;
         bool _isMainScrollViewerLocked;
-
-        private readonly ICalendarService _calendarService = ServiceLocator.Provider?.GetRequiredService<ICalendarService>();
 
         public MainControl()
         {
@@ -97,25 +94,44 @@ namespace ToDoCalendarControl
 
         private async Task LoadNativeCalendarEvents(DateTime startDate, DateTime endDate)
         {
-            if (_calendarService == null)
+            if (_controller.CalendarService is not ICalendarService calendarService)
                 return;
 
             var model = _controller.Model;
 
             try
             {
-                await foreach (var item in _calendarService.GetCalendarEvents(startDate, endDate))
+                var allEvents = await calendarService.GetCalendarEvents(startDate, endDate);
+
+                foreach (var dayItems in allEvents.GroupBy(x => x.DateTime.Date).OrderBy(x => x.Key))
                 {
-                    var date = item.DateTime.Date;
-                    if (!model.Days.ContainsKey(date))
+                    var date = dayItems.Key;
+                    if (!model.Days.TryGetValue(date, out var dayModel))
                     {
-                        model.Days[date] = new DayModel();
+                        model.Days[date] = dayModel = new DayModel();
                     }
 
-                    var events = model.Days[date].Events;
-                    if (events.Find(x => x.Id == item.Id) == null)
+                    var dayEvents = dayModel.Events;
+                    bool hasChanges = false;
+                    foreach (var calendarEvent in dayItems)
                     {
-                        events.Add(new EventModel { Title = item.Title, Id = item.Id });
+                        if (dayEvents.Find(x => x.Id == calendarEvent.Id) is not EventModel eventModel)
+                        {
+                            hasChanges = true;
+                            dayEvents.Add(new EventModel { Title = calendarEvent.Title, Id = calendarEvent.Id });
+                        }
+                        else
+                        {
+                            if (eventModel.Title != calendarEvent.Title)
+                            {
+                                hasChanges = true;
+                                eventModel.Title = calendarEvent.Title;
+                            }
+                        }
+                    }
+
+                    if (hasChanges)
+                    {
                         _controller.RequestRefreshOfDay(date);
                         await Task.Delay(1);
                     }
@@ -163,12 +179,14 @@ namespace ToDoCalendarControl
             await LoadNativeCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
         }
 
-        void Controller_EditingModeStopped(object sender, EventArgs e)
+        async void Controller_EditingModeStopped(object sender, EventArgs e)
         {
             EventOptionsControl.Visibility = Visibility.Collapsed;
 
             // Show again the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Visible;
+
+            await _controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
         }
 
         void Controller_EditingModeStarted(object sender, EditingModeStartedEventArgs e)
