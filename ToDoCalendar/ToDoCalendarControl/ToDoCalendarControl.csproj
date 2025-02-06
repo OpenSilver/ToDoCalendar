@@ -30,10 +30,10 @@
     <Compile Include="Helpers\FileSystemHelpers.cs" />
     <Compile Include="Helpers\LoadAndSaveHelpers.cs" />
     <Compile Include="Helpers\RenderingHelpers.cs" />
-    <Compile Include="Helpers\ScreenAutoOffHelpers.cs" />
     <Compile Include="Helpers\SerializationHelpers.cs" />
     <Compile Include="Helpers\TrialHelpers.cs" />
     <Compile Include="Helpers\WeakEventsHelpers.cs" />
+    <Compile Include="Helpers\YamlSerializer.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="MainControl.xaml.cs" />
     <Compile Include="Model\DayModel.cs" />

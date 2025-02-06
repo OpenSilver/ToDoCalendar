@@ -63,7 +63,6 @@ namespace ToDoCalendar
             // This code will not execute when the application is reactivated
             private void Application_Launching(object sender, LaunchingEventArgs e)
             {
-                ScreenAutoOffHelpers.ApplyScreenAutoOffSetting();
                 TrialHelpers.UpdateIsTrialCache();
             }
 
@@ -71,7 +70,6 @@ namespace ToDoCalendar
             // This code will not execute when the application is first launched
             private void Application_Activated(object sender, ActivatedEventArgs e)
             {
-                ScreenAutoOffHelpers.ApplyScreenAutoOffSetting();
                 TrialHelpers.UpdateIsTrialCache();
             }
 

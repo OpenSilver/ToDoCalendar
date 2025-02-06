@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ToDoCalendarControl
+﻿namespace ToDoCalendarControl
 {
     public enum EventType
     {
-        Normal, HighPriority, LowPriority, Info
+        Normal,
+        HighPriority,
+        LowPriority,
+        Info,
+        Unspecified
     }
 }

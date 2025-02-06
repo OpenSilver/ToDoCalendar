@@ -34,6 +34,7 @@ public class CalendarService : ICalendarService
         [
             Instances.EventId,
             Instances.InterfaceConsts.Title,
+            Instances.InterfaceConsts.Description,
             Instances.Begin,
         ];
         var cursor = _contentResolver.Query(uri, projection, null, null, null);
@@ -45,6 +46,7 @@ public class CalendarService : ICalendarService
                 {
                     Id = cursor.GetString(cursor.GetColumnIndex(Instances.EventId)),
                     Title = cursor.GetString(cursor.GetColumnIndex(Instances.InterfaceConsts.Title)),
+                    Description = cursor.GetString(cursor.GetColumnIndex(Instances.InterfaceConsts.Description)),
                     DateTime = DateTimeOffset.FromUnixTimeMilliseconds(cursor.GetLong(cursor.GetColumnIndex(Instances.Begin))).DateTime
                 };
             }
@@ -60,6 +62,7 @@ public class CalendarService : ICalendarService
         var eventValues = new ContentValues();
         eventValues.Put(Events.InterfaceConsts.CalendarId, calendarId);
         eventValues.Put(Events.InterfaceConsts.Title, deviceEvent.Title);
+        eventValues.Put(Events.InterfaceConsts.Description, deviceEvent.Description);
         var dateMilliseconds = GetMilliseconds(DateTime.SpecifyKind(deviceEvent.DateTime, DateTimeKind.Utc));
         eventValues.Put(Events.InterfaceConsts.Dtstart, dateMilliseconds);
         eventValues.Put(Events.InterfaceConsts.Dtend, dateMilliseconds);

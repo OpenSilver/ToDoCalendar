@@ -44,18 +44,9 @@ namespace ToDoCalendarControl
             bool isInDesignMode = System.ComponentModel.DesignerProperties.IsInDesignTool;
             if (!isInDesignMode)
             {
-                // Reload the model (if a save file exists):
-                Model model;
-                if (LoadAndSaveHelpers.TryLoadModelFromFileSystem(out model))
-                {
-                    _controller.Model = model;
-                }
 #if OPENSILVER && DEBUG
-                else
-                {
-                    // Mock data for testing:
-                    _controller.Model = CreateMockData();
-                }
+                // Mock data for testing:
+                _controller.Model = CreateMockData();
 #endif
 
                 // Initialize the Auto-Save handler:
@@ -79,20 +70,10 @@ namespace ToDoCalendarControl
             // Set initial scroll offset:
             MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
 
-            await LoadSavedEvents();
-            await LoadNativeCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
         }
 
-        private async Task LoadSavedEvents()
-        {
-            foreach (var date in _controller.Model.Days.Keys.OrderBy(x => x))
-            {
-                _controller.RequestRefreshOfDay(date);
-                await Task.Delay(1);
-            }
-        }
-
-        private async Task LoadNativeCalendarEvents(DateTime startDate, DateTime endDate)
+        private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
         {
             if (_controller.CalendarService is not ICalendarService calendarService)
                 return;
@@ -111,30 +92,16 @@ namespace ToDoCalendarControl
                         model.Days[date] = dayModel = new DayModel();
                     }
 
-                    var dayEvents = dayModel.Events;
-                    bool hasChanges = false;
                     foreach (var calendarEvent in dayItems)
                     {
-                        if (dayEvents.Find(x => x.Id == calendarEvent.Id) is not EventModel eventModel)
+                        if (dayModel.Events.Find(x => x.Id == calendarEvent.Id) == null)
                         {
-                            hasChanges = true;
-                            dayEvents.Add(new EventModel { Title = calendarEvent.Title, Id = calendarEvent.Id });
-                        }
-                        else
-                        {
-                            if (eventModel.Title != calendarEvent.Title)
-                            {
-                                hasChanges = true;
-                                eventModel.Title = calendarEvent.Title;
-                            }
+                            dayModel.Events.Add(calendarEvent.ToEventModel());
                         }
                     }
 
-                    if (hasChanges)
-                    {
-                        _controller.RequestRefreshOfDay(date);
-                        await Task.Delay(1);
-                    }
+                    _controller.RequestRefreshOfDay(date);
+                    await Task.Delay(1);
                 }
             }
             catch (Exception ex)
@@ -164,7 +131,7 @@ namespace ToDoCalendarControl
 
             _firstDayOfCalendar = firstDayToAdd;
 
-            await LoadNativeCalendarEvents(_firstDayOfCalendar, lastDayToAdd);
+            await LoadCalendarEvents(_firstDayOfCalendar, lastDayToAdd);
         }
 
         private async void ButtonLoadMoreDaysAfter_Click(object sender, RoutedEventArgs e)
@@ -176,7 +143,7 @@ namespace ToDoCalendarControl
 
             _lastDayOfCalendar = lastDayToAdd;
 
-            await LoadNativeCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
+            await LoadCalendarEvents(firstDayToAdd, _lastDayOfCalendar);
         }
 
         async void Controller_EditingModeStopped(object sender, EventArgs e)
@@ -186,13 +153,17 @@ namespace ToDoCalendarControl
             // Show again the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Visible;
 
-            await _controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+            if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle)
+            {
+                await _controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+            }
         }
 
         void Controller_EditingModeStarted(object sender, EditingModeStartedEventArgs e)
         {
             EventOptionsControl.Controller = _controller;
             EventOptionsControl.EventModel = e.EventModel;
+            EventOptionsControl.PreviousTitle = e.EventModel.Title;
             EventOptionsControl.DayModel = e.DayModel;
             EventOptionsControl.Day = e.Day;
             EventOptionsControl.TextBox = e.TextBox;
@@ -235,12 +206,6 @@ namespace ToDoCalendarControl
         private void ButtonForOptions_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             PopupForOptions.IsOpen = !PopupForOptions.IsOpen;
-
-            // Update the status of the checkbox(es):
-            if (PopupForOptions.IsOpen)
-            {
-                CheckBoxForDisablingAutoScreenOff.IsChecked = ScreenAutoOffHelpers.GetScreenAutoOffSetting();
-            }
         }
 
         private void ButtonClosePopupForOptions_Click(object sender, RoutedEventArgs e)
@@ -248,80 +213,6 @@ namespace ToDoCalendarControl
             PopupForOptions.IsOpen = false;
         }
 #endif
-
-        private void ButtonSendBackupByEmail_Click(object sender, RoutedEventArgs e)
-        {
-#if !OPENSILVER
-            try
-            {
-                var emailSubject = string.Format("Backup of calendar ({0:0000}-{1:00}-{2:00})", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                var emailBody = "To restore this backup, copy/paste the following code into the \"Import from backup\" field:\r\n\r\n\r\n\r\n" + SerializationHelpers.Serialize(_controller.Model);
-
-                var emailComposeTask = new Microsoft.Phone.Tasks.EmailComposeTask();
-                emailComposeTask.Subject = emailSubject;
-                emailComposeTask.Body = emailBody;
-                emailComposeTask.To = "";
-                emailComposeTask.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-#else
-            MessageBox.Show("This feature is currently unavailable");
-#endif
-        }
-
-#if !OPENSILVER
-        private void ButtonImportFromBackup_Click(object sender, RoutedEventArgs e)
-        {
-            TextBoxForImportingFromBackup.Text = string.Empty;
-            PopupForOptions.IsOpen = false;
-            PopupForImportingFromBackup.IsOpen = true;
-        }
-
-        private void ButtonClosePopupForImportingFromBackup_Click(object sender, RoutedEventArgs e)
-        {
-            PopupForImportingFromBackup.IsOpen = false;
-        }
-#endif
-
-        private void ButtonStartImportingFromBackup_Click(object sender, RoutedEventArgs e)
-        {
-#if !OPENSILVER
-            try
-            {
-                // Attempt to load the model from the backup:
-                var model = LoadAndSaveHelpers.LoadModelFromTextAndRaiseExceptionIfError(TextBoxForImportingFromBackup.Text);
-
-                // Replace the current model:
-                _controller.Model = model;
-                _controller.RememberThatThereAreUnsavedChanges();
-
-                // Refresh all:
-                RefreshAll();
-
-                // Close the popup:
-                PopupForImportingFromBackup.IsOpen = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-#else
-            MessageBox.Show("This feature is currently unavailable.");
-#endif
-        }
-
-        private void CheckBoxForDisablingAutoScreenOff_Click(object sender, RoutedEventArgs e)
-        {
-#if !OPENSILVER
-            bool isScreenAutoOffDisabled = CheckBoxForDisablingAutoScreenOff.IsChecked.HasValue ? CheckBoxForDisablingAutoScreenOff.IsChecked.Value : false;
-
-            ScreenAutoOffHelpers.SaveScreenAutoOffSetting(isScreenAutoOffDisabled);
-            ScreenAutoOffHelpers.ApplyScreenAutoOffSetting();
-#endif
-        }
 
         void Controller_QuitEditingModeRequested(object sender, EventArgs e)
         {
@@ -333,24 +224,6 @@ namespace ToDoCalendarControl
         {
             ExplanationOverlay.Visibility = System.Windows.Visibility.Visible;
             //MessageBox.Show("Drag-and-drop the + sign to the calendar.");
-        }
-
-        void DragAndDropSource_DragAndDropStarted(object sender, EventArgs e)
-        {
-#if !OPENSILVER
-            // Bug fix to keep the display refreshing while the user is dragging the button to add an event:
-            var storyboard = (Storyboard)this.Resources["BugFixToKeepDisplayRefreshingWhileDragging"];
-            storyboard.Begin();
-#endif
-        }
-
-        void DragAndDropSource_DragAndDropStopped(object sender, EventArgs e)
-        {
-#if !OPENSILVER
-            // Bug fix to keep the display refreshing while the user is dragging the button to add an event:
-            var storyboard = (Storyboard)this.Resources["BugFixToKeepDisplayRefreshingWhileDragging"];
-            storyboard.Stop();
-#endif
         }
 
         void ExplanationOverlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -422,7 +295,7 @@ namespace ToDoCalendarControl
                 {
                     Title = $"Event {i + 1}",
                     IsMarkedAsDone = (i % 2 == 0), // Mark every second event as done
-                    EventType = (EventType)(i % 4) // Cycle through EventType enum values
+                    EventType = (EventType)(i % 5) // Cycle through EventType enum values
                 };
 
                 var day = dates[i];

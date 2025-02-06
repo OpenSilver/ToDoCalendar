@@ -17,6 +17,7 @@ public class CalendarService : ICalendarService
         {
             Id = x.Id,
             Title = x.Title,
+            Description = x.Description,
             DateTime = x.StartDate.DateTime
         });
     }
@@ -52,7 +53,7 @@ public class CalendarService : ICalendarService
             await _calendarStore.UpdateEvent(
                 calendarEvent.Id,
                 calendarEvent.Title,
-                existingEvent.Description,
+                !string.IsNullOrEmpty(calendarEvent.Description) ? calendarEvent.Description : existingEvent.Description,
                 existingEvent.Location,
                 dateOffset,
                 existingEvent.IsAllDay ? dateOffset : existingEvent.EndDate,

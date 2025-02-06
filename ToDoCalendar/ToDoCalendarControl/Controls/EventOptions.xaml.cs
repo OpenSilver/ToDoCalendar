@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using MetroStyleApps;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
 {
@@ -23,6 +20,7 @@ namespace ToDoCalendarControl
             set { _eventModel = value; ApplyEventTypeToRadioButtons(); }
         }
 
+        public string PreviousTitle { get; set; }
 
         public EventOptions()
         {
@@ -48,23 +46,24 @@ namespace ToDoCalendarControl
             }
         }
 
-        void ButtonMarkAsNotDone_Click(object sender, RoutedEventArgs e)
+        async void ButtonMarkAsNotDone_Click(object sender, RoutedEventArgs e)
         {
-            MarkAsDoneOrUndone(false);
+            await MarkAsDoneOrUndone(false);
         }
 
-        void ButtonMarkAsDone_Click(object sender, RoutedEventArgs e)
+        async void ButtonMarkAsDone_Click(object sender, RoutedEventArgs e)
         {
-            MarkAsDoneOrUndone(true);
+            await MarkAsDoneOrUndone(true);
         }
 
-        void MarkAsDoneOrUndone(bool isDone)
+        async Task MarkAsDoneOrUndone(bool isDone)
         {
             if (EventModel != null && Controller != null)
             {
                 EventModel.IsMarkedAsDone = isDone;
                 Controller.RequestRefreshOfDay(Day);
                 Controller.RememberThatThereAreUnsavedChanges();
+                await Controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
             }
             UpdateButtonsVisibility();
         }
@@ -87,7 +86,7 @@ namespace ToDoCalendarControl
             }
         }
 
-        void ApplyRadioButtonsToEventType()
+        async Task ApplyRadioButtonsToEventType()
         {
             var newEventType = EventType.Normal;
             if (RadioButtonNormal.IsChecked == true)
@@ -100,12 +99,15 @@ namespace ToDoCalendarControl
                 newEventType = EventType.Info;
 
             if (EventModel != null)
+            {
                 EventModel.EventType = newEventType;
+                await Controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
+            }
         }
 
-        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        private async void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyRadioButtonsToEventType();
+            await ApplyRadioButtonsToEventType();
             if (Controller != null)
             {
                 Controller.RequestRefreshOfDay(Day);
@@ -115,6 +117,5 @@ namespace ToDoCalendarControl
             // Make sure the textbox remains focused:
             Controller.EditEvent(EventModel, DayModel, Day);
         }
-
     }
 }

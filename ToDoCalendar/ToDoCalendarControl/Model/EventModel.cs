@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ToDoCalendarControl
+﻿namespace ToDoCalendarControl
 {
     public class EventModel
     {
@@ -8,7 +6,7 @@ namespace ToDoCalendarControl
         {
             Title = string.Empty;
             Id = string.Empty;
-            EventType = EventType.Normal;
+            EventType = EventType.Unspecified;
         }
 
         public string Title { get; set; }
