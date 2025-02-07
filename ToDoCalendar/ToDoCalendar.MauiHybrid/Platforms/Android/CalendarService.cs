@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Provider;
 using Microsoft.Maui.Graphics.Platform;
+using Plugin.Maui.CalendarStore;
 using ToDoCalendarControl.Services;
 using static Android.Provider.CalendarContract;
 
@@ -11,15 +12,17 @@ public class CalendarService : ICalendarService
     private readonly ContentResolver _contentResolver = Platform.AppContext.ApplicationContext?.ContentResolver
         ?? throw new InvalidOperationException("ContentResolver is null");
 
+    private readonly Services.CalendarService _calendarService = new();
+
     private int? _calendarId;
 
     public async Task<IEnumerable<DeviceEvent>> GetCalendarEvents(DateTime startDate, DateTime endDate)
     {
         await EnsurePermissionIsGranted<Permissions.CalendarRead>();
-        return GetEvents(startDate, endDate);
+        return GetEvents(startDate, endDate, await _calendarService.GetCalendars());
     }
 
-    private IEnumerable<DeviceEvent> GetEvents(DateTime startDate, DateTime endDate)
+    private IEnumerable<DeviceEvent> GetEvents(DateTime startDate, DateTime endDate, Dictionary<string, Calendar> calendars)
     {
         var uri = Instances.ContentUri ?? throw new InvalidOperationException("Instances.ContentUri is null.");
         var uriBuilder = uri.BuildUpon();
@@ -36,19 +39,30 @@ public class CalendarService : ICalendarService
             Instances.InterfaceConsts.Title,
             Instances.InterfaceConsts.Description,
             Instances.Begin,
+            Instances.InterfaceConsts.CalendarId
         ];
+
         var cursor = _contentResolver.Query(uri, projection, null, null, null);
         if (cursor != null)
         {
             while (cursor.MoveToNext())
             {
-                yield return new DeviceEvent
+                var calendarEvent = new DeviceEvent
                 {
                     Id = cursor.GetString(cursor.GetColumnIndex(Instances.EventId)),
                     Title = cursor.GetString(cursor.GetColumnIndex(Instances.InterfaceConsts.Title)),
                     Description = cursor.GetString(cursor.GetColumnIndex(Instances.InterfaceConsts.Description)),
                     DateTime = DateTimeOffset.FromUnixTimeMilliseconds(cursor.GetLong(cursor.GetColumnIndex(Instances.Begin))).DateTime
                 };
+
+                var calendarId = cursor.GetString(cursor.GetColumnIndex(Instances.InterfaceConsts.CalendarId));
+                if (calendarId != null && calendars.TryGetValue(calendarId, out var calendar))
+                {
+                    var color = calendar.Color;
+                    calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
+                }
+
+                yield return calendarEvent;
             }
         }
     }
@@ -58,6 +72,14 @@ public class CalendarService : ICalendarService
         await EnsurePermissionIsGranted<Permissions.CalendarWrite>();
 
         int calendarId = GetPrimaryCalendarId() ?? throw new InvalidOperationException("Not found primary calendar to save.");
+
+        var calendars = await _calendarService.GetCalendars();
+        if (calendars.TryGetValue(calendarId.ToString(), out var calendar))
+        {
+            var color = calendar.Color;
+            deviceEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
+        }
+
         var uri = Events.ContentUri ?? throw new InvalidOperationException("Events.ContentUri is null.");
         var eventValues = new ContentValues();
         eventValues.Put(Events.InterfaceConsts.CalendarId, calendarId);
@@ -82,13 +104,13 @@ public class CalendarService : ICalendarService
     public async Task UpdateCalendarEvent(DeviceEvent calendarEvent)
     {
         // await EnsurePermissionIsGranted<Permissions.CalendarWrite>();
-        await new Services.CalendarService().UpdateCalendarEvent(calendarEvent);
+        await _calendarService.UpdateCalendarEvent(calendarEvent);
     }
 
     public async Task DeleteCalendarEvent(string eventId)
     {
         //await EnsurePermissionIsGranted<Permissions.CalendarWrite>();
-        await new Services.CalendarService().DeleteCalendarEvent(eventId);
+        await _calendarService.DeleteCalendarEvent(eventId);
     }
 
     private int? GetPrimaryCalendarId()

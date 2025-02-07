@@ -320,8 +320,21 @@ namespace ToDoCalendarControl
             var mainBorder = new Border()
             {
                 CornerRadius = EventCornerRadius,
-                Background = (eventModel.EventType == EventType.Info ? EventBackgroundColorWhenInfo : (eventModel.IsMarkedAsDone && !isToday ? EventBackgroundColorWhenDone : (eventModel.EventType == EventType.HighPriority ? EventBackgroundColorWhenHighPriority : EventBackgroundColor))),
-                Opacity = (eventModel.EventType == EventType.LowPriority ? (isToday ? EventOpacityWhenLowPriorityIfToday : EventOpacityWhenLowPriority) : (eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d)),
+                Background = eventModel.EventType switch
+                {
+                    EventType.Info => EventBackgroundColorWhenInfo,
+                    _ when eventModel.IsMarkedAsDone && !isToday => EventBackgroundColorWhenDone,
+                    EventType.HighPriority => EventBackgroundColorWhenHighPriority,
+                    _ => EventBackgroundColor
+                },
+                Opacity = eventModel.EventType switch
+                {
+                    EventType.LowPriority => isToday ? EventOpacityWhenLowPriorityIfToday : EventOpacityWhenLowPriority,
+                    EventType.Unspecified => 0.8,
+                    _ => eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d
+                },
+                BorderBrush = new SolidColorBrush(eventModel.CalendarColor),
+                BorderThickness = new Thickness(2),
                 Padding = new Thickness(15, 2, 15, 2),
                 Margin = EventMargin
             };

@@ -82,6 +82,7 @@ namespace ToDoCalendarControl
 
             try
             {
+                endDate = endDate.AddDays(1); // workaround to load events from the last day
                 var allEvents = await calendarService.GetCalendarEvents(startDate, endDate);
 
                 foreach (var dayItems in allEvents.GroupBy(x => x.DateTime.Date).OrderBy(x => x.Key))

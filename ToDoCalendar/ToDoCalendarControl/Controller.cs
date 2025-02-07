@@ -61,11 +61,11 @@ namespace ToDoCalendarControl
             }
 
             // Create the model for the event:
-            var newEventModel = new EventModel()
-            {
-                EventType = EventType.Normal
-            };
-            newEventModel.Id = await CalendarService?.CreateCalendarEvent(new DeviceEvent(newEventModel, day));
+            var newEventModel = new EventModel { EventType = EventType.Normal };
+            var deviceEvent = new DeviceEvent(newEventModel, day);
+            newEventModel.Id = await CalendarService?.CreateCalendarEvent(deviceEvent);
+            newEventModel.CalendarColor = deviceEvent.CalendarColor;
+
             dayModel.Events.Add(newEventModel);
 
             // Refresh the day:

@@ -7,28 +7,45 @@ public class CalendarService : ICalendarService
 {
     private const string CalendarName = "ToDoCalendar";
 
-    readonly ICalendarStore _calendarStore = CalendarStore.Default;
+    private readonly ICalendarStore _calendarStore = CalendarStore.Default;
+
+    private Dictionary<string, Calendar>? _calendars;
 
     public async Task<IEnumerable<DeviceEvent>> GetCalendarEvents(DateTime startDate, DateTime endDate)
     {
         var events = await ExecuteOnMainThread(() => _calendarStore.GetEvents(null, new DateTimeOffset(startDate), new DateTimeOffset(endDate)));
+        var calendars = await GetCalendars();
 
-        return events.Select(x => new DeviceEvent
+        return events.Select(x =>
         {
-            Id = x.Id,
-            Title = x.Title,
-            Description = x.Description,
-            DateTime = x.StartDate.DateTime
+            var calendarEvent = new DeviceEvent
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description,
+                DateTime = x.StartDate.DateTime
+            };
+
+            if (calendars.TryGetValue(x.CalendarId, out var calendar))
+            {
+                var color = calendar.Color;
+                calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
+            }
+            return calendarEvent;
         });
     }
 
     public async Task<string> CreateCalendarEvent(DeviceEvent calendarEvent)
     {
+        var calendars = await GetCalendars();
+
         return await ExecuteOnMainThread(async () =>
         {
-            var calendars = await _calendarStore.GetCalendars();
-            var calendarId = calendars.FirstOrDefault(x => x.Name == CalendarName)?.Id
-                ?? await _calendarStore.CreateCalendar(CalendarName, Colors.Purple);
+            var calendar = calendars.Values.FirstOrDefault(x => x.Name == CalendarName);
+            var color = calendar?.Color ?? Colors.Purple;
+            var calendarId = calendar?.Id ?? await _calendarStore.CreateCalendar(CalendarName, color);
+
+            calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
 
             var eventId = await _calendarStore.CreateEvent(
                 calendarId,
@@ -64,6 +81,16 @@ public class CalendarService : ICalendarService
     public async Task DeleteCalendarEvent(string eventId)
     {
         await ExecuteOnMainThread(() => _calendarStore.DeleteEvent(eventId));
+    }
+
+    internal async Task<Dictionary<string, Calendar>> GetCalendars()
+    {
+        if (_calendars == null)
+        {
+            var calendars = await ExecuteOnMainThread(_calendarStore.GetCalendars);
+            _calendars = calendars.ToDictionary(x => x.Id);
+        }
+        return _calendars;
     }
 
     private static Task<TResult> ExecuteOnMainThread<TResult>(Func<Task<TResult>> action)

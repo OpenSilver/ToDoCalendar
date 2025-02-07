@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media;
 using ToDoCalendarControl.Helpers;
 
 namespace ToDoCalendarControl.Services;
@@ -9,6 +10,7 @@ public class DeviceEvent
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime DateTime { get; set; }
+    public Color CalendarColor { get; set; }
 
     public DeviceEvent()
     {
@@ -22,11 +24,17 @@ public class DeviceEvent
         DateTime = day;
     }
 
+    public void SetCalendarColor(float a, float r, float g, float b)
+        => CalendarColor = Color.FromArgb(FloatToByte(a), FloatToByte(r), FloatToByte(g), FloatToByte(b));
+
+    private static byte FloatToByte(float value) => (byte)Math.Round(value * 255);
+
     public EventModel ToEventModel()
     {
         var model = YamlSerializer.Deserialize(Description) ?? new EventModel();
         model.Id = Id;
         model.Title = Title;
+        model.CalendarColor = CalendarColor;
 
         return model;
     }
