@@ -63,7 +63,11 @@ namespace ToDoCalendarControl
                 EventModel.IsMarkedAsDone = isDone;
                 Controller.RequestRefreshOfDay(Day);
                 Controller.RememberThatThereAreUnsavedChanges();
-                await Controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
+
+                if (Controller.CalendarService is ICalendarService calendarService)
+                {
+                    await calendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
+                }
             }
             UpdateButtonsVisibility();
         }
@@ -101,7 +105,11 @@ namespace ToDoCalendarControl
             if (EventModel != null)
             {
                 EventModel.EventType = newEventType;
-                await Controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
+
+                if (Controller.CalendarService is ICalendarService calendarService)
+                {
+                    await calendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
+                }
             }
         }
 

@@ -62,9 +62,13 @@ namespace ToDoCalendarControl
 
             // Create the model for the event:
             var newEventModel = new EventModel { EventType = EventType.Normal };
-            var deviceEvent = new DeviceEvent(newEventModel, day);
-            newEventModel.Id = await CalendarService?.CreateCalendarEvent(deviceEvent);
-            newEventModel.CalendarColor = deviceEvent.CalendarColor;
+
+            if (CalendarService != null)
+            {
+                var deviceEvent = new DeviceEvent(newEventModel, day);
+                newEventModel.Id = await CalendarService.CreateCalendarEvent(deviceEvent);
+                newEventModel.CalendarColor = deviceEvent.CalendarColor;
+            }
 
             dayModel.Events.Add(newEventModel);
 
@@ -77,7 +81,10 @@ namespace ToDoCalendarControl
 
         public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day)
         {
-            await CalendarService?.DeleteCalendarEvent(eventModel.Id);
+            if (CalendarService != null)
+            {
+                await CalendarService.DeleteCalendarEvent(eventModel.Id);
+            }
 
             // Delete the event from the model:
             dayModel.Events.Remove(eventModel);
@@ -130,7 +137,10 @@ namespace ToDoCalendarControl
                 // Remember that there are unsaved changes:
                 RememberThatThereAreUnsavedChanges();
 
-                await CalendarService?.UpdateCalendarEvent(new DeviceEvent(eventModel, newDay));
+                if (CalendarService != null)
+                {
+                    await CalendarService.UpdateCalendarEvent(new DeviceEvent(eventModel, newDay));
+                }
             }
         }
 

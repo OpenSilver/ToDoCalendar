@@ -154,9 +154,10 @@ namespace ToDoCalendarControl
             // Show again the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Visible;
 
-            if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle)
+            if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle &&
+                _controller.CalendarService is ICalendarService calendarService)
             {
-                await _controller.CalendarService?.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                await calendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
             }
         }
 
