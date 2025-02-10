@@ -46,7 +46,7 @@ namespace ToDoCalendarControl
             {
 #if OPENSILVER && DEBUG
                 // Mock data for testing:
-                _controller.Model = CreateMockData();
+                //_controller.Model = CreateMockData();
 #endif
 
                 // Initialize the Auto-Save handler:
