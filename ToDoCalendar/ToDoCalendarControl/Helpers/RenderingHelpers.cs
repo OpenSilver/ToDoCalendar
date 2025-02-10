@@ -56,7 +56,7 @@ namespace ToDoCalendarControl
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
         static readonly Thickness EventMargin = new Thickness(3);
-        static readonly Thickness EventTextBoxMargin = new Thickness(-6, -12, -6, -12);
+        static readonly Thickness EventTextBoxMargin = new Thickness(-6, 0, -6, 0);
 
         // Rendering the month header:
         const double LeftMarginOfMonthName = 10d; // in pixels
