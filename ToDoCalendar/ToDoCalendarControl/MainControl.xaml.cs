@@ -18,6 +18,7 @@ namespace ToDoCalendarControl
         const int NumberOfAdditionalDaysToLoadBefore = 30;
         const int NumberOfAdditionalDaysToLoadAfter = 120;
         const int ItemHeight = 16;
+        const int MinLandscapeWidth = 600;
 
         Controller _controller;
         AutoSaveHandler _autoSaveHandler;
@@ -63,6 +64,14 @@ namespace ToDoCalendarControl
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(Button.MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
+        }
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo info)
+        {
+            base.OnRenderSizeChanged(info);
+
+            var stateName = ActualWidth > ActualHeight && ActualWidth > MinLandscapeWidth ? "LandscapeState" : "DefaultState";
+            VisualStateManager.GoToState(Parent as Control, stateName, false);
         }
 
         async void MainControl_Loaded(object sender, RoutedEventArgs e)

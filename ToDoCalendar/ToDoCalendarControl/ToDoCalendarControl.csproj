@@ -11,6 +11,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Controls\EventOptions.xaml.cs" />
     <Compile Include="Controls\NotificationControl.xaml.cs" />
+    <Compile Include="Converters\PositiveNumberConverter.cs" />
     <Compile Include="CustomDragAndDropTarget.cs" />
     <Compile Include="EventArgs\EditEventRequestedEventArgs.cs" />
     <Compile Include="EventArgs\EditingModeStartedEventArgs.cs" />
