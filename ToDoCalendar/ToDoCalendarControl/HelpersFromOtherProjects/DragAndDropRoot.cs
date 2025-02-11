@@ -185,8 +185,18 @@ namespace MetroStyleApps
 
                 // Move the ghost control:
                 var popup = _informationAboutElementBeingDragged.GhostWhileDragging;
-                popup.HorizontalOffset = absolutePositionOfTopLeftCornerOfSource.X;
-                popup.VerticalOffset = absolutePositionOfTopLeftCornerOfSource.Y;
+                // adjust the offset for a new ghost event
+                if (_informationAboutElementBeingDragged.Source is DragAndDropSource source && !source.HoldToStartDrag)
+                {
+                    var ghost = _informationAboutElementBeingDragged.GhostWhileDragging.Child as FrameworkElement;
+                    popup.HorizontalOffset = absolutePositionOfCursorPositionOrOfCenterOfControl.X - ghost.ActualWidth;
+                    popup.VerticalOffset = absolutePositionOfCursorPositionOrOfCenterOfControl.Y - ghost.ActualHeight;
+                }
+                else
+                {
+                    popup.HorizontalOffset = absolutePositionOfTopLeftCornerOfSource.X;
+                    popup.VerticalOffset = absolutePositionOfTopLeftCornerOfSource.Y;
+                }
 
                 // Find closest target:
                 DragAndDropTarget closestTarget = null;
@@ -194,8 +204,7 @@ namespace MetroStyleApps
                 var rootControl = MetroHelpers.GetRootVisual();
                 foreach (var target in GetTargetsWithGiveGroupId(_informationAboutElementBeingDragged.GroupId))
                 {
-                    Rect targetRect;
-                    if (TryGetElementRect(target, rootControl, out targetRect))
+                    if (TryGetElementRect(target, rootControl, out Rect targetRect))
                     {
                         var distanceToTargetRect = CalculateDistanceToRect(absolutePositionOfCursorPositionOrOfCenterOfControl, targetRect);
                         if (distanceToTargetRect < closesTargetDistance)
@@ -203,7 +212,6 @@ namespace MetroStyleApps
                             closesTargetDistance = distanceToTargetRect;
                             closestTarget = target;
                         }
-
                     }
                 }
 
@@ -293,33 +301,16 @@ namespace MetroStyleApps
 
         static bool TryGetElementRect(FrameworkElement element, UIElement rootControl, out Rect rect)
         {
-            if (element.Parent != null)
+            try
             {
-                GeneralTransform gt;
-                try
-                {
-                    gt = element.TransformToVisual(rootControl);
-                }
-                catch (System.ArgumentException)
-                {
-                    rect = new Rect();
-                    return false;
-                }
-                Point topLeft = MetroHelpers.TransformPoint(gt, new Point(0, 0));
-                Point bottomRight;
-                if (!double.IsNaN(element.ActualWidth) && !double.IsNaN(element.ActualHeight))
-                    bottomRight = MetroHelpers.TransformPoint(gt, new Point(element.ActualWidth, element.ActualHeight));
-                else
-                    bottomRight = topLeft;
-                rect = new Rect(topLeft, bottomRight);
+                rect = element.TransformToVisual(rootControl)
+                              .TransformBounds(new Rect(element.RenderSize));
                 return true;
             }
-            else
-            {
-                // It likely means that the element is not in the visual tree.
-                rect = new Rect();
-                return false;
-            }
+            catch { }
+
+            rect = new Rect();
+            return false;
         }
 
         static double CalculateDistanceToRect(Point point, Rect rect)
@@ -415,7 +406,7 @@ namespace MetroStyleApps
                     MinWidth = 30,
                     MinHeight = 20,
                     Opacity = GhostOpacityDuringDragAndDrop,
-                    RenderTransformOrigin = new Point(0.5, 0.5),
+                    //RenderTransformOrigin = new Point(0.5, 0.5),
                     RenderTransform = sourceShouldBeEnlargedDuringDrag ? new ScaleTransform() { ScaleX = 1.5, ScaleY = 1.5 } : null
                 };
                 ghostControl = image;
