@@ -14,13 +14,13 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="MaxWidth" Value="110"/>
+            <Setter Property="MaxWidth" Value="150"/>
         </Style>
         <Style x:Key="StyleForTextBlockInOptionsButtons" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="MaxWidth" Value="110"/>
+            <Setter Property="MaxWidth" Value="130"/>
         </Style>
         <Style x:Key="StyleForOptionsButtons" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
@@ -39,7 +39,7 @@
         <Border CornerRadius="20" Background="{StaticResource PhoneAccentBrush}" Padding="10,10,10,5">
             <StackPanel Orientation="Vertical">
                 <Border Background="#44000000" CornerRadius="20,20,0,0">
-                    <Viewbox Width="400" Stretch="Uniform" Margin="10,0,0,0" HorizontalAlignment="Left">
+                    <Viewbox Stretch="Uniform" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="RadioButtonNormal" Click="RadioButton_Click">
                                 <TextBlock Text="{Binding LocalizedResources.PriorityNormal_RadioButtonContent, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Style="{StaticResource StyleForTextBlockInRadioButtons}"/>
@@ -67,7 +67,7 @@
                         <TextBlock Text="{Binding LocalizedResources.ActionsMarkTaskAsNotDone_ButtonContent, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Style="{StaticResource StyleForTextBlockInOptionsButtons}"/>
                     </Button>
                     <Button x:Name="ButtonOK" Style="{StaticResource StyleForOptionsButtons}">
-                        <TextBlock FontSize="32" Text="{Binding LocalizedResources.ActionsOKEditTask_ButtonContent, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Style="{StaticResource StyleForTextBlockInOptionsButtons}"/>
+                        <TextBlock FontSize="24" Text="{Binding LocalizedResources.ActionsOKEditTask_ButtonContent, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Style="{StaticResource StyleForTextBlockInOptionsButtons}"/>
                     </Button>
                 </StackPanel>
             </StackPanel>
