@@ -18,7 +18,7 @@ namespace ToDoCalendarControl
         const int NumberOfAdditionalDaysToLoadBefore = 30;
         const int NumberOfAdditionalDaysToLoadAfter = 120;
         const int ItemHeight = 16;
-        const int MinLandscapeWidth = 600;
+        const int MinLandscapeWidth = 1150;
 
         Controller _controller;
         AutoSaveHandler _autoSaveHandler;
@@ -70,7 +70,7 @@ namespace ToDoCalendarControl
         {
             base.OnRenderSizeChanged(info);
 
-            var stateName = ActualWidth > ActualHeight && ActualWidth > MinLandscapeWidth ? "LandscapeState" : "DefaultState";
+            var stateName = ActualWidth > MinLandscapeWidth ? "LandscapeState" : "DefaultState";
             VisualStateManager.GoToState(Parent as Control, stateName, false);
         }
 
