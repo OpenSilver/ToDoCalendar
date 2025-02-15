@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 
 namespace ToDoCalendarControl
 {
@@ -16,5 +17,6 @@ namespace ToDoCalendarControl
         public bool IsMarkedAsDone { get; set; }
         public EventType EventType { get; set; }
         public Color CalendarColor { get; set; }
+        public DateTime? TemporaryCreationDate { get; set; } // Not intended to be persisted
     }
 }

@@ -163,10 +163,22 @@ namespace ToDoCalendarControl
             // Show again the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Visible;
 
-            if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle &&
-                _controller.CalendarService is ICalendarService calendarService)
+            // If the event has an empty title and was created recently (less than 3 minues ago),
+            // then delete it (because it was most likely created by mistake), otherwise save the new title:
+            if (string.IsNullOrEmpty(EventOptionsControl.EventModel.Title)
+                && (EventOptionsControl.EventModel.TemporaryCreationDate.HasValue
+                && EventOptionsControl.EventModel.TemporaryCreationDate.Value < DateTime.UtcNow
+                && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3)))
             {
-                await calendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day);
+            }
+            else
+            {
+                if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle &&
+                    _controller.CalendarService is ICalendarService calendarService)
+                {
+                    await calendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                }
             }
         }
 
