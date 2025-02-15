@@ -336,7 +336,8 @@ namespace ToDoCalendarControl
                 BorderBrush = new SolidColorBrush(eventModel.CalendarColor),
                 BorderThickness = new Thickness(2),
                 Padding = new Thickness(12, 0, 12, 0),
-                Margin = EventMargin
+                Margin = EventMargin,
+                Cursor = Cursors.Hand
             };
 
             var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
