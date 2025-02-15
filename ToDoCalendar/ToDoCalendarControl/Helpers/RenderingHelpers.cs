@@ -22,8 +22,8 @@ namespace ToDoCalendarControl
         const double Column2WidthIfMoreSpaceRequired = 80d;
         const double SeparatorHeight = 1d;
         static readonly Brush SeparatorColor = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
-        static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
-        static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 240, 240, 240));
+        static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
         static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
         static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush DayNumberColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
