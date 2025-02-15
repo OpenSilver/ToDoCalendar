@@ -1,11 +1,12 @@
 ﻿using MetroStyleApps;
 using System;
-
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ToDoCalendarControl
 {
@@ -230,7 +231,14 @@ namespace ToDoCalendarControl
             // Check if the user has dragged the control for adding an event or he/she has dragged another event:
             if (e.Source.Name == "DRAGSOURCE_NewEvent")
             {
-                await customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
+                var (newEventModel, dayModel) = await customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
+
+                // Make sure the event enters Edit Mode immediately after being created:
+                customDragAndDropTarget.Dispatcher.BeginInvoke(async () =>
+                {
+                    await Task.Delay(1); // Workaround to ensure that the UI element for the new event has been loaded.
+                    customDragAndDropTarget.Controller.EditEvent(newEventModel, dayModel, customDragAndDropTarget.Day);
+                });
             }
             else
             {

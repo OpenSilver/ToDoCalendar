@@ -48,7 +48,7 @@ namespace ToDoCalendarControl
             }
         }
 
-        public async Task AddEvent(DateTime day)
+        public async Task<(EventModel,DayModel)> AddEvent(DateTime day)
         {
             // Create or reuse the model for the day:
             DayModel dayModel;
@@ -77,6 +77,8 @@ namespace ToDoCalendarControl
 
             // Remember that there are unsaved changes:
             RememberThatThereAreUnsavedChanges();
+
+            return (newEventModel, dayModel);
         }
 
         public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day)
