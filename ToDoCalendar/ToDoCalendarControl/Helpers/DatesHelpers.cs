@@ -27,7 +27,7 @@ namespace ToDoCalendarControl
 
         public static string GetMonthHeaderText(DateTime firstDayOfMonth)
         {
-            return CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(firstDayOfMonth.Month).ToUpper() + " " + firstDayOfMonth.Year.ToString();
+            return CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(firstDayOfMonth.Month) + " " + firstDayOfMonth.Year.ToString();
             //return DateTimeFormatInfo.CurrentInfo.GetMonthName(firstDayOfMonth.Month).ToUpper() + " " + firstDayOfMonth.Year.ToString();
             //return firstDayOfMonth.ToString("MMMM yyyy", CultureInfo.CurrentUICulture);
         }

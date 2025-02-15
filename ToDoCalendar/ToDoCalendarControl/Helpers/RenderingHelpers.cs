@@ -60,8 +60,8 @@ namespace ToDoCalendarControl
         static readonly Thickness EventTextBoxMargin = new Thickness(-6, 0, -6, 0);
 
         // Rendering the month header:
-        const double LeftMarginOfMonthName = 10d; // in pixels
-        static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 190, 190, 190));
+        const double LeftMarginOfMonthName = 5d; // in pixels
+        static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
         static readonly Brush MonthHeaderForegroundColor = new SolidColorBrush(Colors.White);
 
 
@@ -493,7 +493,7 @@ namespace ToDoCalendarControl
 
             var outerContainer = new Border()
             {
-                Height = 14,
+                Height = 16,
                 Background = MonthHeaderBackgroundColor
             };
 
@@ -505,6 +505,7 @@ namespace ToDoCalendarControl
                 VerticalAlignment = VerticalAlignment.Center,
                 TextAlignment = System.Windows.TextAlignment.Left,
                 TextWrapping = TextWrapping.Wrap,
+                FontWeight = FontWeights.Bold,
                 Margin = new Thickness(LeftMarginOfMonthName, 0, 0, 0)
             };
 
