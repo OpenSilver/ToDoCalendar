@@ -47,7 +47,7 @@ namespace ToDoCalendarControl
         const double EventOpacityWhenLowPriorityIfToday = 0.6;
         static readonly Thickness StrikethroughMargin = new Thickness(-5, 2, -5, 0);
         static readonly Brush StrikethroughLineColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
-        static readonly Brush EventBackgroundColor = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
+        static readonly Brush EventBackgroundColorDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
         static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
         static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
         static readonly Brush EventBackgroundColorWhenInfo = new SolidColorBrush(Colors.Transparent);
@@ -340,7 +340,7 @@ namespace ToDoCalendarControl
                     EventType.Info => EventBackgroundColorWhenInfo,
                     _ when eventModel.IsMarkedAsDone && !isToday => EventBackgroundColorWhenDone,
                     EventType.HighPriority => EventBackgroundColorWhenHighPriority,
-                    _ => EventBackgroundColor
+                    _ => (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventBackgroundColorDefault)
                 },
                 Opacity = eventModel.EventType switch
                 {
@@ -348,8 +348,6 @@ namespace ToDoCalendarControl
                     EventType.Unspecified => 0.8,
                     _ => eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d
                 },
-                BorderBrush = new SolidColorBrush(eventModel.CalendarColor),
-                BorderThickness = new Thickness(2),
                 Padding = new Thickness(12, 0, 12, 0),
                 Margin = EventMargin,
                 Cursor = Cursors.Hand
