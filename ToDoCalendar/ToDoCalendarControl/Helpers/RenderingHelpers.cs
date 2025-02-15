@@ -21,8 +21,10 @@ namespace ToDoCalendarControl
         const double Column2WidthIfNormalSpaceRequired = 30d;
         const double Column2WidthIfMoreSpaceRequired = 80d;
         const double SeparatorHeight = 1d;
+        const double ColumnsSeparatorWidth = 2d;
         static readonly Brush SeparatorColor = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
         static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        static readonly Brush ColumnsSeparatorColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
         static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
         static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
         static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
@@ -109,7 +111,11 @@ namespace ToDoCalendarControl
             // CREATE ELEMENTS
             //----------------
 
-            var rootControl = new Grid();
+            var rootControl = new Border()
+            {
+                BorderThickness = new Thickness(0, 0, ColumnsSeparatorWidth, 0),
+                BorderBrush = ColumnsSeparatorColor
+            };
 
             //if (isToday)
             //{
@@ -219,7 +225,7 @@ namespace ToDoCalendarControl
             dayContainer.Children.Add(eventsContainer);
             mainContainer.Children.Add(dayContainer);
             mainContainer.Children.Add(dragAndDropTarget);
-            rootControl.Children.Add(mainContainer);
+            rootControl.Child = mainContainer;
 
             return rootControl;
         }
