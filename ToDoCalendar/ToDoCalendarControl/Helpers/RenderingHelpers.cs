@@ -52,7 +52,7 @@ namespace ToDoCalendarControl
         static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
         static readonly Brush EventBackgroundColorWhenInfo = new SolidColorBrush(Colors.Transparent);
         static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
-        static readonly Brush EventTextBackgroundWhenEditing = (Brush)Application.Current.Resources["PhoneAccentBrush"];
+        static readonly Brush EventTextBackgroundWhenEditingDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
         static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.White);
         static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
@@ -394,7 +394,7 @@ namespace ToDoCalendarControl
             eventTitle.GotFocus += (s, e) =>
             {
                 eventTitle.FontSize = EventFontSizeWhenEditing;
-                eventTitle.Background = EventTextBackgroundWhenEditing;
+                eventTitle.Background = (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextBackgroundWhenEditingDefault);
                 eventTitle.Foreground = EventTextColorWhenEditing;
                 eventTitle.Margin = EventTextBoxMarginWhenEditing;
                 eventTitle.TextWrapping = TextWrapping.Wrap;
