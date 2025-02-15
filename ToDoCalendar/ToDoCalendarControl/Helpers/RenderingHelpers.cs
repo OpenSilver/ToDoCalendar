@@ -52,14 +52,15 @@ namespace ToDoCalendarControl
         static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
         static readonly Brush EventBackgroundColorWhenInfo = new SolidColorBrush(Colors.Transparent);
         static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
-        static readonly Brush EventTextBackgroundWhenEditing = new SolidColorBrush(Colors.White);
+        static readonly Brush EventTextBackgroundWhenEditing = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
-        static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.Black);
+        static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.White);
         static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
         static readonly Thickness EventMargin = new Thickness(0);
-        static readonly Thickness EventTextBoxMargin = new Thickness(-6, 0, -6, 0);
+        static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, -1);
+        static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
 
         // Rendering the month header:
         const double LeftMarginOfMonthName = 5d; // in pixels
@@ -367,9 +368,11 @@ namespace ToDoCalendarControl
                 IsSpellCheckEnabled = true,
 #endif
                 BorderThickness = new Thickness(0),
-                Margin = EventTextBoxMargin,
+                Margin = EventTextBoxMarginWhenNotEditing,
                 Padding = new Thickness(0),
+                CaretBrush = EventTextColorWhenEditing,
                 FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize),
+                FontWeight = FontWeights.Bold,
                 MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity),
                 TextWrapping = TextWrapping.NoWrap,
                 Height = double.NaN,
@@ -395,6 +398,7 @@ namespace ToDoCalendarControl
                 eventTitle.FontSize = EventFontSizeWhenEditing;
                 eventTitle.Background = EventTextBackgroundWhenEditing;
                 eventTitle.Foreground = EventTextColorWhenEditing;
+                eventTitle.Margin = EventTextBoxMarginWhenEditing;
                 eventTitle.TextWrapping = TextWrapping.Wrap;
                 eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
                 eventTitle.MaxWidth = double.PositiveInfinity;
@@ -408,6 +412,7 @@ namespace ToDoCalendarControl
                 eventTitle.FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize);
                 eventTitle.Background = EventTextBackgroundWhenNotEditing;
                 eventTitle.Foreground = functionToDetermineEventForeground();
+                eventTitle.Margin = EventTextBoxMarginWhenNotEditing;
                 eventTitle.TextWrapping = TextWrapping.NoWrap;
                 eventTitle.MinWidth = 0;
                 eventTitle.MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity);
