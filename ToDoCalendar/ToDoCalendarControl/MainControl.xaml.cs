@@ -13,11 +13,11 @@ namespace ToDoCalendarControl
     public partial class MainControl : UserControl
     {
         const int AutoSaveIntervalInSeconds = 2;
-        const int InitialDayCountBeforeCurrentDate = 10;
-        const int InitialDayCountAfterCurrentDate = 60;
-        const int NumberOfAdditionalDaysToLoadBefore = 30;
-        const int NumberOfAdditionalDaysToLoadAfter = 120;
-        const int ItemHeight = 16;
+        const int InitialDayCountBeforeCurrentDate = 20;
+        const int InitialDayCountAfterCurrentDate = 150;
+        const int NumberOfAdditionalDaysToLoadBefore = 100;
+        const int NumberOfAdditionalDaysToLoadAfter = 150;
+        const int ItemHeight = 14;
         const int MinLandscapeWidth = 1150;
 
         Controller _controller;

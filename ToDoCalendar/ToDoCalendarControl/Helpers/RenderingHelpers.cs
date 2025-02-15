@@ -16,7 +16,7 @@ namespace ToDoCalendarControl
         //----------------
 
         // Rendering a day:
-        const double Column1Width = 35d;
+        const double Column1Width = 25d;
         const double Column2WidthIfNormalSpaceRequired = 30d;
         const double Column2WidthIfMoreSpaceRequired = 80d;
         const double SeparatorHeight = 1d;
@@ -33,9 +33,9 @@ namespace ToDoCalendarControl
         static readonly Brush DayOfWeekColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
 
         // Rendering an event:
-        const double EventFontSize = 18;
-        const double EventFontSizeWhenEditing = 32;
-        const double EventFontSizeWhenToday = 30;
+        const double EventFontSize = 12;
+        const double EventFontSizeWhenEditing = 18;
+        const double EventFontSizeWhenToday = 14;
         const double StrikethroughLineHeight = 5;
         const double StrikethroughLineHeightIfToday = 9;
         const double MaxWidthWhenEventIsMarkedAsDone = 80;
@@ -55,7 +55,7 @@ namespace ToDoCalendarControl
         static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
-        static readonly Thickness EventMargin = new Thickness(3);
+        static readonly Thickness EventMargin = new Thickness(0);
         static readonly Thickness EventTextBoxMargin = new Thickness(-6, 0, -6, 0);
 
         // Rendering the month header:
@@ -158,7 +158,7 @@ namespace ToDoCalendarControl
 
             var eventsContainer = new Border()
             {
-                MinHeight = 30,
+                MinHeight = 14,
                 Margin = new Thickness(Column1Width + column2Width, 1, 1, 1)
             };
 
@@ -335,7 +335,7 @@ namespace ToDoCalendarControl
                 },
                 BorderBrush = new SolidColorBrush(eventModel.CalendarColor),
                 BorderThickness = new Thickness(2),
-                Padding = new Thickness(15, 2, 15, 2),
+                Padding = new Thickness(12, 0, 12, 0),
                 Margin = EventMargin
             };
 
@@ -484,7 +484,7 @@ namespace ToDoCalendarControl
 
             var outerContainer = new Border()
             {
-                Height = 32,
+                Height = 14,
                 Background = MonthHeaderBackgroundColor
             };
 

@@ -11,7 +11,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="White"
-    d:DesignHeight="480" d:DesignWidth="480">
+    d:DesignHeight="932" d:DesignWidth="430">
     
     <UserControl.Resources>
         <local:LocalizedStrings x:Key="ToDoCalendarControl_LocalizedStrings"/>
@@ -78,10 +78,10 @@
                     </Popup>
                 </Grid>
             </ScrollViewer>
-            <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,1">
-                <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="223" Height="165" Margin="0,0,0,-1"/>
-                <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" Margin="0,28,0,10" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click">
-                    <Grid Width="80" Height="80">
+            <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,-10">
+                <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="165" Margin="0,0,0,-1"/>
+                <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
+                    <Grid Width="80" Height="80" Margin="20,0,20,0">
                         <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
                         <Path Data="M0,-1 V1 M-1,0 H1" Stretch="Fill" StrokeThickness="10" Stroke="White" Width="60" Height="60"/>
                     </Grid>
