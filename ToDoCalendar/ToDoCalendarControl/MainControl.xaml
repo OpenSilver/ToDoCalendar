@@ -48,7 +48,7 @@
                             </DiscreteObjectKeyFrame.Value>
                         </DiscreteObjectKeyFrame>
                     </ObjectAnimationUsingKeyFrames>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadNextButton" Storyboard.TargetProperty="HorizontalAlignment">
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadNextButton" Storyboard.TargetProperty="HorizontalContentAlignment">
                         <DiscreteObjectKeyFrame KeyTime="0" Value="Center"/>
                     </ObjectAnimationUsingKeyFrames>
                 </Storyboard>
@@ -62,14 +62,14 @@
                 <Grid x:Name="MainContainer" uwp:ManipulationDelta="MainContainer_ManipulationDelta">
                     <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}">
                         <LayoutTransformer x:Name="LoadPrevButtonTransformer">
-                            <Button FontSize="14" Padding="20,10,20,10" Foreground="#FFCCCCCC" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Margin="5"/>
+                            <Button FontSize="14" Padding="20,10,20,10" Background="#FF444444" Foreground="#FFCCCCCC" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" FontWeight="Bold"/>
                         </LayoutTransformer>
                         
                         <WrapPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"
                                    ItemWidth="{Binding ActualWidth, ElementName=MainContainer, Converter={StaticResource PositiveNumberConverter}}"/>
 
                         <LayoutTransformer x:Name="LoadNextButtonTransformer">
-                            <Button x:Name="LoadNextButton" FontSize="14" Padding="20,10,20,10" Foreground="#FFCCCCCC" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Margin="5"/>
+                            <Button x:Name="LoadNextButton" FontSize="14" Padding="20,10,20,10" Margin="0,2,0,0" Foreground="#FFCCCCCC" HorizontalContentAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Background="#FF444444" FontWeight="Bold"/>
                         </LayoutTransformer>
                     </StackPanel>
                     
