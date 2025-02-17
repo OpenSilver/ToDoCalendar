@@ -81,8 +81,8 @@ namespace ToDoCalendarControl
 
         public void UpdateButtonsVisibility()
         {
-            ButtonMarkAsDone.Visibility = (EventModel != null && !EventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed);
-            ButtonMarkAsNotDone.Visibility = (EventModel != null && EventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed);
+            ButtonMarkAsDone.Visibility = (EventModel != null && !string.IsNullOrEmpty(PreviousTitle) && !EventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed);
+            ButtonMarkAsNotDone.Visibility = (EventModel != null && !string.IsNullOrEmpty(PreviousTitle) && EventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed);
         }
 
         void ApplyEventTypeToRadioButtons()

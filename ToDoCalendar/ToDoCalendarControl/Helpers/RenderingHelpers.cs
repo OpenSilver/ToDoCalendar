@@ -1,11 +1,12 @@
 ﻿using MetroStyleApps;
 using System;
-
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ToDoCalendarControl
 {
@@ -16,13 +17,15 @@ namespace ToDoCalendarControl
         //----------------
 
         // Rendering a day:
-        const double Column1Width = 35d;
+        const double Column1Width = 25d;
         const double Column2WidthIfNormalSpaceRequired = 30d;
         const double Column2WidthIfMoreSpaceRequired = 80d;
         const double SeparatorHeight = 1d;
+        const double ColumnsSeparatorWidth = 2d;
         static readonly Brush SeparatorColor = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
-        static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
-        static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 240, 240, 240));
+        static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        static readonly Brush ColumnsSeparatorColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
+        static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
         static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
         static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush DayNumberColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
@@ -33,9 +36,9 @@ namespace ToDoCalendarControl
         static readonly Brush DayOfWeekColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
 
         // Rendering an event:
-        const double EventFontSize = 18;
-        const double EventFontSizeWhenEditing = 32;
-        const double EventFontSizeWhenToday = 30;
+        const double EventFontSize = 12;
+        const double EventFontSizeWhenEditing = 18;
+        const double EventFontSizeWhenToday = 14;
         const double StrikethroughLineHeight = 5;
         const double StrikethroughLineHeightIfToday = 9;
         const double MaxWidthWhenEventIsMarkedAsDone = 80;
@@ -44,23 +47,24 @@ namespace ToDoCalendarControl
         const double EventOpacityWhenLowPriorityIfToday = 0.6;
         static readonly Thickness StrikethroughMargin = new Thickness(-5, 2, -5, 0);
         static readonly Brush StrikethroughLineColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
-        static readonly Brush EventBackgroundColor = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
+        static readonly Brush EventBackgroundColorDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
         static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
         static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
         static readonly Brush EventBackgroundColorWhenInfo = new SolidColorBrush(Colors.Transparent);
         static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
-        static readonly Brush EventTextBackgroundWhenEditing = new SolidColorBrush(Colors.White);
+        static readonly Brush EventTextBackgroundWhenEditingDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
-        static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.Black);
+        static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.White);
         static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
-        static readonly Thickness EventMargin = new Thickness(3);
-        static readonly Thickness EventTextBoxMargin = new Thickness(-6, 0, -6, 0);
+        static readonly Thickness EventMargin = new Thickness(0);
+        static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, -1);
+        static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
 
         // Rendering the month header:
-        const double LeftMarginOfMonthName = 10d; // in pixels
-        static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 190, 190, 190));
+        const double LeftMarginOfMonthName = 5d; // in pixels
+        static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
         static readonly Brush MonthHeaderForegroundColor = new SolidColorBrush(Colors.White);
 
 
@@ -108,7 +112,11 @@ namespace ToDoCalendarControl
             // CREATE ELEMENTS
             //----------------
 
-            var rootControl = new Grid();
+            var rootControl = new Border()
+            {
+                BorderThickness = new Thickness(0, 0, ColumnsSeparatorWidth, 0),
+                BorderBrush = ColumnsSeparatorColor
+            };
 
             //if (isToday)
             //{
@@ -158,7 +166,7 @@ namespace ToDoCalendarControl
 
             var eventsContainer = new Border()
             {
-                MinHeight = 30,
+                MinHeight = 14,
                 Margin = new Thickness(Column1Width + column2Width, 1, 1, 1)
             };
 
@@ -218,7 +226,7 @@ namespace ToDoCalendarControl
             dayContainer.Children.Add(eventsContainer);
             mainContainer.Children.Add(dayContainer);
             mainContainer.Children.Add(dragAndDropTarget);
-            rootControl.Children.Add(mainContainer);
+            rootControl.Child = mainContainer;
 
             return rootControl;
         }
@@ -230,7 +238,14 @@ namespace ToDoCalendarControl
             // Check if the user has dragged the control for adding an event or he/she has dragged another event:
             if (e.Source.Name == "DRAGSOURCE_NewEvent")
             {
-                await customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
+                var (newEventModel, dayModel) = await customDragAndDropTarget.Controller.AddEvent(customDragAndDropTarget.Day);
+
+                // Make sure the event enters Edit Mode immediately after being created:
+                customDragAndDropTarget.Dispatcher.BeginInvoke(async () =>
+                {
+                    await Task.Delay(1); // Workaround to ensure that the UI element for the new event has been loaded.
+                    customDragAndDropTarget.Controller.EditEvent(newEventModel, dayModel, customDragAndDropTarget.Day);
+                });
             }
             else
             {
@@ -325,7 +340,7 @@ namespace ToDoCalendarControl
                     EventType.Info => EventBackgroundColorWhenInfo,
                     _ when eventModel.IsMarkedAsDone && !isToday => EventBackgroundColorWhenDone,
                     EventType.HighPriority => EventBackgroundColorWhenHighPriority,
-                    _ => EventBackgroundColor
+                    _ => (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventBackgroundColorDefault)
                 },
                 Opacity = eventModel.EventType switch
                 {
@@ -333,10 +348,9 @@ namespace ToDoCalendarControl
                     EventType.Unspecified => 0.8,
                     _ => eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d
                 },
-                BorderBrush = new SolidColorBrush(eventModel.CalendarColor),
-                BorderThickness = new Thickness(2),
-                Padding = new Thickness(15, 2, 15, 2),
-                Margin = EventMargin
+                Padding = new Thickness(12, 0, 12, 0),
+                Margin = EventMargin,
+                Cursor = Cursors.Hand
             };
 
             var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
@@ -352,9 +366,11 @@ namespace ToDoCalendarControl
                 IsSpellCheckEnabled = true,
 #endif
                 BorderThickness = new Thickness(0),
-                Margin = EventTextBoxMargin,
+                Margin = EventTextBoxMarginWhenNotEditing,
                 Padding = new Thickness(0),
+                CaretBrush = EventTextColorWhenEditing,
                 FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize),
+                FontWeight = FontWeights.Bold,
                 MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity),
                 TextWrapping = TextWrapping.NoWrap,
                 Height = double.NaN,
@@ -378,8 +394,9 @@ namespace ToDoCalendarControl
             eventTitle.GotFocus += (s, e) =>
             {
                 eventTitle.FontSize = EventFontSizeWhenEditing;
-                eventTitle.Background = EventTextBackgroundWhenEditing;
+                eventTitle.Background = (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextBackgroundWhenEditingDefault);
                 eventTitle.Foreground = EventTextColorWhenEditing;
+                eventTitle.Margin = EventTextBoxMarginWhenEditing;
                 eventTitle.TextWrapping = TextWrapping.Wrap;
                 eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
                 eventTitle.MaxWidth = double.PositiveInfinity;
@@ -393,6 +410,7 @@ namespace ToDoCalendarControl
                 eventTitle.FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize);
                 eventTitle.Background = EventTextBackgroundWhenNotEditing;
                 eventTitle.Foreground = functionToDetermineEventForeground();
+                eventTitle.Margin = EventTextBoxMarginWhenNotEditing;
                 eventTitle.TextWrapping = TextWrapping.NoWrap;
                 eventTitle.MinWidth = 0;
                 eventTitle.MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity);
@@ -484,7 +502,7 @@ namespace ToDoCalendarControl
 
             var outerContainer = new Border()
             {
-                Height = 32,
+                Height = 16,
                 Background = MonthHeaderBackgroundColor
             };
 
@@ -496,6 +514,7 @@ namespace ToDoCalendarControl
                 VerticalAlignment = VerticalAlignment.Center,
                 TextAlignment = System.Windows.TextAlignment.Left,
                 TextWrapping = TextWrapping.Wrap,
+                FontWeight = FontWeights.Bold,
                 Margin = new Thickness(LeftMarginOfMonthName, 0, 0, 0)
             };
 
