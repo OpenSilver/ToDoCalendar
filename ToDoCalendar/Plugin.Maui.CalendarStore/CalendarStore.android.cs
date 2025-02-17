@@ -2,6 +2,7 @@
 using Android.Database;
 using Android.Provider;
 using Microsoft.Maui.Graphics.Platform;
+using System.Diagnostics;
 using static Plugin.Maui.CalendarStore.CalendarStore;
 
 namespace Plugin.Maui.CalendarStore;
@@ -745,8 +746,8 @@ partial class CalendarStoreImplementation : ICalendarStore
             Location = cursor.GetString(cursor.GetColumnIndex(
                 CalendarContract.Instances.InterfaceConsts.EventLocation)) ?? string.Empty,
             IsAllDay = allDay,
-            StartDate = timezone is null ? start : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, timezone),
-            EndDate = timezone is null ? end : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(end, timezone),
+            StartDate = ToDateTimeOffsetWithTimezone(start, timezone),
+            EndDate = ToDateTimeOffsetWithTimezone(end, timezone),
             Attendees = GetAttendees(EventIDString),
             Reminders = GetAllEventReminders(eventId),
         };
@@ -759,17 +760,6 @@ partial class CalendarStoreImplementation : ICalendarStore
         var start = DateTimeOffset.FromUnixTimeMilliseconds(cursor.GetLong(projection.IndexOf(CalendarContract.Events.InterfaceConsts.Dtstart)));
         var end = DateTimeOffset.FromUnixTimeMilliseconds(cursor.GetLong(projection.IndexOf(CalendarContract.Events.InterfaceConsts.Dtend)));
 
-        DateTimeOffset SafeConvertTime(DateTimeOffset time, string tz)
-        {
-            try
-            {
-                return tz is null ? time : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(time, tz);
-            }
-            catch (TimeZoneNotFoundException)
-            {
-                return time; // Fallback if timezone is invalid
-            }
-        }
         var EventIDString = cursor.GetString(projection.IndexOf(CalendarContract.Events.InterfaceConsts.Id)) ?? string.Empty;
         if (!long.TryParse(EventIDString, out var eventId))
         {
@@ -784,12 +774,30 @@ partial class CalendarStoreImplementation : ICalendarStore
             Location = cursor.GetString(projection.IndexOf(
                 CalendarContract.Events.InterfaceConsts.EventLocation)) ?? string.Empty,
             IsAllDay = allDay,
-            StartDate = timezone is null ? start : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(start, timezone),
-            EndDate = timezone is null ? end : TimeZoneInfo.ConvertTimeBySystemTimeZoneId(end, timezone),
+            StartDate = ToDateTimeOffsetWithTimezone(start, timezone),
+            EndDate = ToDateTimeOffsetWithTimezone(end, timezone),
             Attendees = GetAttendees(cursor.GetString(projection.IndexOf(
                 CalendarContract.Events.InterfaceConsts.Id)) ?? string.Empty).ToList(),
             Reminders = GetAllEventReminders(eventId),
         };
+    }
+
+    static DateTimeOffset ToDateTimeOffsetWithTimezone(DateTimeOffset dateTimeOffset, string? timezoneId)
+    {
+        if (timezoneId is null)
+        {
+            return dateTimeOffset;
+        }
+
+        try
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTimeOffset, timezoneId);
+        }
+        catch (TimeZoneNotFoundException ex)
+        {
+            Debug.WriteLine(ex);
+            return dateTimeOffset;
+        }
     }
 
     static IEnumerable<CalendarEventAttendee> ToAttendees(ICursor cur, List<string> projection)
