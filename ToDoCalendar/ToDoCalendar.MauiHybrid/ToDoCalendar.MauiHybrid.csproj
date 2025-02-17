@@ -77,10 +77,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
         <PackageReference Include="OpenSilver.MauiHybrid" Version="3.2.0-preview-2025-02-10-090106-4ac8fa89" />
-        <PackageReference Include="Plugin.Maui.CalendarStore" Version="3.0.0-preview2" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj" />
       <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
     </ItemGroup>
 
