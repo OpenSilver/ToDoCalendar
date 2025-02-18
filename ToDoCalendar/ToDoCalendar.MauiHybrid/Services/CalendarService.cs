@@ -23,7 +23,7 @@ public class CalendarService : ICalendarService
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
-                DateTime = x.StartDate.DateTime
+                DateTime = x.StartDate.LocalDateTime
             };
 
             if (calendars.TryGetValue(x.CalendarId, out var calendar))
@@ -65,7 +65,7 @@ public class CalendarService : ICalendarService
         await ExecuteOnMainThread(async () =>
         {
             var existingEvent = await _calendarStore.GetEvent(calendarEvent.Id);
-            var dateOffset = new DateTimeOffset(DateTime.SpecifyKind(calendarEvent.DateTime, DateTimeKind.Utc));
+            var dateOffset = new DateTimeOffset(DateTime.SpecifyKind(calendarEvent.DateTime, DateTimeKind.Local));
 
             await _calendarStore.UpdateEvent(
                 calendarEvent.Id,
