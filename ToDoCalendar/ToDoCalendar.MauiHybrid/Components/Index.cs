@@ -20,7 +20,7 @@ namespace ToDoCalendar.MauiHybrid.Components
 
             if (Application.Current?.MainPage is MainPage mainPage)
             {
-                app.MainWindow?.InvokeOnLayoutUpdated(mainPage.HideLoader);
+                app.MainWindow?.InvokeOnLayoutUpdated(mainPage.Initialize);
             }
         }
     }

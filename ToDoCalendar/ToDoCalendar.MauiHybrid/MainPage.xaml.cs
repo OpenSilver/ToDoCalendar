@@ -11,8 +11,13 @@ public partial class MainPage : ContentPage
 #endif
     }
 
-    internal void HideLoader()
+    internal void Initialize()
     {
-        MainThread.BeginInvokeOnMainThread(() => RootGrid.Children.Remove(Loader));
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            RootGrid.Children.Remove(Loader);
+
+            blazorWebView.Focus(); // required to show keyboard after dragging a new event
+        });
     }
 }
