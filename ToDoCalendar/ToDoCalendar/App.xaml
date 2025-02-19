@@ -14,7 +14,7 @@
             <SolidColorBrush x:Key="PhoneForegroundBrush" Color="Black"/>
             <SolidColorBrush x:Key="PhoneChromeBrush" Color="White"/>
             <sys:Double x:Key="PhoneFontSizeNormal">12</sys:Double>
-            <media:FontFamily x:Key="PhoneFontFamilyNormal">Segoe UI</media:FontFamily>
+            <media:FontFamily x:Key="PhoneFontFamilyNormal">Verdana</media:FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
