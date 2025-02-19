@@ -1,10 +1,15 @@
-﻿namespace ToDoCalendar.MauiHybrid;
+﻿using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 
-public partial class App : Application
+namespace ToDoCalendar.MauiHybrid;
+
+public partial class App : Microsoft.Maui.Controls.Application
 {
     public App()
     {
         InitializeComponent();
+
+        Current?.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>()
+            .UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
     }
 
     protected override Window CreateWindow(IActivationState? activationState)

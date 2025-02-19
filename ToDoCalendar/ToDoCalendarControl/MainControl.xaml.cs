@@ -185,7 +185,7 @@ namespace ToDoCalendarControl
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Cannot update the event");
+                MessageBox.Show(ex.ToString(), "Cannot update or delete the event");
             }
         }
 
@@ -204,6 +204,8 @@ namespace ToDoCalendarControl
 
             // Hide the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Collapsed;
+
+            MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox);
         }
 
         void Controller_ChangesWereMade(object sender, EventArgs e)
@@ -269,6 +271,14 @@ namespace ToDoCalendarControl
         void ButtonBuyFullVersion_Click(object sender, EventArgs e)
         {
             TrialHelpers.BuyFullVersion();
+        }
+
+        private void OnMainScrollViewerLayoutUpdated(object sender, EventArgs e)
+        {
+            if (EventOptionsControl.Visibility == Visibility.Visible && EventOptionsControl.TextBox is FrameworkElement element)
+            {
+                MainScrollViewer.ScrollIntoView(element);
+            }
         }
 
 #if !OPENSILVER
