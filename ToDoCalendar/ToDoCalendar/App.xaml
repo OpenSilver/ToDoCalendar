@@ -14,7 +14,7 @@
             <SolidColorBrush x:Key="PhoneForegroundBrush" Color="Black"/>
             <SolidColorBrush x:Key="PhoneChromeBrush" Color="White"/>
             <sys:Double x:Key="PhoneFontSizeNormal">12</sys:Double>
-            <media:FontFamily x:Key="PhoneFontFamilyNormal">Verdana</media:FontFamily>
+            <FontFamily x:Key="PhoneFontFamilyNormal">ms-appx:///ToDoCalendar/Fonts/Inter-VariableFont_slnt,wght.ttf</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

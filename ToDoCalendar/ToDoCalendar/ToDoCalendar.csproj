@@ -22,12 +22,14 @@
 
   <ItemGroup>
     <Compile Include="App.xaml.cs" />
+    <Compile Include="Utils\FontLoader.cs" />
     <Compile Include="MainPage.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="ApplicationIcon.png" />
     <Content Include="Background.png" />
+    <Content Include="Fonts\Inter-VariableFont_slnt,wght.ttf" />
     <Content Include="Properties\launchSettings.json" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>

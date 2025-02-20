@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using ToDoCalendar.Utils;
+
 #if !OPENSILVER
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -12,6 +14,12 @@ namespace ToDoCalendar
         {
             InitializeComponent();
 
+            Startup += App_Startup;
+        }
+
+        private async void App_Startup(object sender, StartupEventArgs e)
+        {
+            await FontLoader.LoadAppFonts();
             var mainPage = new MainPage();
             Window.Current.Content = mainPage;
         }

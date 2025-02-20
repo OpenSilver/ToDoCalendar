@@ -12,7 +12,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="White"
     d:DesignHeight="932" d:DesignWidth="430">
-    
+
     <UserControl.Resources>
         <local:LocalizedStrings x:Key="ToDoCalendarControl_LocalizedStrings"/>
         <converters:PositiveNumberConverter x:Key="PositiveNumberConverter"/>
