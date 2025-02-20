@@ -80,6 +80,10 @@ namespace ToDoCalendarControl
             MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
 
             await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+
+            var todayItem = DaysContainer.Children.Cast<Border>()
+                .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
+            MainScrollViewer.ScrollIntoView(todayItem);
         }
 
         private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)

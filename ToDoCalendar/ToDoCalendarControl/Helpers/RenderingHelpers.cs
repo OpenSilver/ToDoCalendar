@@ -27,7 +27,7 @@ namespace ToDoCalendarControl
         static readonly Brush ColumnsSeparatorColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
         static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
         static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
-        static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
+        internal static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush DayNumberColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
         static readonly Brush DayNumberColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
         static readonly Brush DayNumberColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
