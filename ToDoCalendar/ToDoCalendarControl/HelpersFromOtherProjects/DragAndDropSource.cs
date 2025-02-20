@@ -50,9 +50,11 @@ namespace MetroStyleApps
         public event EventHandler DragAndDropStopped;
 
 #if OPENSILVER
+        private const int MaxDragDelta = 5;
         private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
         private object _mouseLeftButtonDownSender;
         private MouseEventArgs _mouseLeftButtonDownEventArgs;
+        private Point _originPosition;
 #endif
 
         public DragAndDropSource()
@@ -122,6 +124,8 @@ namespace MetroStyleApps
 
         void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            _originPosition = e.GetPosition(MetroHelpers.GetRootVisual());
+
             if (!HoldToStartDrag)
             {
                 // Verify that the user is not dragging a scrollbar:
@@ -129,7 +133,7 @@ namespace MetroStyleApps
                 {
                     // Initialize the drag and drop operation:
                     StartDragOperation(sender,
-                        e.GetPosition(MetroHelpers.GetRootVisual()),
+                        _originPosition,
                         e.GetPosition((FrameworkElement)sender));
                 }
             }
@@ -137,7 +141,7 @@ namespace MetroStyleApps
             else
             {
                 _mouseLeftButtonDownSender = sender;
-                _mouseLeftButtonDownEventArgs = e;
+                _mouseLeftButtonDownEventArgs = e;                
                 _holdTimer.Tick += OnHoldTimerTick;
                 _holdTimer.Start();
             }
@@ -204,6 +208,13 @@ namespace MetroStyleApps
         void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
         {
             var pointerPosition = e.GetPosition(MetroHelpers.GetRootVisual());
+
+            if (_holdTimer.IsEnabled &&
+                (Math.Abs(pointerPosition.X - _originPosition.X) > MaxDragDelta || Math.Abs(pointerPosition.Y - _originPosition.Y) > MaxDragDelta))
+            {
+                ResetHoldTimer();
+            }
+
             OnMouseMove(pointerPosition, DistanceForDragOperationToBeConsideredIntentional);
         }
 
@@ -311,5 +322,5 @@ namespace MetroStyleApps
         }
 
 #endif
-            }
-        }
+    }
+}
