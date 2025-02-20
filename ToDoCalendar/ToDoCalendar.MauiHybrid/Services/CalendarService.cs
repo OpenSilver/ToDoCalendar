@@ -65,15 +65,18 @@ public class CalendarService : ICalendarService
         await ExecuteOnMainThread(async () =>
         {
             var existingEvent = await _calendarStore.GetEvent(calendarEvent.Id);
-            var dateOffset = new DateTimeOffset(DateTime.SpecifyKind(calendarEvent.DateTime, DateTimeKind.Local));
+            //Let's keep the time of the event and change only date
+            var localTimeOfTheEvent = existingEvent.StartDate.LocalDateTime.TimeOfDay;
+            var start = new DateTimeOffset(
+                DateTime.SpecifyKind(calendarEvent.DateTime.Date.Add(localTimeOfTheEvent), DateTimeKind.Local));
 
             await _calendarStore.UpdateEvent(
                 calendarEvent.Id,
                 calendarEvent.Title,
                 !string.IsNullOrEmpty(calendarEvent.Description) ? calendarEvent.Description : existingEvent.Description,
                 existingEvent.Location,
-                dateOffset,
-                existingEvent.IsAllDay ? dateOffset : existingEvent.EndDate,
+                start,
+                start.Add(existingEvent.Duration),
                 existingEvent.IsAllDay);
         });
     }
