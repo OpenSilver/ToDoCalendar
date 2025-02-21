@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ToDoCalendarControl.Resources;
 using ToDoCalendarControl.Services;
@@ -18,6 +19,7 @@ namespace ToDoCalendarControl
         const int NumberOfAdditionalDaysToLoadBefore = 100;
         const int NumberOfAdditionalDaysToLoadAfter = 150;
         const int ItemHeight = 14;
+        const int InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
 
         Controller _controller;
@@ -83,7 +85,20 @@ namespace ToDoCalendarControl
 
             var todayItem = DaysContainer.Children.Cast<Border>()
                 .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
-            MainScrollViewer.ScrollIntoView(todayItem);
+            ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
+        }
+
+        private static void ScrollIntoView(ScrollViewer viewer, FrameworkElement element, double verticalMargin)
+        {
+            if (element.GetBoundsRelativeTo(viewer) is not Rect itemRect)
+                return;
+
+            if (itemRect.Top - verticalMargin < 0 || itemRect.Bottom + verticalMargin > viewer.ViewportHeight)
+            {
+                double itemTop = itemRect.Top - verticalMargin;
+                double verticalOffset = viewer.VerticalOffset + itemTop;
+                viewer.ScrollToVerticalOffset(verticalOffset);
+            }
         }
 
         private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
