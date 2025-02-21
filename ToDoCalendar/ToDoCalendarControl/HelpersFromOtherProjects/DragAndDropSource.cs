@@ -141,7 +141,7 @@ namespace MetroStyleApps
             else
             {
                 _mouseLeftButtonDownSender = sender;
-                _mouseLeftButtonDownEventArgs = e;                
+                _mouseLeftButtonDownEventArgs = e;
                 _holdTimer.Tick += OnHoldTimerTick;
                 _holdTimer.Start();
             }
@@ -209,8 +209,7 @@ namespace MetroStyleApps
         {
             var pointerPosition = e.GetPosition(MetroHelpers.GetRootVisual());
 
-            if (_holdTimer.IsEnabled &&
-                (Math.Abs(pointerPosition.X - _originPosition.X) > MaxDragDelta || Math.Abs(pointerPosition.Y - _originPosition.Y) > MaxDragDelta))
+            if (_holdTimer.IsEnabled && !IsSameSpot(_originPosition, pointerPosition))
             {
                 ResetHoldTimer();
             }
@@ -250,6 +249,10 @@ namespace MetroStyleApps
                 }
             }
         }
+
+        public static bool IsSameSpot(Point originPosition, Point newPosition) =>
+            Math.Abs(newPosition.X - originPosition.X) < MaxDragDelta &&
+            Math.Abs(newPosition.Y - originPosition.Y) < MaxDragDelta;
 #endif
 
 #else

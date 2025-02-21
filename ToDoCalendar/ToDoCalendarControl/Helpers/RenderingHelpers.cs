@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace ToDoCalendarControl
 {
@@ -67,6 +66,7 @@ namespace ToDoCalendarControl
         static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
         static readonly Brush MonthHeaderForegroundColor = new SolidColorBrush(Colors.White);
 
+        private static Point _originPosition;
 
         //----------------
         // METHODS
@@ -383,12 +383,14 @@ namespace ToDoCalendarControl
                 Background = new SolidColorBrush(Colors.Transparent)
             };
 
+            borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonDown += (s, e) => _originPosition = e.GetPosition(null);
+
             borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonUp += (s, e) => // Note: we use this control so as to put focus on the TextBox only on MouseUp (instead of MouseDown) so that the user can "Hold" to drag and drop instead of editing.
                 {
-                    MetroHelpers.DispatcherRunAsync(() =>
-                        {
-                            MetroHelpers.SetFocus(eventTitle);
-                        });
+                    if (DragAndDropSource.IsSameSpot(_originPosition, e.GetPosition(null)))
+                    {
+                        MetroHelpers.SetFocus(eventTitle);
+                    }
                 };
 
             eventTitle.GotFocus += (s, e) =>
