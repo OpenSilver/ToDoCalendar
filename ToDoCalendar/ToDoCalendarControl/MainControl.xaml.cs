@@ -21,6 +21,7 @@ namespace ToDoCalendarControl
         const int ItemHeight = 14;
         const int InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
+        const int HorizontalScrollMargin = 67;
 
         Controller _controller;
         AutoSaveHandler _autoSaveHandler;
@@ -224,7 +225,7 @@ namespace ToDoCalendarControl
             // Hide the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Collapsed;
 
-            MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox);
+            MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
         }
 
         void Controller_ChangesWereMade(object sender, EventArgs e)
@@ -296,7 +297,7 @@ namespace ToDoCalendarControl
         {
             if (EventOptionsControl.Visibility == Visibility.Visible && EventOptionsControl.TextBox is FrameworkElement element)
             {
-                MainScrollViewer.ScrollIntoView(element);
+                MainScrollViewer.ScrollIntoView(element, HorizontalScrollMargin, 0, TimeSpan.Zero);
             }
         }
 
