@@ -26,6 +26,7 @@
     <Compile Include="HelpersFromOtherProjects\MetroHelpers.cs" />
     <Compile Include="HelpersFromOtherProjects\PointerPoint.cs" />
     <Compile Include="HelpersFromOtherProjects\PointerRoutedEventArgs.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\DatesHelpers.cs" />
     <Compile Include="Helpers\FileSystemHelpers.cs" />
     <Compile Include="Helpers\LoadAndSaveHelpers.cs" />

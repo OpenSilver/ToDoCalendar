@@ -34,7 +34,7 @@ public class DeviceEvent
         var model = YamlSerializer.Deserialize(Description) ?? new EventModel();
         model.Id = Id;
         model.Title = Title;
-        model.CalendarColor = CalendarColor;
+        model.CalendarColor = ColorHelper.AdjustCalendarColor(CalendarColor);
 
         return model;
     }
