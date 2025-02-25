@@ -282,7 +282,7 @@ namespace ToDoCalendarControl
             }
             else
             {
-                mainContainer = new StandAloneWrapPanel()
+                mainContainer = new WrapPanel()
                 {
                     Orientation = Orientation.Horizontal
                 };
