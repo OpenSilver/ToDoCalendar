@@ -58,7 +58,7 @@
 
     <metrostyleapps:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
         <Grid Background="White">
-            <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated"
+            <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
                           HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" uwp:ManipulationMode="Control">
                 <Grid x:Name="MainContainer" uwp:ManipulationDelta="MainContainer_ManipulationDelta" Margin="0,0,2,0">
                     <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-2,0">

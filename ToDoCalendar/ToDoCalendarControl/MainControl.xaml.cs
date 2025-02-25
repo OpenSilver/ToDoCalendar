@@ -301,6 +301,14 @@ namespace ToDoCalendarControl
             }
         }
 
+        private void OnMainScrollViewerMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (MainScrollViewer.ComputedHorizontalScrollBarVisibility != Visibility.Visible || e.Delta == 0)
+                return;
+
+            MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset - e.Delta);
+        }
+
 #if !OPENSILVER
         void Controller_LockMainScrollViewerRequested(object sender, EventArgs e)
         {
