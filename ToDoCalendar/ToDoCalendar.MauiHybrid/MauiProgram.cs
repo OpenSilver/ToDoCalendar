@@ -33,6 +33,12 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ICalendarService, CalendarService>();
 
+#if ANDROID
+        builder.Services.AddSingleton<IKeyboardService, Platforms.Android.KeyboardService>();
+#elif IOS
+        builder.Services.AddSingleton<IKeyboardService, Platforms.iOS.KeyboardService>();
+#endif
+
         builder.Services.AddSingleton<IDispatcher>(provider =>
         {
             var dispatcher = Application.Current?.Dispatcher;

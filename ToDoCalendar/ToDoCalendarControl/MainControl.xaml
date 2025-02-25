@@ -77,7 +77,7 @@
                     </StackPanel>
                     
                     <Popup Name="OptionsPopup" Placement="Top" VerticalOffset="-5">
-                        <local:EventOptions x:Name="EventOptionsControl"/>
+                        <local:EventOptions x:Name="EventOptionsControl" Visibility="Collapsed"/>
                     </Popup>
                 </Grid>
             </ScrollViewer>

@@ -1,4 +1,5 @@
 ﻿using MetroStyleApps;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace ToDoCalendarControl
         const int InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
         const int HorizontalScrollMargin = 67;
+
+        private readonly IKeyboardService _keyboardService = ServiceLocator.Provider?.GetService<IKeyboardService>();
 
         Controller _controller;
         AutoSaveHandler _autoSaveHandler;
@@ -67,6 +70,11 @@ namespace ToDoCalendarControl
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(Button.MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
+
+            if (_keyboardService != null)
+            {
+                _keyboardService.KeyboardStateChanged += OnKeyboardStateChanged;
+            }
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo info)
@@ -307,6 +315,15 @@ namespace ToDoCalendarControl
                 return;
 
             MainScrollViewer.ScrollToHorizontalOffset(MainScrollViewer.HorizontalOffset - e.Delta);
+        }
+
+        private void OnKeyboardStateChanged(bool isOpen)
+        {
+            // hide the editing popup if the virtual keyboard is closed 
+            if (!isOpen && EventOptionsControl.Visibility == Visibility.Visible)
+            {
+                Dispatcher.BeginInvoke(Focus);
+            }
         }
 
 #if !OPENSILVER
