@@ -50,6 +50,7 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="Other\HashSet.cs" />
     <Compile Include="Other\Tuple.cs" />
+    <Compile Include="Services\IKeyboardService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
   </ItemGroup>
 
