@@ -1,5 +1,4 @@
-﻿using System.Windows.Printing;
-using Plugin.Maui.CalendarStore;
+﻿using Plugin.Maui.CalendarStore;
 using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.MauiHybrid.Services;
