@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ToDoCalendarControl.Resources;
 
 namespace ToDoCalendarControl
 {
@@ -60,6 +61,7 @@ namespace ToDoCalendarControl
         static readonly Thickness EventMargin = new Thickness(0);
         static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, -1);
         static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
+        static readonly Thickness ReadonlyLabelMargin = new Thickness(12, -2, -6, 0);
 
         // Rendering the month header:
         const double LeftMarginOfMonthName = 5d; // in pixels
@@ -354,6 +356,8 @@ namespace ToDoCalendarControl
             };
 
             var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
+            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             var eventTitle = new TextBox()
             {
@@ -494,6 +498,17 @@ namespace ToDoCalendarControl
             mainBorder.Child = mainContainer;
             if (eventModel.IsReadOnly)
             {
+                var readonlyLabel = new TextBlock
+                {
+                    Text = AppResources.ReadOnly,
+                    FontSize = 8,
+                    Foreground = eventTitle.Foreground,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = ReadonlyLabelMargin
+                };
+                Grid.SetColumn(readonlyLabel, 1);
+                mainContainer.Children.Add(readonlyLabel);
+
                 return mainBorder;
             }
 

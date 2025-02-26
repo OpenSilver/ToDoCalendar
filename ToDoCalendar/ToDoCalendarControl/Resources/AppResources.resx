@@ -191,4 +191,7 @@
   <data name="TrialText3" xml:space="preserve">
     <value>To keep your data,</value>
   </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>readonly</value>
+  </data>
 </root>
