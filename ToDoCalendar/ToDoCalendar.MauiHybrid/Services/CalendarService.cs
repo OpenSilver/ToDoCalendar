@@ -30,6 +30,7 @@ public class CalendarService : ICalendarService
             {
                 var color = calendar.Color;
                 calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
+                calendarEvent.IsReadOnly = calendar.IsReadOnly;
             }
             return calendarEvent;
         });

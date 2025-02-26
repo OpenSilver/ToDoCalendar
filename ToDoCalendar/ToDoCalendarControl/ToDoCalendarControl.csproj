@@ -40,12 +40,16 @@
     <Compile Include="Model\DayModel.cs" />
     <Compile Include="Model\EventModel.cs" />
     <Compile Include="Model\EventType.cs" />
+    <Compile Include="Resources\AppResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\DeviceEvent.cs" />
     <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="Other\HashSet.cs" />
     <Compile Include="Other\Tuple.cs" />
-    <Compile Include="Resources\AppResources1.Designer.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
   </ItemGroup>
 
@@ -61,7 +65,10 @@
     <EmbeddedResource Include="Resources\AppResources.fr.resx" />
     <EmbeddedResource Include="Resources\AppResources.it.resx" />
     <EmbeddedResource Include="Resources\AppResources.ja.resx" />
-    <EmbeddedResource Include="Resources\AppResources.resx" />
+    <EmbeddedResource Include="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.ru.resx" />
     <EmbeddedResource Include="Resources\AppResources.zh-CN.resx" />
     <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx" />
