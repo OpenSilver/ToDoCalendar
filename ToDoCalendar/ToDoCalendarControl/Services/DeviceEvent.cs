@@ -11,6 +11,7 @@ public class DeviceEvent
     public string Description { get; set; }
     public DateTime DateTime { get; set; }
     public Color CalendarColor { get; set; }
+    public bool IsReadOnly { get; set; }
 
     public DeviceEvent()
     {
@@ -35,6 +36,7 @@ public class DeviceEvent
         model.Id = Id;
         model.Title = Title;
         model.CalendarColor = ColorHelper.AdjustCalendarColor(CalendarColor);
+        model.IsReadOnly = IsReadOnly;
 
         return model;
     }

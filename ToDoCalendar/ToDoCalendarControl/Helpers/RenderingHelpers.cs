@@ -393,19 +393,22 @@ namespace ToDoCalendarControl
                     }
                 };
 
-            eventTitle.GotFocus += (s, e) =>
+            if (!eventModel.IsReadOnly)
             {
-                eventTitle.FontSize = EventFontSizeWhenEditing;
-                eventTitle.Background = (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextBackgroundWhenEditingDefault);
-                eventTitle.Foreground = EventTextColorWhenEditing;
-                eventTitle.Margin = EventTextBoxMarginWhenEditing;
-                eventTitle.TextWrapping = TextWrapping.Wrap;
-                eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
-                eventTitle.MaxWidth = double.PositiveInfinity;
-                eventTitle.IsHitTestVisible = true;
-                borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Collapsed;
-                controller.SignalThatEditingModeStarted(new EditingModeStartedEventArgs(eventTitle, eventModel, dayModel, day));
-            };
+                eventTitle.GotFocus += (s, e) =>
+                {
+                    eventTitle.FontSize = EventFontSizeWhenEditing;
+                    eventTitle.Background = (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextBackgroundWhenEditingDefault);
+                    eventTitle.Foreground = EventTextColorWhenEditing;
+                    eventTitle.Margin = EventTextBoxMarginWhenEditing;
+                    eventTitle.TextWrapping = TextWrapping.Wrap;
+                    eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
+                    eventTitle.MaxWidth = double.PositiveInfinity;
+                    eventTitle.IsHitTestVisible = true;
+                    borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Collapsed;
+                    controller.SignalThatEditingModeStarted(new EditingModeStartedEventArgs(eventTitle, eventModel, dayModel, day));
+                };
+            }
 
             eventTitle.LostFocus += (s, e) =>
             {

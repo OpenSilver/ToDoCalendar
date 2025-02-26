@@ -1,4 +1,5 @@
-﻿using Plugin.Maui.CalendarStore;
+﻿using System.Windows.Printing;
+using Plugin.Maui.CalendarStore;
 using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.MauiHybrid.Services;
@@ -30,6 +31,7 @@ public class CalendarService : ICalendarService
             {
                 var color = calendar.Color;
                 calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
+                calendarEvent.IsReadOnly = calendar.IsReadOnly;
             }
             return calendarEvent;
         });
