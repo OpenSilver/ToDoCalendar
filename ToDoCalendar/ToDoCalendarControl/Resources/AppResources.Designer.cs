@@ -223,7 +223,7 @@ namespace ToDoCalendarControl.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to readonly.
+        ///   Looks up a localized string similar to read-only.
         /// </summary>
         public static string ReadOnly {
             get {

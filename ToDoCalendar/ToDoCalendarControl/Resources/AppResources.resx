@@ -192,6 +192,6 @@
     <value>To keep your data,</value>
   </data>
   <data name="ReadOnly" xml:space="preserve">
-    <value>readonly</value>
+    <value>read-only</value>
   </data>
 </root>
