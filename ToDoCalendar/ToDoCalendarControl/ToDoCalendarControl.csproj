@@ -29,6 +29,7 @@
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\DatesHelpers.cs" />
     <Compile Include="Helpers\FileSystemHelpers.cs" />
+    <Compile Include="Helpers\FileCalendar.cs" />
     <Compile Include="Helpers\LoadAndSaveHelpers.cs" />
     <Compile Include="Helpers\RenderingHelpers.cs" />
     <Compile Include="Helpers\SerializationHelpers.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Services\IKeyboardService.cs" />
     <Compile Include="Services\Platform.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\WebServiceProvider.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ namespace ToDoCalendar.Browser.Pages
         {
             await base.OnInitializedAsync();
 
-            ServiceLocator.Initialize(null, Platform.Web);
+            ServiceLocator.Initialize(new WebServiceProvider(), Platform.Web);
             await Runner.RunApplicationAsync<ToDoCalendar.App>();
         }
     }
