@@ -30,13 +30,6 @@ namespace ToDoCalendarControl
             ButtonMarkAsDone.Click += ButtonMarkAsDone_Click;
             ButtonMarkAsNotDone.Click += ButtonMarkAsNotDone_Click;
             ButtonOK.Click += ButtonOK_Click;
-
-            Application.Current.MainWindow.SizeChanged += OnMainWindowSizeChanged;
-        }
-
-        private void OnMainWindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
-        {
-            MaxWidth = Math.Min(e.Size.Width, 450);
         }
 
         void ButtonOK_Click(object sender, RoutedEventArgs e)

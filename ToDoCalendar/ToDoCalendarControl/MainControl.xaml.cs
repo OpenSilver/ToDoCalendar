@@ -23,6 +23,7 @@ namespace ToDoCalendarControl
         const int InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
         const int HorizontalScrollMargin = 67;
+        const int MaxOptionsPopupWidth = 450;
 
         private readonly IKeyboardService _keyboardService = ServiceLocator.Provider?.GetService<IKeyboardService>();
 
@@ -225,6 +226,7 @@ namespace ToDoCalendarControl
             EventOptionsControl.DayModel = e.DayModel;
             EventOptionsControl.Day = e.Day;
             EventOptionsControl.TextBox = e.TextBox;
+            EventOptionsControl.MaxWidth = Math.Min(ActualWidth, MaxOptionsPopupWidth);
             EventOptionsControl.UpdateButtonsVisibility();
             EventOptionsControl.Visibility = Visibility.Visible;
             OptionsPopup.PlacementTarget = e.TextBox;
