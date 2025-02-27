@@ -47,8 +47,23 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        ServiceLocator.Initialize(app.Services);
+        ServiceLocator.Initialize(app.Services, GetPlatform());
 
         return app;
+    }
+
+    private static ToDoCalendarControl.Services.Platform GetPlatform()
+    {
+#if ANDROID
+        return ToDoCalendarControl.Services.Platform.Android;
+#elif IOS
+        return ToDoCalendarControl.Services.Platform.iOS;
+#elif MACCATALYST
+        return ToDoCalendarControl.Services.Platform.Mac;
+#elif WINDOWS
+        return ToDoCalendarControl.Services.Platform.Windows;
+#else
+        return ToDoCalendarControl.Services.Platform.Unknown;
+#endif
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using OpenSilver.WebAssembly;
 using System.Threading.Tasks;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.Browser.Pages
 {
@@ -15,6 +16,8 @@ namespace ToDoCalendar.Browser.Pages
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+
+            ServiceLocator.Initialize(null, Platform.Web);
             await Runner.RunApplicationAsync<ToDoCalendar.App>();
         }
     }

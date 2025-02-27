@@ -1,5 +1,6 @@
 ﻿using OpenSilver.Simulator;
 using System;
+using ToDoCalendarControl.Services;
 
 namespace ToDoCalendar.Simulator
 {
@@ -8,6 +9,7 @@ namespace ToDoCalendar.Simulator
         [STAThread]
         static int Main(string[] args)
         {
+            ServiceLocator.Initialize(null, Platform.Simulator);
             return SimulatorLauncher.Start(typeof(App));
         }
     }
