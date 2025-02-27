@@ -1,4 +1,5 @@
 ﻿using ToDoCalendarControl.Services;
+using Platform = Microsoft.Maui.ApplicationModel.Platform;
 
 namespace ToDoCalendar.MauiHybrid.Platforms.Android;
 

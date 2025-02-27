@@ -352,7 +352,6 @@ namespace ToDoCalendarControl
                 },
                 Padding = new Thickness(12, 0, 12, 0),
                 Margin = EventMargin,
-                Cursor = Cursors.Hand
             };
 
             var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
@@ -389,6 +388,8 @@ namespace ToDoCalendarControl
 
             if (!eventModel.IsReadOnly)
             {
+                mainBorder.Cursor = Cursors.Hand;
+
                 borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonDown += (s, e) => _originPosition = e.GetPosition(null);
 
                 borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonUp += (s, e) => // Note: we use this control so as to put focus on the TextBox only on MouseUp (instead of MouseDown) so that the user can "Hold" to drag and drop instead of editing.
