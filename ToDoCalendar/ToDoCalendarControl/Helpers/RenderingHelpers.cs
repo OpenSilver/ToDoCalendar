@@ -322,9 +322,12 @@ namespace ToDoCalendarControl
             // CREATE ELEMENTS
             //----------------
 
-            Func<Brush> functionToDetermineEventForeground = () =>
+            Brush functionToDetermineEventForeground() =>
+                eventModel.EventType switch
                 {
-                    return (eventModel.EventType == EventType.Info ? (DatesHelpers.GetDateWithoutTime(day) <= DatesHelpers.GetTodayDateWithoutTime() ? EventTextColorWhenInfoBeforeCurrentDate : EventTextColorWhenInfoAfterCurrentDate) : EventTextColor);
+                    EventType.Info => DatesHelpers.GetDateWithoutTime(day) <= DatesHelpers.GetTodayDateWithoutTime() ? EventTextColorWhenInfoBeforeCurrentDate : EventTextColorWhenInfoAfterCurrentDate,
+                    EventType.Unspecified => eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
+                    _ => EventTextColor
                 };
 
             var dragAndDropSource = new DragAndDropSource()
@@ -339,15 +342,15 @@ namespace ToDoCalendarControl
                 CornerRadius = EventCornerRadius,
                 Background = eventModel.EventType switch
                 {
-                    EventType.Info => EventBackgroundColorWhenInfo,
+                    EventType.Info or EventType.Unspecified => EventBackgroundColorWhenInfo,
                     _ when eventModel.IsMarkedAsDone && !isToday => EventBackgroundColorWhenDone,
                     EventType.HighPriority => EventBackgroundColorWhenHighPriority,
-                    _ => (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventBackgroundColorDefault)
+                    _ => EventBackgroundColorDefault
                 },
                 Opacity = eventModel.EventType switch
                 {
                     EventType.LowPriority => isToday ? EventOpacityWhenLowPriorityIfToday : EventOpacityWhenLowPriority,
-                    EventType.Unspecified => 0.8,
+                    //EventType.Unspecified => 0.8,
                     _ => eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d
                 },
                 Padding = new Thickness(12, 0, 12, 0),
@@ -403,7 +406,7 @@ namespace ToDoCalendarControl
                 eventTitle.GotFocus += (s, e) =>
                 {
                     eventTitle.FontSize = EventFontSizeWhenEditing;
-                    eventTitle.Background = (eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextBackgroundWhenEditingDefault);
+                    eventTitle.Background = EventTextBackgroundWhenEditingDefault;
                     eventTitle.Foreground = EventTextColorWhenEditing;
                     eventTitle.Margin = EventTextBoxMarginWhenEditing;
                     eventTitle.TextWrapping = TextWrapping.Wrap;
