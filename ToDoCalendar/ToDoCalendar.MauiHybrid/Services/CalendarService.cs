@@ -23,7 +23,8 @@ public class CalendarService : ICalendarService
                 Id = x.Id,
                 Title = x.Title,
                 Description = x.Description,
-                DateTime = x.StartDate.LocalDateTime
+                DateTime = x.StartDate.LocalDateTime,
+                IsRecurring = x.IsRecurring,
             };
 
             if (calendars.TryGetValue(x.CalendarId, out var calendar))

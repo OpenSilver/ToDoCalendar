@@ -12,6 +12,7 @@ public class DeviceEvent
     public DateTime DateTime { get; set; }
     public Color CalendarColor { get; set; }
     public bool IsReadOnly { get; set; }
+    public bool IsRecurring { get; set; }
 
     public DeviceEvent()
     {
@@ -36,7 +37,7 @@ public class DeviceEvent
         model.Id = Id;
         model.Title = Title;
         model.CalendarColor = ColorHelper.AdjustCalendarColor(CalendarColor);
-        model.IsReadOnly = IsReadOnly;
+        model.IsReadOnly = IsReadOnly || IsRecurring; // we don't support editing recurring events yet
 
         return model;
     }
