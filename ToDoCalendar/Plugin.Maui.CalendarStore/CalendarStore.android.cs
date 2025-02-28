@@ -50,6 +50,8 @@ partial class CalendarStoreImplementation : ICalendarStore
             CalendarContract.Instances.Begin,
             CalendarContract.Instances.End,
             CalendarContract.Instances.InterfaceConsts.EventTimezone,
+            CalendarContract.Instances.InterfaceConsts.Rrule,
+            CalendarContract.Instances.InterfaceConsts.Rdate,
         ];
 
     readonly List<string> attendeesColumns =
@@ -746,6 +748,8 @@ partial class CalendarStoreImplementation : ICalendarStore
             Location = cursor.GetString(cursor.GetColumnIndex(
                 CalendarContract.Instances.InterfaceConsts.EventLocation)) ?? string.Empty,
             IsAllDay = allDay,
+            IsRecurring = !string.IsNullOrEmpty(cursor.GetString(cursor.GetColumnIndex(CalendarContract.Instances.InterfaceConsts.Rrule))) ||
+                          !string.IsNullOrEmpty(cursor.GetString(cursor.GetColumnIndex(CalendarContract.Instances.InterfaceConsts.Rdate))),
             StartDate = ToDateTimeOffsetWithTimezone(start, timezone),
             EndDate = ToDateTimeOffsetWithTimezone(end, timezone),
             Attendees = GetAttendees(EventIDString),

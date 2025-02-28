@@ -407,6 +407,7 @@ partial class CalendarStoreImplementation : ICalendarStore
             Description = platform.Notes ?? string.Empty,
             Location = platform.Location ?? string.Empty,
             IsAllDay = platform.AllDay,
+            IsRecurring = platform.HasRecurrenceRules,
             StartDate = ToDateTimeOffsetWithTimezone(platform.StartDate, platform.TimeZone),
             EndDate = ToDateTimeOffsetWithTimezone(platform.EndDate, platform.TimeZone),
             Attendees = platform.Attendees != null
