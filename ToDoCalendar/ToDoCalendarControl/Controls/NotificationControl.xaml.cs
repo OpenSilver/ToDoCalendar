@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 using System.Windows.Media.Animation;
 
 namespace ToDoCalendarControl
 {
     public partial class NotificationControl : UserControl
     {
+        private readonly Storyboard _storyboard;
+
         public event EventHandler NotificationCompleted;
 
         public NotificationControl()
         {
             InitializeComponent();
+
+            _storyboard = (Storyboard)Resources["FadeInFadeOutStoryboard"];
         }
 
         public string Text
@@ -26,10 +25,10 @@ namespace ToDoCalendarControl
 
         public void Show()
         {
-            var storyboard = (Storyboard)this.Resources["FadeInFadeOutStoryboard"];
-            storyboard.Completed -= storyboard_Completed;
-            storyboard.Completed += storyboard_Completed;
-            storyboard.Begin();
+            _storyboard.Stop();
+            _storyboard.Completed -= storyboard_Completed;
+            _storyboard.Completed += storyboard_Completed;
+            _storyboard.Begin();
         }
 
         void storyboard_Completed(object sender, EventArgs e)

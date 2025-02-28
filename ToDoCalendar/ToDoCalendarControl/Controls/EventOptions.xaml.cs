@@ -68,12 +68,8 @@ namespace ToDoCalendarControl
             {
                 EventModel.IsMarkedAsDone = isDone;
                 Controller.RequestRefreshOfDay(Day);
-                Controller.RememberThatThereAreUnsavedChanges();
 
-                if (Controller.CalendarService is ICalendarService calendarService)
-                {
-                    await calendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
-                }
+                await Controller.CalendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
             }
             UpdateButtonsVisibility();
         }
@@ -112,10 +108,7 @@ namespace ToDoCalendarControl
             {
                 EventModel.EventType = newEventType;
 
-                if (Controller.CalendarService is ICalendarService calendarService)
-                {
-                    await calendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
-                }
+                await Controller.CalendarService.UpdateCalendarEvent(new DeviceEvent(EventModel, Day));
             }
         }
 
@@ -125,11 +118,10 @@ namespace ToDoCalendarControl
             if (Controller != null)
             {
                 Controller.RequestRefreshOfDay(Day);
-                Controller.RememberThatThereAreUnsavedChanges();
-            }
 
-            // Make sure the textbox remains focused:
-            Controller.EditEvent(EventModel, DayModel, Day);
+                // Make sure the textbox remains focused:
+                Controller.EditEvent(EventModel, DayModel, Day);
+            }
         }
     }
 }

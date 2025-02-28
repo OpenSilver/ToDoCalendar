@@ -432,9 +432,6 @@ namespace ToDoCalendarControl
                     {
                         // Sync the model:
                         eventModel.Title = ((TextBox)s).Text;
-
-                        // Remember that we need to save the changes:
-                        controller.RememberThatThereAreUnsavedChanges();
                     };
 
                 eventTitle.KeyDown += (object sender, KeyEventArgs e) =>

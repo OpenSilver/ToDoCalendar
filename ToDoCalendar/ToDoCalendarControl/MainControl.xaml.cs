@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using ToDoCalendarControl.Helpers;
 using ToDoCalendarControl.Resources;
 using ToDoCalendarControl.Services;
 
@@ -25,10 +26,9 @@ namespace ToDoCalendarControl
         const int HorizontalScrollMargin = 67;
         const int MaxOptionsPopupWidth = 450;
 
-        private readonly IKeyboardService _keyboardService = ServiceLocator.Provider?.GetService<IKeyboardService>();
+        private readonly IKeyboardService _keyboardService = ServiceLocator.Provider.GetService<IKeyboardService>();
 
         Controller _controller;
-        AutoSaveHandler _autoSaveHandler;
         DateTime _firstDayOfCalendar;
         DateTime _lastDayOfCalendar;
         bool _isMainScrollViewerLocked;
@@ -38,8 +38,7 @@ namespace ToDoCalendarControl
             InitializeComponent();
 
             // Prepare the controller:
-            _controller = new Controller();
-            _controller.ChangesWereMade += Controller_ChangesWereMade;
+            _controller = new Controller(new CalendarServiceSaver(ServiceLocator.Provider.GetRequiredService<ICalendarService>()));
             _controller.EditingModeStarted += Controller_EditingModeStarted;
             _controller.EditingModeStopped += Controller_EditingModeStopped;
             _controller.QuitEditingModeRequested += Controller_QuitEditingModeRequested;
@@ -56,11 +55,7 @@ namespace ToDoCalendarControl
                 // Mock data for testing:
                 //_controller.Model = CreateMockData();
 #endif
-
-                // Initialize the Auto-Save handler:
-                _autoSaveHandler = new AutoSaveHandler(AutoSaveIntervalInSeconds, () => _controller.Model, () => _controller.ContainsUnsavedChanges);
-                _autoSaveHandler.AutoSaveTookPlace += AutoSaveHandler_AutoSaveTookPlace;
-                _autoSaveHandler.Start();
+                _controller.CalendarService.CalendarModified += OnCalendarModified;
             }
 
             // Render the calendar:
@@ -113,15 +108,12 @@ namespace ToDoCalendarControl
 
         private async Task LoadCalendarEvents(DateTime startDate, DateTime endDate)
         {
-            if (_controller.CalendarService is not ICalendarService calendarService)
-                return;
-
             var model = _controller.Model;
 
             try
             {
                 endDate = endDate.AddDays(1); // workaround to load events from the last day
-                var allEvents = await calendarService.GetCalendarEvents(startDate, endDate);
+                var allEvents = await _controller.CalendarService.GetCalendarEvents(startDate, endDate);
 
                 foreach (var dayItems in allEvents.GroupBy(x => x.DateTime.Date).OrderBy(x => x.Key))
                 {
@@ -201,14 +193,13 @@ namespace ToDoCalendarControl
                     && EventOptionsControl.EventModel.TemporaryCreationDate.Value < DateTime.UtcNow
                     && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3)))
                 {
-                    await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day);
+                    await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day, false);
                 }
                 else
                 {
-                    if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle &&
-                        _controller.CalendarService is ICalendarService calendarService)
+                    if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle)
                     {
-                        await calendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                        await _controller.CalendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
                     }
                 }
             }
@@ -238,16 +229,9 @@ namespace ToDoCalendarControl
             MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
         }
 
-        void Controller_ChangesWereMade(object sender, EventArgs e)
-        {
-            // When changes are made, reset the timer of the AutoSave (this ensures that we don't AutoSave while the user is typing some text):
-            _autoSaveHandler.PostponeAutoSave();
-        }
-
-        void AutoSaveHandler_AutoSaveTookPlace(object sender, EventArgs e)
+        void OnCalendarModified()
         {
             DisplayNotification(AppResources.Notification_Saved);
-            _controller.RememberThatChangesWereSaved();
         }
 
         void DisplayNotification(string text)

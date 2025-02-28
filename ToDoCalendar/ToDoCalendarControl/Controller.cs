@@ -1,51 +1,27 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using ToDoCalendarControl.Helpers;
 using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
 {
     public class Controller
     {
-        bool _containsUnsavedChanges = false;
-
-        public Model Model { get; set; }
+        public CalendarServiceSaver CalendarService { get; }
+        public Model Model { get; }
 
         public event EventHandler<RefreshDayRequestedEventArgs> RefreshDayRequested;
         public event EventHandler<EditEventRequestedEventArgs> EditEventRequested;
         public event EventHandler<EditingModeStartedEventArgs> EditingModeStarted;
         public event EventHandler EditingModeStopped;
-        public event EventHandler ChangesWereMade;
         public event EventHandler QuitEditingModeRequested;
         public event EventHandler LockMainScrollViewerRequested;
         public event EventHandler UnlockMainScrollViewerRequested;
 
-        public ICalendarService CalendarService { get; } = ServiceLocator.Provider?.GetRequiredService<ICalendarService>();
-
-        public Controller()
+        public Controller(CalendarServiceSaver calendarService)
         {
+            CalendarService = calendarService;
             Model = new Model();
-        }
-
-        public void RememberThatThereAreUnsavedChanges()
-        {
-            _containsUnsavedChanges = true;
-
-            if (ChangesWereMade != null)
-                ChangesWereMade(this, new EventArgs());
-        }
-
-        public void RememberThatChangesWereSaved()
-        {
-            _containsUnsavedChanges = false;
-        }
-
-        public bool ContainsUnsavedChanges
-        {
-            get
-            {
-                return _containsUnsavedChanges;
-            }
         }
 
         public async Task<(EventModel, DayModel)> AddEvent(DateTime day)
@@ -67,29 +43,27 @@ namespace ToDoCalendarControl
                 TemporaryCreationDate = DateTime.UtcNow // Not intended to be persisted
             };
 
-            if (CalendarService != null)
-            {
-                var deviceEvent = new DeviceEvent(newEventModel, day);
-                newEventModel.Id = await CalendarService.CreateCalendarEvent(deviceEvent);
-                newEventModel.CalendarColor = deviceEvent.CalendarColor;
-            }
+            var deviceEvent = new DeviceEvent(newEventModel, day);
+            newEventModel.Id = await CalendarService.CreateCalendarEvent(deviceEvent);
+            newEventModel.CalendarColor = deviceEvent.CalendarColor;
 
             dayModel.Events.Add(newEventModel);
 
             // Refresh the day:
             RequestRefreshOfDay(day, true);
 
-            // Remember that there are unsaved changes:
-            RememberThatThereAreUnsavedChanges();
-
             return (newEventModel, dayModel);
         }
 
-        public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day)
+        public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day, bool showNotification = true)
         {
-            if (CalendarService != null)
+            if (showNotification)
             {
                 await CalendarService.DeleteCalendarEvent(eventModel.Id);
+            }
+            else
+            {
+                await CalendarService.DeleteCalendarEventSilently(eventModel.Id);
             }
 
             // Delete the event from the model:
@@ -104,9 +78,6 @@ namespace ToDoCalendarControl
 
             // Refresh the day:
             RequestRefreshOfDay(day);
-
-            // Remember that there are unsaved changes:
-            RememberThatThereAreUnsavedChanges();
         }
 
         public async Task MoveEvent(EventModel eventModel, DayModel previousDayModel, DateTime previousDay, DateTime newDay)
@@ -140,13 +111,7 @@ namespace ToDoCalendarControl
                 RequestRefreshOfDay(newDay);
                 RequestRefreshOfDay(previousDay);
 
-                // Remember that there are unsaved changes:
-                RememberThatThereAreUnsavedChanges();
-
-                if (CalendarService != null)
-                {
-                    await CalendarService.UpdateCalendarEvent(new DeviceEvent(eventModel, newDay));
-                }
+                await CalendarService.UpdateCalendarEvent(new DeviceEvent(eventModel, newDay));
             }
         }
 
