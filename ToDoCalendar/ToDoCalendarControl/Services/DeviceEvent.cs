@@ -37,7 +37,13 @@ public class DeviceEvent
         model.Id = Id;
         model.Title = Title;
         model.CalendarColor = ColorHelper.AdjustCalendarColor(CalendarColor);
-        model.IsReadOnly = IsReadOnly || IsRecurring; // we don't support editing recurring events yet
+        model.IsReadOnly = IsReadOnly;
+
+        // we don't support editing existing events yet
+        if (IsRecurring || model.EventType == EventType.Unspecified)
+        {
+            model.IsReadOnly = true;
+        }
 
         return model;
     }
