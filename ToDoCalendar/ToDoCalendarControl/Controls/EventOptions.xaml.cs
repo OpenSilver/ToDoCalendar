@@ -40,6 +40,12 @@ namespace ToDoCalendarControl
 
         async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
+            // workaround to make sure the LostFocus event is triggered before the button handler is executed, as on other platforms
+            if (ServiceLocator.Platform == Platform.Android)
+            {
+                await Task.Delay(10);
+            }
+
             if (DayModel != null && EventModel != null && Controller != null && Day != default(DateTime))
             {
                 await Controller.DeleteEvent(EventModel, DayModel, Day);
