@@ -56,47 +56,56 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <metrostyleapps:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-        <Grid Background="White">
-            <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
+    <Grid>
+        <metrostyleapps:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <Grid Background="White">
+                <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
                           HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" uwp:ManipulationMode="Control">
-                <Grid x:Name="MainContainer" uwp:ManipulationDelta="MainContainer_ManipulationDelta" Margin="0,0,2,0">
-                    <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-2,0">
-                        <LayoutTransformer x:Name="LoadPrevButtonTransformer">
-                            <Button FontSize="14" Padding="20,10,20,10" Background="#FF444444" Foreground="#FFCCCCCC" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" FontWeight="Bold"/>
-                        </LayoutTransformer>
+                    <Grid x:Name="MainContainer" uwp:ManipulationDelta="MainContainer_ManipulationDelta" Margin="0,0,2,0">
+                        <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-2,0">
+                            <LayoutTransformer x:Name="LoadPrevButtonTransformer" Visibility="Collapsed">
+                                <Button FontSize="14" Padding="20,10,20,10" Background="#FF444444" Foreground="#FFCCCCCC" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" FontWeight="Bold"/>
+                            </LayoutTransformer>
 
-                        <Border BorderThickness="2,0,0,0" BorderBrush="#FF888888">
-                            <WrapPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"
+                            <Border BorderThickness="2,0,0,0" BorderBrush="#FF888888">
+                                <WrapPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"
                                        ItemWidth="{Binding ActualWidth, ElementName=MainContainer, Converter={StaticResource PositiveNumberConverter}}"/>
-                        </Border>
-                        
-                        <LayoutTransformer x:Name="LoadNextButtonTransformer">
-                            <Button x:Name="LoadNextButton" FontSize="14" Padding="20,10,20,10" Margin="0,2,0,0" Foreground="#FFCCCCCC" HorizontalContentAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Background="#FF444444" FontWeight="Bold"/>
-                        </LayoutTransformer>
-                    </StackPanel>
-                    
-                    <Popup Name="OptionsPopup" Placement="Top" VerticalOffset="-5">
-                        <local:EventOptions x:Name="EventOptionsControl" Visibility="Collapsed"/>
-                    </Popup>
-                </Grid>
-            </ScrollViewer>
-            <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,-10">
-                <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="165" Margin="0,0,0,-1"/>
-                <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
-                    <Grid Width="80" Height="80" Margin="20,0,20,0" Cursor="Hand">
-                        <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
-                        <Path Data="M0,-1 V1 M-1,0 H1" Stretch="Fill" StrokeThickness="10" Stroke="White" Width="60" Height="60"/>
+                            </Border>
+
+                            <LayoutTransformer x:Name="LoadNextButtonTransformer" Visibility="Collapsed">
+                                <Button x:Name="LoadNextButton" FontSize="14" Padding="20,10,20,10" Margin="0,2,0,0" Foreground="#FFCCCCCC" HorizontalContentAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Background="#FF444444" FontWeight="Bold"/>
+                            </LayoutTransformer>
+                        </StackPanel>
+
+                        <Popup Name="OptionsPopup" Placement="Top" VerticalOffset="-5">
+                            <local:EventOptions x:Name="EventOptionsControl" Visibility="Collapsed"/>
+                        </Popup>
                     </Grid>
-                </metrostyleapps:DragAndDropSource>
-            </Grid>
-            <Grid x:Name="ExplanationOverlay" Margin="0,-150,0,150" Visibility="Collapsed" MouseLeftButtonDown="ExplanationOverlay_MouseLeftButtonDown" Background="Transparent">
-                <Grid IsHitTestVisible="False" Background="#BB000000" Margin="0,150,0,-150">
-                    <Image Source="Images/arrow_for_explanation.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="224" Height="512" Margin="0,0,0,-1"/>
-                    <TextBlock MaxWidth="160" Margin="100,0,0,250" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding LocalizedResources.ExplanationForDragAndDrop_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" />
+                </ScrollViewer>
+                <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,-10" Visibility="Collapsed">
+                    <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="165" Margin="0,0,0,-1"/>
+                    <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
+                        <Grid Width="80" Height="80" Margin="20,0,20,0" Cursor="Hand">
+                            <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
+                            <Path Data="M0,-1 V1 M-1,0 H1" Stretch="Fill" StrokeThickness="10" Stroke="White" Width="60" Height="60"/>
+                        </Grid>
+                    </metrostyleapps:DragAndDropSource>
                 </Grid>
+                <Grid x:Name="ExplanationOverlay" Margin="0,-150,0,150" Visibility="Collapsed" MouseLeftButtonDown="ExplanationOverlay_MouseLeftButtonDown" Background="Transparent">
+                    <Grid IsHitTestVisible="False" Background="#BB000000" Margin="0,150,0,-150">
+                        <Image Source="Images/arrow_for_explanation.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="224" Height="512" Margin="0,0,0,-1"/>
+                        <TextBlock MaxWidth="160" Margin="100,0,0,250" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding LocalizedResources.ExplanationForDragAndDrop_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" />
+                    </Grid>
+                </Grid>
+                <local:NotificationControl x:Name="NotificationControl" Visibility="Collapsed"/>
             </Grid>
-            <local:NotificationControl x:Name="NotificationControl" Visibility="Collapsed"/>
-        </Grid>
-    </metrostyleapps:DragAndDropRoot>
+        </metrostyleapps:DragAndDropRoot>
+
+        <Border Name="LoadingIndicator">
+            <Border.Background>
+                <SolidColorBrush Color="#512BD4" Opacity="0.3"/>
+            </Border.Background>
+            <TextBlock Text="Loading..." FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
 </UserControl>

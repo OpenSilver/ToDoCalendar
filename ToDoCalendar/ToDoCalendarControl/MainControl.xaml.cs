@@ -119,7 +119,6 @@ namespace ToDoCalendarControl
                     }
 
                     _controller.RequestRefreshOfDay(date);
-                    await Task.Delay(1);
                 }
             }
             catch (Exception ex)
@@ -155,12 +154,21 @@ namespace ToDoCalendarControl
 
             // Set initial scroll offset:
             MainScrollViewer.ScrollToVerticalOffset(InitialTodayTopOffset);
+            await Task.Delay(1);
 
             await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+            await Task.Delay(1);
 
             var todayItem = DaysContainer.Children.Cast<Border>()
                 .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
             ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
+
+            LoadPrevButtonTransformer.Visibility = Visibility.Visible;
+            LoadNextButtonTransformer.Visibility = Visibility.Visible;
+            ButtonsOuterContainer.Visibility = Visibility.Visible;
+
+            await Task.Delay(1);
+            LoadingIndicator.Visibility = Visibility.Collapsed;
         }
 
         private async void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
