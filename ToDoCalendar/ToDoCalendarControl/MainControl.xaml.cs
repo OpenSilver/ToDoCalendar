@@ -15,16 +15,17 @@ namespace ToDoCalendarControl
 {
     public partial class MainControl : UserControl
     {
-        const int AutoSaveIntervalInSeconds = 2;
-        const int InitialDayCountBeforeCurrentDate = 20;
-        const int InitialDayCountAfterCurrentDate = 150;
-        const int NumberOfAdditionalDaysToLoadBefore = 100;
-        const int NumberOfAdditionalDaysToLoadAfter = 150;
-        const int ItemHeight = 14;
-        const int InitialTodayTopOffset = 150;
+        const int InitialDayCountBeforeScreen = 5;
+        const int InitialDayCountAfterScreen = 10;
+        const int NumberOfAdditionalDaysToLoadBefore = 30;
+        const int NumberOfAdditionalDaysToLoadAfter = 30;
+        const double DayItemHeight = 16;
+        const double InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
         const int HorizontalScrollMargin = 67;
         const int MaxOptionsPopupWidth = 450;
+
+        public const double LandscapeColumnWidth = 500;
 
         private readonly IKeyboardService _keyboardService = ServiceLocator.Provider.GetService<IKeyboardService>();
 
@@ -32,6 +33,8 @@ namespace ToDoCalendarControl
         DateTime _firstDayOfCalendar;
         DateTime _lastDayOfCalendar;
         bool _isMainScrollViewerLocked;
+
+        private bool IsLandscapeMode => ActualWidth > MinLandscapeWidth;
 
         public MainControl()
         {
@@ -58,11 +61,7 @@ namespace ToDoCalendarControl
                 _controller.CalendarService.CalendarModified += OnCalendarModified;
             }
 
-            // Render the calendar:
-            RefreshAll();
-
-            // Register the "Loaded" event, which occurs after the controls have been added to the Visual Tree:
-            Loaded += MainControl_Loaded;
+            this.InvokeOnLayoutUpdated(async () => await RefreshAll());
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(Button.MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
@@ -77,20 +76,8 @@ namespace ToDoCalendarControl
         {
             base.OnRenderSizeChanged(info);
 
-            var stateName = ActualWidth > MinLandscapeWidth ? "LandscapeState" : "DefaultState";
+            var stateName = IsLandscapeMode ? "LandscapeState" : "DefaultState";
             VisualStateManager.GoToState(Parent as Control, stateName, false);
-        }
-
-        async void MainControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Set initial scroll offset:
-            MainScrollViewer.ScrollToVerticalOffset(InitialDayCountBeforeCurrentDate * ItemHeight);
-
-            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
-
-            var todayItem = DaysContainer.Children.Cast<Border>()
-                .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
-            ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
         }
 
         private static void ScrollIntoView(ScrollViewer viewer, FrameworkElement element, double verticalMargin)
@@ -142,15 +129,38 @@ namespace ToDoCalendarControl
             }
         }
 
-        void RefreshAll()
+        private async Task RefreshAll()
         {
-            DaysContainer.Children.Clear();
+            int dayCountBeforeCurrentDay = InitialDayCountBeforeScreen;
+            int dayCountAfterCurrentDay;
+            var maxItemsPerScreen = (int)Math.Ceiling(MainScrollViewer.ViewportHeight / DayItemHeight);
+
+            if (IsLandscapeMode)
+            {
+                var maxColumns = (int)Math.Ceiling(MainScrollViewer.ViewportWidth / LandscapeColumnWidth);
+                dayCountAfterCurrentDay = maxItemsPerScreen * maxColumns;
+            }
+            else
+            {
+                var numberOfCurrentDayOnScreen = (int)Math.Floor(InitialTodayTopOffset / DayItemHeight);
+                dayCountBeforeCurrentDay += numberOfCurrentDayOnScreen;
+                dayCountAfterCurrentDay = maxItemsPerScreen - numberOfCurrentDayOnScreen + InitialDayCountAfterScreen;
+            }
 
             var today = DatesHelpers.GetTodayDateWithoutTime();
-            _firstDayOfCalendar = today.AddDays(-InitialDayCountBeforeCurrentDate);
-            _lastDayOfCalendar = today.AddDays(InitialDayCountAfterCurrentDate);
+            _firstDayOfCalendar = today.AddDays(-dayCountBeforeCurrentDay);
+            _lastDayOfCalendar = today.AddDays(dayCountAfterCurrentDay);
 
             RenderingHelpers.AddDaysToContainer(DaysContainer, _firstDayOfCalendar, _lastDayOfCalendar, _controller, renderEvents: false);
+
+            // Set initial scroll offset:
+            MainScrollViewer.ScrollToVerticalOffset(InitialTodayTopOffset);
+
+            await LoadCalendarEvents(_firstDayOfCalendar, _lastDayOfCalendar);
+
+            var todayItem = DaysContainer.Children.Cast<Border>()
+                .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
+            ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
         }
 
         private async void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
@@ -186,12 +196,12 @@ namespace ToDoCalendarControl
 
             try
             {
-                // If the event has an empty title and was created recently (less than 3 minues ago),
+                // If the event has an empty title and was created recently (less than 3 minutes ago),
                 // then delete it (because it was most likely created by mistake), otherwise save the new title:
                 if (string.IsNullOrEmpty(EventOptionsControl.EventModel.Title)
-                    && (EventOptionsControl.EventModel.TemporaryCreationDate.HasValue
+                    && EventOptionsControl.EventModel.TemporaryCreationDate.HasValue
                     && EventOptionsControl.EventModel.TemporaryCreationDate.Value < DateTime.UtcNow
-                    && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3)))
+                    && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3))
                 {
                     await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day, false);
                 }

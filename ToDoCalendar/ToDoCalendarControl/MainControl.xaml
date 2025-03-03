@@ -33,7 +33,7 @@
                         <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal"/>
                     </ObjectAnimationUsingKeyFrames>
                     <DoubleAnimation Storyboard.TargetName="DaysContainer" Storyboard.TargetProperty="ItemWidth"
-                                     From="0" To="500" Duration="0"/>
+                                     From="0" To="{x:Static local:MainControl.LandscapeColumnWidth}" Duration="0"/>
                     <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadPrevButtonTransformer" Storyboard.TargetProperty="LayoutTransform">
                         <DiscreteObjectKeyFrame KeyTime="0">
                             <DiscreteObjectKeyFrame.Value>
