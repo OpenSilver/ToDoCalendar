@@ -7,6 +7,8 @@ public class KeyboardService : IKeyboardService
 {
     public event Action<bool>? KeyboardStateChanged;
 
+    public double KeyboardHeight => throw new NotImplementedException();
+
     public KeyboardService()
     {
         var rootView = Platform.CurrentActivity?.Window?.DecorView.FindViewById(global::Android.Resource.Id.Content);

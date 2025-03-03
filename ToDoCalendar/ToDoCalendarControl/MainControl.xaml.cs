@@ -323,10 +323,24 @@ namespace ToDoCalendarControl
 
         private void OnKeyboardStateChanged(bool isOpen)
         {
-            // hide the editing popup if the virtual keyboard is closed 
-            if (!isOpen && EventOptionsControl.Visibility == Visibility.Visible)
+            if (EventOptionsControl.Visibility == Visibility.Visible)
             {
-                Dispatcher.BeginInvoke(Focus);
+                if (isOpen)
+                {
+                    if (ServiceLocator.Platform == Platform.iOS &&
+                        EventOptionsControl.TextBox.GetBoundsRelativeTo(MainScrollViewer) is Rect elementRect)
+                    {
+                        var heightWithoutKeyboard = MainScrollViewer.ActualHeight - _keyboardService.KeyboardHeight;
+                        if (elementRect.Bottom > heightWithoutKeyboard)
+                        {
+                            MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - elementRect.Bottom + heightWithoutKeyboard);
+                        }
+                    }
+                }
+                else // hide the editing popup if the virtual keyboard is closed 
+                {
+                    Dispatcher.BeginInvoke(Focus);
+                }
             }
         }
 

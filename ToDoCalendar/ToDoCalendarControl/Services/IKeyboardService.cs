@@ -5,4 +5,6 @@ namespace ToDoCalendarControl.Services;
 public interface IKeyboardService
 {
     event Action<bool> KeyboardStateChanged;
+
+    double KeyboardHeight { get; }
 }
