@@ -333,7 +333,9 @@ namespace ToDoCalendarControl
                         var heightWithoutKeyboard = MainScrollViewer.ActualHeight - _keyboardService.KeyboardHeight;
                         if (elementRect.Bottom > heightWithoutKeyboard)
                         {
-                            MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - elementRect.Bottom + heightWithoutKeyboard);
+                            var offset = MainScrollViewer.VerticalOffset + elementRect.Bottom - heightWithoutKeyboard;
+                            //System.Diagnostics.Debug.WriteLine($"Scroll {MainScrollViewer.VerticalOffset} {offset}");
+                            Dispatcher.BeginInvoke(() => MainScrollViewer.ScrollToVerticalOffset(offset));
                         }
                     }
                 }
