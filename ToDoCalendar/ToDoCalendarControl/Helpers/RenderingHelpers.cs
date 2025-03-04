@@ -50,7 +50,8 @@ namespace ToDoCalendarControl
         static readonly Brush EventBackgroundColorDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
         static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
         static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-        static readonly Brush EventBackgroundColorWhenInfo = new SolidColorBrush(Colors.Transparent);
+        static readonly Brush EventBackgroundColorWhenInfo = (Brush)Application.Current.Resources["PhoneAccentBrushLowerOpacity"];
+        static readonly Brush EventBackgroundColorWhenUnspecifiedPriority = new SolidColorBrush(Colors.Transparent);
         static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
         static readonly Brush EventTextBackgroundWhenEditingDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
@@ -341,7 +342,8 @@ namespace ToDoCalendarControl
                 CornerRadius = EventCornerRadius,
                 Background = eventModel.EventType switch
                 {
-                    EventType.Info or EventType.Unspecified => EventBackgroundColorWhenInfo,
+                    EventType.Info => EventBackgroundColorWhenInfo,
+                    EventType.Unspecified => EventBackgroundColorWhenUnspecifiedPriority,
                     _ when eventModel.IsMarkedAsDone && !isToday => EventBackgroundColorWhenDone,
                     EventType.HighPriority => EventBackgroundColorWhenHighPriority,
                     _ => EventBackgroundColorDefault
