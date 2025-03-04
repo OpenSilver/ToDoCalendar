@@ -334,11 +334,7 @@ namespace ToDoCalendarControl
             {
                 HoldToStartDrag = true,
                 EnlargeSourceDuringDrag = true,
-                DataContext = new InformationAboutEventBeingDragged(eventModel, dayModel, day)
-            };
-
-            var mainBorder = new Border()
-            {
+                DataContext = new InformationAboutEventBeingDragged(eventModel, dayModel, day),
                 CornerRadius = EventCornerRadius,
                 Background = eventModel.EventType switch
                 {
@@ -355,6 +351,7 @@ namespace ToDoCalendarControl
                 },
                 Padding = new Thickness(12, 0, 12, 0),
                 Margin = EventMargin,
+                Cursor = Cursors.Hand
             };
 
             var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
@@ -389,83 +386,78 @@ namespace ToDoCalendarControl
                 Background = new SolidColorBrush(Colors.Transparent)
             };
 
-            if (!eventModel.IsReadOnly)
+            borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonDown += (s, e) => _originPosition = e.GetPosition(null);
+
+            borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonUp += (s, e) => // Note: we use this control so as to put focus on the TextBox only on MouseUp (instead of MouseDown) so that the user can "Hold" to drag and drop instead of editing.
             {
-                mainBorder.Cursor = Cursors.Hand;
-
-                borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonDown += (s, e) => _originPosition = e.GetPosition(null);
-
-                borderToStartEditingOnMouseUpRatherThanMouseDown.MouseLeftButtonUp += (s, e) => // Note: we use this control so as to put focus on the TextBox only on MouseUp (instead of MouseDown) so that the user can "Hold" to drag and drop instead of editing.
-                    {
-                        if (DragAndDropSource.IsSameSpot(_originPosition, e.GetPosition(null)))
-                        {
-                            MetroHelpers.SetFocus(eventTitle);
-                        }
-                    };
-
-                eventTitle.GotFocus += (s, e) =>
+                if (DragAndDropSource.IsSameSpot(_originPosition, e.GetPosition(null)))
                 {
-                    eventTitle.FontSize = EventFontSizeWhenEditing;
-                    eventTitle.Background = EventTextBackgroundWhenEditingDefault;
-                    eventTitle.Foreground = EventTextColorWhenEditing;
-                    eventTitle.Margin = EventTextBoxMarginWhenEditing;
-                    eventTitle.TextWrapping = TextWrapping.Wrap;
-                    eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
-                    eventTitle.MaxWidth = double.PositiveInfinity;
-                    eventTitle.IsHitTestVisible = true;
-                    borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Collapsed;
-                    controller.SignalThatEditingModeStarted(new EditingModeStartedEventArgs(eventTitle, eventModel, dayModel, day));
-                };
+                    MetroHelpers.SetFocus(eventTitle);
+                }
+            };
 
-                eventTitle.LostFocus += (s, e) =>
-                {
-                    eventTitle.FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize);
-                    eventTitle.Background = EventTextBackgroundWhenNotEditing;
-                    eventTitle.Foreground = functionToDetermineEventForeground();
-                    eventTitle.Margin = EventTextBoxMarginWhenNotEditing;
-                    eventTitle.TextWrapping = TextWrapping.NoWrap;
-                    eventTitle.MinWidth = 0;
-                    eventTitle.MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity);
-                    eventTitle.IsHitTestVisible = false;
-                    borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Visible;
-                    controller.SignalThatEditingModeStopped();
-                };
+            eventTitle.GotFocus += (s, e) =>
+            {
+                eventTitle.FontSize = EventFontSizeWhenEditing;
+                eventTitle.Background = EventTextBackgroundWhenEditingDefault;
+                eventTitle.Foreground = EventTextColorWhenEditing;
+                eventTitle.Margin = EventTextBoxMarginWhenEditing;
+                eventTitle.TextWrapping = TextWrapping.Wrap;
+                eventTitle.MinWidth = 2000; // to prevent flickering on every text change, because the StandAloneWrapPanel is recalculating sizes
+                eventTitle.MaxWidth = double.PositiveInfinity;
+                eventTitle.IsHitTestVisible = true;
+                borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Collapsed;
+                controller.SignalThatEditingModeStarted(new EditingModeStartedEventArgs(eventTitle, eventModel, dayModel, day));
+            };
 
-                eventTitle.TextChanged += (s, e) =>
-                    {
-                        // Sync the model:
-                        eventModel.Title = ((TextBox)s).Text;
-                    };
+            eventTitle.LostFocus += (s, e) =>
+            {
+                eventTitle.FontSize = (isToday ? EventFontSizeWhenToday : EventFontSize);
+                eventTitle.Background = EventTextBackgroundWhenNotEditing;
+                eventTitle.Foreground = functionToDetermineEventForeground();
+                eventTitle.Margin = EventTextBoxMarginWhenNotEditing;
+                eventTitle.TextWrapping = TextWrapping.NoWrap;
+                eventTitle.MinWidth = 0;
+                eventTitle.MaxWidth = (eventModel.IsMarkedAsDone && !isToday ? MaxWidthWhenEventIsMarkedAsDone : double.PositiveInfinity);
+                eventTitle.IsHitTestVisible = false;
+                borderToStartEditingOnMouseUpRatherThanMouseDown.Visibility = Visibility.Visible;
+                controller.SignalThatEditingModeStopped();
+            };
 
-                eventTitle.KeyDown += (object sender, KeyEventArgs e) =>
-                    {
-                        if (e.Key == Key.Enter)
-                            controller.QuitEditingMode();
-                    };
+            eventTitle.TextChanged += (s, e) =>
+            {
+                // Sync the model:
+                eventModel.Title = ((TextBox)s).Text;
+            };
 
-                dragAndDropSource.DragAndDropStarted += (object sender, EventArgs e) =>
-                    {
-                        controller.QuitEditingMode();
-                        controller.LockMainScrollViewer();
-                    };
+            eventTitle.KeyDown += (object sender, KeyEventArgs e) =>
+            {
+                if (e.Key == Key.Enter)
+                    controller.QuitEditingMode();
+            };
 
-                dragAndDropSource.DragAndDropStopped += (object sender, EventArgs e) =>
-                {
-                    controller.UnlockMainScrollViewer();
-                };
+            dragAndDropSource.DragAndDropStarted += (object sender, EventArgs e) =>
+            {
+                controller.QuitEditingMode();
+                controller.LockMainScrollViewer();
+            };
 
-                //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
-                //Action<EditEventRequestedEventArgs> actionToEditEvent = (e) =>
-                //    {
-                //        if (e.EventModel == eventModel)
-                //            MetroHelpers.SetFocus(eventTitle);
-                //    };
-                var editEventRequestedHandler = new EditEventRequestedRequestedHandler(eventTitle, eventModel);
+            dragAndDropSource.DragAndDropStopped += (object sender, EventArgs e) =>
+            {
+                controller.UnlockMainScrollViewer();
+            };
 
-                //todo: test that the following "weak event" is indeed "weak" and does not leak:
-                //controller.EditEventRequested += WeakEventsHelpers.MakeWeakHandler<EditEventRequestedEventArgs>(actionToEditEvent, h => controller.EditEventRequested -= h);
-                controller.EditEventRequested += WeakEventsHelpers.MakeWeakHandler<EditEventRequestedEventArgs>(editEventRequestedHandler.Controller_EditEventRequested, h => controller.EditEventRequested -= h);
-            }
+            //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
+            //Action<EditEventRequestedEventArgs> actionToEditEvent = (e) =>
+            //    {
+            //        if (e.EventModel == eventModel)
+            //            MetroHelpers.SetFocus(eventTitle);
+            //    };
+            var editEventRequestedHandler = new EditEventRequestedRequestedHandler(eventTitle, eventModel);
+
+            //todo: test that the following "weak event" is indeed "weak" and does not leak:
+            //controller.EditEventRequested += WeakEventsHelpers.MakeWeakHandler<EditEventRequestedEventArgs>(actionToEditEvent, h => controller.EditEventRequested -= h);
+            controller.EditEventRequested += WeakEventsHelpers.MakeWeakHandler<EditEventRequestedEventArgs>(editEventRequestedHandler.Controller_EditEventRequested, h => controller.EditEventRequested -= h);
 
             if (setFocus)
             {
@@ -496,48 +488,21 @@ namespace ToDoCalendarControl
             }
 
             mainContainer.Children.Add(borderToStartEditingOnMouseUpRatherThanMouseDown);
-            mainBorder.Child = mainContainer;
-            if (eventModel.IsReadOnly)
-            {
-                var readonlyLabel = new TextBlock
-                {
-                    Text = AppResources.ReadOnly,
-                    FontSize = 8,
-                    Foreground = eventTitle.Foreground,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = ReadonlyLabelMargin
-                };
-                Grid.SetColumn(readonlyLabel, 1);
-                mainContainer.Children.Add(readonlyLabel);
-
-                return mainBorder;
-            }
-
-            dragAndDropSource.Content = mainBorder;
+            dragAndDropSource.Child = mainContainer;
 
             return dragAndDropSource;
         }
 
         private static FrameworkElement RenderReadOnlyEvent(EventModel eventModel, bool isToday)
         {
-            Brush functionToDetermineEventForeground()
-                => eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor;
-
-            var mainBorder = new Border()
-            {
-                CornerRadius = EventCornerRadius,
-                Padding = new Thickness(12, 0, 12, 0),
-                Margin = EventMargin,
-            };
-
-            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
+            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20, Margin = new Thickness(12, 0, 12, 0) };
             mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
             var eventTitle = new TextBlock()
             {
                 Text = eventModel.Title,
-                Foreground = functionToDetermineEventForeground(),
+                Foreground = eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
                 Margin = EventTextBoxMarginWhenNotEditing,
                 Padding = new Thickness(0),
                 FontSize = isToday ? EventFontSizeWhenToday : EventFontSize,
@@ -545,7 +510,6 @@ namespace ToDoCalendarControl
             };
 
             mainContainer.Children.Add(eventTitle);
-            mainBorder.Child = mainContainer;
 
             var readonlyLabel = new TextBlock
             {
@@ -558,7 +522,7 @@ namespace ToDoCalendarControl
             Grid.SetColumn(readonlyLabel, 1);
             mainContainer.Children.Add(readonlyLabel);
 
-            return mainBorder;
+            return mainContainer;
         }
 
         public static FrameworkElement RenderMonthHeader(DateTime firstDayOfMonth)
