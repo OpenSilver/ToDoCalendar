@@ -503,9 +503,11 @@ namespace ToDoCalendarControl
 
         private static FrameworkElement RenderReadOnlyEvent(EventModel eventModel, bool isToday)
         {
+            bool isShowEventTime = !eventModel.IsAllDay && eventModel.DateTime.HasValue;
+
             var eventTitle = new TextBlock()
             {
-                Text = (eventModel.DateTime.HasValue ? ConvertToShortTime(eventModel.DateTime.Value) + ": ": "") + eventModel.Title,
+                Text = (isShowEventTime ? ConvertToShortTime(eventModel.DateTime.Value) + ": ": "") + eventModel.Title,
                 Foreground = eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
                 Margin = new Thickness(12, 0, 12, 0),
                 Padding = new Thickness(0),

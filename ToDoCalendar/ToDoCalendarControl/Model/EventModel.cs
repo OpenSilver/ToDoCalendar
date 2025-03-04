@@ -20,5 +20,7 @@ namespace ToDoCalendarControl
         public Color? CalendarColor { get; set; }
         public DateTime? TemporaryCreationDate { get; set; } // Not intended to be persisted
         public DateTime? DateTime { get; set; }
+        public bool IsAllDay { get; set; }
+
     }
 }

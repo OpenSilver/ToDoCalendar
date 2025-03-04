@@ -13,6 +13,7 @@ public class DeviceEvent
     public Color CalendarColor { get; set; }
     public bool IsReadOnly { get; set; }
     public bool IsRecurring { get; set; }
+    public bool IsAllDay { get; set; }
 
     public DeviceEvent()
     {
@@ -39,6 +40,7 @@ public class DeviceEvent
         model.CalendarColor = ColorHelper.AdjustCalendarColor(CalendarColor);
         model.IsReadOnly = IsReadOnly;
         model.DateTime = DateTime;
+        model.IsAllDay = IsAllDay;
 
         // we don't support editing existing events yet
         if (IsRecurring || model.EventType == EventType.Unspecified)

@@ -25,6 +25,7 @@ public class CalendarService : ICalendarService
                 Description = x.Description,
                 DateTime = x.StartDate.LocalDateTime,
                 IsRecurring = x.IsRecurring,
+                IsAllDay = x.IsAllDay
             };
 
             if (calendars.TryGetValue(x.CalendarId, out var calendar))
