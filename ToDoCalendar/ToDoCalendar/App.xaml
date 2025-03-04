@@ -11,6 +11,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="PhoneAccentBrush" Color="Purple"/>
+            <SolidColorBrush x:Key="PhoneAccentBrushLowerOpacity" Color="Purple" Opacity="0.2"/>
             <SolidColorBrush x:Key="PhoneForegroundBrush" Color="Black"/>
             <SolidColorBrush x:Key="PhoneChromeBrush" Color="White"/>
             <sys:Double x:Key="PhoneFontSizeNormal">12</sys:Double>
