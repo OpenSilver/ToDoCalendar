@@ -510,7 +510,8 @@ namespace ToDoCalendarControl
                 Padding = new Thickness(0),
                 FontSize = isToday ? EventFontSizeWhenToday : EventFontSize,
                 FontWeight = FontWeights.Bold,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis
             };
 
             return eventTitle;
