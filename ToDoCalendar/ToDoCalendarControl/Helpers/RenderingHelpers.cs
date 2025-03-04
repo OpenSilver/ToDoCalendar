@@ -297,7 +297,10 @@ namespace ToDoCalendarControl
                 foreach (EventModel eventModel in dayModelIfAny.Events)
                 {
                     bool shouldSetFocus = setFocusToLastEventOfTheDay && index == (count - 1);
-                    var eventControl = RenderEvent(eventModel, dayModelIfAny, day, controller, shouldSetFocus);
+                    var eventControl = eventModel.IsReadOnly
+                        ? RenderReadOnlyEvent(eventModel, isToday)
+                        : RenderEvent(eventModel, dayModelIfAny, day, controller, isToday, shouldSetFocus);
+
                     mainContainer.Children.Add(eventControl);
                     index++;
                 }
@@ -313,11 +316,8 @@ namespace ToDoCalendarControl
             return rootControl;
         }
 
-        public static FrameworkElement RenderEvent(EventModel eventModel, DayModel dayModel, DateTime day, Controller controller, bool setFocus = false)
+        public static FrameworkElement RenderEvent(EventModel eventModel, DayModel dayModel, DateTime day, Controller controller, bool isToday, bool setFocus = false)
         {
-            var isToday = (day == DatesHelpers.GetTodayDateWithoutTime());
-
-
             //----------------
             // CREATE ELEMENTS
             //----------------
@@ -516,6 +516,49 @@ namespace ToDoCalendarControl
             dragAndDropSource.Content = mainBorder;
 
             return dragAndDropSource;
+        }
+
+        private static FrameworkElement RenderReadOnlyEvent(EventModel eventModel, bool isToday)
+        {
+            Brush functionToDetermineEventForeground()
+                => eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor;
+
+            var mainBorder = new Border()
+            {
+                CornerRadius = EventCornerRadius,
+                Padding = new Thickness(12, 0, 12, 0),
+                Margin = EventMargin,
+            };
+
+            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
+            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            var eventTitle = new TextBlock()
+            {
+                Text = eventModel.Title,
+                Foreground = functionToDetermineEventForeground(),
+                Margin = EventTextBoxMarginWhenNotEditing,
+                Padding = new Thickness(0),
+                FontSize = isToday ? EventFontSizeWhenToday : EventFontSize,
+                FontWeight = FontWeights.Bold,
+            };
+
+            mainContainer.Children.Add(eventTitle);
+            mainBorder.Child = mainContainer;
+
+            var readonlyLabel = new TextBlock
+            {
+                Text = AppResources.ReadOnly,
+                FontSize = 8,
+                Foreground = eventTitle.Foreground,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = ReadonlyLabelMargin
+            };
+            Grid.SetColumn(readonlyLabel, 1);
+            mainContainer.Children.Add(readonlyLabel);
+
+            return mainBorder;
         }
 
         public static FrameworkElement RenderMonthHeader(DateTime firstDayOfMonth)
