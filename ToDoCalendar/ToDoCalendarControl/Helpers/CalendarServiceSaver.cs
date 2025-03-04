@@ -21,11 +21,36 @@ public class CalendarServiceSaver : ICalendarService
     // Define four fixed colors for events
     private readonly List<Color> _eventColors = new()
         {
-            Color.FromRgb(255, 0, 0),   // Red
-            Color.FromRgb(0, 255, 0),   // Green
-            Color.FromRgb(0, 0, 255),   // Blue
-            Color.FromRgb(255, 165, 0)  // Orange
+            Color.FromRgb(1, 131, 191),   
+            Color.FromRgb(104, 191, 1),   // Green
+            Color.FromRgb(191, 144, 1),   // Blue
+            Color.FromRgb(108, 1, 191)  // Orange
         };
+
+    // Predefined list of short random event titles (max 20 characters)
+    private readonly List<string> _eventTitles = new()
+{
+    "Meeting",
+    "Lunch with John",
+    "Project Deadline",
+    "Doctor's Visit",
+    "Call with Client",
+    "Coffee Break",
+    "Workout Session",
+    "Dinner Plans",
+    "Team Sync-up",
+    "Code Review",
+    "Grocery Shopping",
+    "Flight Booking",
+    "Morning Jog",
+    "Catch-up with Jane",
+    "Yoga Class",
+    "Book Reading",
+    "Study Session",
+    "Gaming Night",
+    "Bike Ride",
+    "Weekend Trip"
+};
 
     private List<DeviceEvent> _allEvents;
     private Random _random = new Random();
@@ -62,6 +87,9 @@ public class CalendarServiceSaver : ICalendarService
                 // Pick a random color from the predefined set
                 Color selectedColor = _eventColors[_random.Next(_eventColors.Count)];
 
+                // Pick a random short title
+                string randomTitle = _eventTitles[_random.Next(_eventTitles.Count)];
+
                 // Generate random RGB values
                 byte r = (byte)_random.Next(256);
                 byte g = (byte)_random.Next(256);
@@ -72,13 +100,13 @@ public class CalendarServiceSaver : ICalendarService
 
                 _allEvents.Add(new DeviceEvent
                 {
-                    Title = $"Sample event from a calendar",
+                    Title = _eventTitles[_random.Next(_eventTitles.Count)],
                     Id = Guid.NewGuid().ToString(),
                     DateTime = currentDate,
                     CalendarColor = selectedColor
                 });
             }
-            currentDate = currentDate.AddDays(_random.Next(0,5));
+            currentDate = currentDate.AddDays(_random.Next(0,3));
         }
         return Task.FromResult(_allEvents as IEnumerable<DeviceEvent>);
     }
