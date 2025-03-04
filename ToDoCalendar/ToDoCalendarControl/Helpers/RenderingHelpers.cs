@@ -61,7 +61,6 @@ namespace ToDoCalendarControl
         static readonly Thickness EventMargin = new Thickness(0);
         static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, -1);
         static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
-        static readonly Thickness ReadonlyLabelMargin = new Thickness(12, -2, -6, 0);
 
         // Rendering the month header:
         const double LeftMarginOfMonthName = 5d; // in pixels
@@ -500,34 +499,18 @@ namespace ToDoCalendarControl
 
         private static FrameworkElement RenderReadOnlyEvent(EventModel eventModel, bool isToday)
         {
-            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20, Margin = new Thickness(12, 0, 12, 0) };
-            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
             var eventTitle = new TextBlock()
             {
                 Text = eventModel.Title,
                 Foreground = eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
-                Margin = EventTextBoxMarginWhenNotEditing,
+                Margin = new Thickness(12, 0, 12, 0),
                 Padding = new Thickness(0),
                 FontSize = isToday ? EventFontSizeWhenToday : EventFontSize,
                 FontWeight = FontWeights.Bold,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
-            mainContainer.Children.Add(eventTitle);
-
-            var readonlyLabel = new TextBlock
-            {
-                Text = AppResources.ReadOnly,
-                FontSize = 8,
-                Foreground = eventTitle.Foreground,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = ReadonlyLabelMargin
-            };
-            Grid.SetColumn(readonlyLabel, 1);
-            mainContainer.Children.Add(readonlyLabel);
-
-            return mainContainer;
+            return eventTitle;
         }
 
         public static FrameworkElement RenderMonthHeader(DateTime firstDayOfMonth)
