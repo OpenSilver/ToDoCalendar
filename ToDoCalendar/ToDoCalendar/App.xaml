@@ -1,13 +1,13 @@
-﻿<Application
-    x:Class="ToDoCalendar.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:media="using:System.Windows.Media"
-    xmlns:mt="http://opensilver.net/themes/modern">
+﻿<Application x:Class="ToDoCalendar.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mt="http://opensilver.net/themes/modern"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
     <Application.Theme>
         <mt:ModernTheme/>
     </Application.Theme>
+
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="PhoneAccentBrush" Color="Purple"/>

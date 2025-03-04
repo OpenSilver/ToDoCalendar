@@ -1,16 +1,13 @@
-﻿<Page
-    x:Class="ToDoCalendar.MainPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:uwp="LEGACY_UNUSED"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:todocalendarcontrol="clr-namespace:ToDoCalendarControl;assembly=ToDoCalendarControl"
-    mc:Ignorable="d uwp"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
-    FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}"
-    uwp:SupportedOrientations="Portrait" uwp:Orientation="Portrait">
+﻿<Page x:Class="ToDoCalendar.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:todocalendarcontrol="clr-namespace:ToDoCalendarControl;assembly=ToDoCalendarControl"
+      FontFamily="{StaticResource PhoneFontFamilyNormal}"
+      FontSize="{StaticResource PhoneFontSizeNormal}"
+      Foreground="{StaticResource PhoneForegroundBrush}"
+      mc:Ignorable="d">
 
     <todocalendarcontrol:MainControl Name="mainControl" Grid.ColumnSpan="2"/>
 </Page>

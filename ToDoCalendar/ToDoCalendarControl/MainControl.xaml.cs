@@ -1,6 +1,7 @@
 ﻿using MetroStyleApps;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace ToDoCalendarControl
 
         public const double LandscapeColumnWidth = 500;
 
-        private readonly IKeyboardService _keyboardService = ServiceLocator.Provider.GetService<IKeyboardService>();
+        private readonly IKeyboardService _keyboardService;
 
         Controller _controller;
         DateTime _firstDayOfCalendar;
@@ -40,20 +41,19 @@ namespace ToDoCalendarControl
         {
             InitializeComponent();
 
-            // Prepare the controller:
-            _controller = new Controller(new CalendarServiceSaver(ServiceLocator.Provider.GetRequiredService<ICalendarService>()));
-            _controller.EditingModeStarted += Controller_EditingModeStarted;
-            _controller.EditingModeStopped += Controller_EditingModeStopped;
-            _controller.QuitEditingModeRequested += Controller_QuitEditingModeRequested;
-#if !OPENSILVER
-            _controller.LockMainScrollViewerRequested += Controller_LockMainScrollViewerRequested;
-            _controller.UnlockMainScrollViewerRequested += Controller_UnlockMainScrollViewerRequested;
-#endif
-
             // If we are not at Design Time:
-            bool isInDesignMode = System.ComponentModel.DesignerProperties.IsInDesignTool;
-            if (!isInDesignMode)
+            if (!DesignerProperties.IsInDesignTool)
             {
+                _keyboardService = ServiceLocator.Provider.GetService<IKeyboardService>();
+
+                _controller = new Controller(new CalendarServiceSaver(ServiceLocator.Provider.GetRequiredService<ICalendarService>()));
+                _controller.EditingModeStarted += Controller_EditingModeStarted;
+                _controller.EditingModeStopped += Controller_EditingModeStopped;
+                _controller.QuitEditingModeRequested += Controller_QuitEditingModeRequested;
+#if !OPENSILVER
+                _controller.LockMainScrollViewerRequested += Controller_LockMainScrollViewerRequested;
+                _controller.UnlockMainScrollViewerRequested += Controller_UnlockMainScrollViewerRequested;
+#endif
 #if OPENSILVER && DEBUG
                 // Mock data for testing:
                 //_controller.Model = CreateMockData();
