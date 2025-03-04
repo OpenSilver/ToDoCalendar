@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Markup;
 using System.Windows.Threading;
 #elif WINRT
 using System;
@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Markup;
 
 namespace MetroStyleApps
 {
-    public class DragAndDropSource : Border
+    public class DragAndDropSource : ContentControl
     {
         //-------------------------------
         // IMPORTANT:
@@ -37,6 +37,7 @@ namespace MetroStyleApps
         Point _dragDeltaOrigin;
         Point _cursorPositionRelativeToSource;
         bool _dragAndDropStarted;
+        FrameworkElement _layoutRoot;
 
         public object GroupId { get; set; }
         public double DistanceForDragOperationToBeConsideredIntentional { get; set; } // in pixels.
@@ -58,28 +59,51 @@ namespace MetroStyleApps
 
         public DragAndDropSource()
         {
+            Template = (ControlTemplate)XamlReader.Load(@"
+                <ControlTemplate TargetType=""ContentControl""
+                    xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
+                    xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
+                        <Border x:Name=""PART_LayoutRoot"" Background=""Transparent"">
+                            <ContentPresenter Content=""{TemplateBinding Content}""/>
+                        </Border>
+                </ControlTemplate>");
+
             // Set default values for properties:
             GroupId = "";
             DistanceForDragOperationToBeConsideredIntentional = 10; // in pixels.
             DontCollapseDuringDrag = false;
-            Background = new SolidColorBrush(Colors.Transparent);
-
-            SubscribeToEvents();
         }
 
 #if !WINRT
 
-        private void SubscribeToEvents()
+        public override void OnApplyTemplate()
         {
-            AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown), true);
-            AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp), true);
+            base.OnApplyTemplate();
+            // Unregister previous events if any:
+            if (_layoutRoot != null)
+            {
+                _layoutRoot.RemoveHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown));
+                _layoutRoot.RemoveHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp));
+                _layoutRoot.MouseMove -= LayoutRoot_MouseMove;
+            }
+
+            // Attempt to get a reference to the objects in the template:
+            _layoutRoot = GetTemplateChild("PART_LayoutRoot") as FrameworkElement;
+
+            // Register events:
+            if (_layoutRoot != null)
+            {
+                _layoutRoot.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown), true);
+                _layoutRoot.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp), true);
 #if !OPENSILVER
-            AddHandler(UIElement.HoldEvent, new EventHandler<GestureEventArgs>(LayoutRoot_Hold), true);
+                _layoutRoot.AddHandler(UIElement.HoldEvent, new EventHandler<GestureEventArgs>(LayoutRoot_Hold), true);
 #endif
-            MouseMove += LayoutRoot_MouseMove;
+                _layoutRoot.MouseMove += LayoutRoot_MouseMove;
 #if !OPENSILVER
-            Hold += LayoutRoot_Hold;
+                _layoutRoot.Hold += LayoutRoot_Hold;
 #endif
+
+            }
         }
 
 #if !OPENSILVER

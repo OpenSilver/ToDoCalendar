@@ -334,7 +334,11 @@ namespace ToDoCalendarControl
             {
                 HoldToStartDrag = true,
                 EnlargeSourceDuringDrag = true,
-                DataContext = new InformationAboutEventBeingDragged(eventModel, dayModel, day),
+                DataContext = new InformationAboutEventBeingDragged(eventModel, dayModel, day)
+            };
+
+            var mainBorder = new Border()
+            {
                 CornerRadius = EventCornerRadius,
                 Background = eventModel.EventType switch
                 {
@@ -488,7 +492,8 @@ namespace ToDoCalendarControl
             }
 
             mainContainer.Children.Add(borderToStartEditingOnMouseUpRatherThanMouseDown);
-            dragAndDropSource.Child = mainContainer;
+            mainBorder.Child = mainContainer;
+            dragAndDropSource.Content = mainBorder;
 
             return dragAndDropSource;
         }
