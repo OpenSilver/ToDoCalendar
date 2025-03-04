@@ -59,8 +59,9 @@ namespace ToDoCalendarControl
         static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
-        static readonly Thickness EventMargin = new Thickness(0);
-        static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, -1);
+        static readonly Thickness EventMargin = new Thickness(1);
+        static readonly Thickness EventMarginIfToday = new Thickness(6,3,1,3);
+        static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, 0);
         static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
 
         // Rendering the month header:
@@ -355,11 +356,11 @@ namespace ToDoCalendarControl
                     _ => eventModel.IsMarkedAsDone ? EventOpacityWhenDone : 1d
                 },
                 Padding = new Thickness(12, 0, 12, 0),
-                Margin = EventMargin,
+                Margin = isToday ? EventMarginIfToday : EventMargin,
                 Cursor = Cursors.Hand
             };
 
-            var mainContainer = new Grid() { MinHeight = isToday ? 30 : 20 };
+            var mainContainer = new Grid();// { MinHeight = isToday ? 30 : 20 };
             mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             mainContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
