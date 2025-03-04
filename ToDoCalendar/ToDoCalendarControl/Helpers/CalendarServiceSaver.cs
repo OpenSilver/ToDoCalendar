@@ -18,6 +18,15 @@ public class CalendarServiceSaver : ICalendarService
         _calendarService = calendarService;
     }
 
+    // Define four fixed colors for events
+    private readonly List<Color> _eventColors = new()
+        {
+            Color.FromRgb(255, 0, 0),   // Red
+            Color.FromRgb(0, 255, 0),   // Green
+            Color.FromRgb(0, 0, 255),   // Blue
+            Color.FromRgb(255, 165, 0)  // Orange
+        };
+
     private List<DeviceEvent> _allEvents;
     private Random _random = new Random();
 
@@ -50,6 +59,9 @@ public class CalendarServiceSaver : ICalendarService
         {
             for (int i = 0; i < 1; i++)
             {
+                // Pick a random color from the predefined set
+                Color selectedColor = _eventColors[_random.Next(_eventColors.Count)];
+
                 // Generate random RGB values
                 byte r = (byte)_random.Next(256);
                 byte g = (byte)_random.Next(256);
@@ -60,13 +72,13 @@ public class CalendarServiceSaver : ICalendarService
 
                 _allEvents.Add(new DeviceEvent
                 {
-                    Title = $"Sample event from the calendar",
+                    Title = $"Sample event from a calendar",
                     Id = Guid.NewGuid().ToString(),
                     DateTime = currentDate,
-                    CalendarColor = randomColor
+                    CalendarColor = selectedColor
                 });
             }
-            currentDate = currentDate.AddDays(_random.Next(0,10));
+            currentDate = currentDate.AddDays(_random.Next(0,5));
         }
         return Task.FromResult(_allEvents as IEnumerable<DeviceEvent>);
     }
