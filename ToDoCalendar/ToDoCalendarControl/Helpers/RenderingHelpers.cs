@@ -1,5 +1,6 @@
 ﻿using MetroStyleApps;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -504,7 +505,7 @@ namespace ToDoCalendarControl
         {
             var eventTitle = new TextBlock()
             {
-                Text = eventModel.Title,
+                Text = (eventModel.DateTime.HasValue ? ConvertToShortTime(eventModel.DateTime.Value) + ": ": "") + eventModel.Title,
                 Foreground = eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
                 Margin = new Thickness(12, 0, 12, 0),
                 Padding = new Thickness(0),
@@ -515,6 +516,16 @@ namespace ToDoCalendarControl
             };
 
             return eventTitle;
+        }
+
+        static string ConvertToShortTime(DateTime dateTime)
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            if (dateTime.Minute == 0)
+            {
+                return dateTime.ToString("h tt", culture).ToUpper(); // Only hour + AM/PM
+            }
+            return dateTime.ToString("h:mm tt", culture).ToUpper(); // Hour:Minutes + AM/PM
         }
 
         public static FrameworkElement RenderMonthHeader(DateTime firstDayOfMonth)
