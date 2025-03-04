@@ -497,21 +497,21 @@ namespace ToDoCalendarControl
 
             mainContainer.Children.Add(borderToStartEditingOnMouseUpRatherThanMouseDown);
             mainBorder.Child = mainContainer;
-            if (eventModel.IsReadOnly)
-            {
-                var readonlyLabel = new TextBlock
-                {
-                    Text = AppResources.ReadOnly,
-                    FontSize = 8,
-                    Foreground = eventTitle.Foreground,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = ReadonlyLabelMargin
-                };
-                Grid.SetColumn(readonlyLabel, 1);
-                mainContainer.Children.Add(readonlyLabel);
+            //if (eventModel.IsReadOnly)
+            //{
+            //    var readonlyLabel = new TextBlock
+            //    {
+            //        Text = AppResources.ReadOnly,
+            //        FontSize = 8,
+            //        Foreground = eventTitle.Foreground,
+            //        VerticalAlignment = VerticalAlignment.Top,
+            //        Margin = ReadonlyLabelMargin
+            //    };
+            //    Grid.SetColumn(readonlyLabel, 1);
+            //    mainContainer.Children.Add(readonlyLabel);
 
-                return mainBorder;
-            }
+            //    return mainBorder;
+            //}
 
             dragAndDropSource.Content = mainBorder;
 
@@ -547,16 +547,16 @@ namespace ToDoCalendarControl
             mainContainer.Children.Add(eventTitle);
             mainBorder.Child = mainContainer;
 
-            var readonlyLabel = new TextBlock
-            {
-                Text = AppResources.ReadOnly,
-                FontSize = 8,
-                Foreground = eventTitle.Foreground,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = ReadonlyLabelMargin
-            };
-            Grid.SetColumn(readonlyLabel, 1);
-            mainContainer.Children.Add(readonlyLabel);
+            //var readonlyLabel = new TextBlock
+            //{
+            //    Text = AppResources.ReadOnly,
+            //    FontSize = 8,
+            //    Foreground = eventTitle.Foreground,
+            //    VerticalAlignment = VerticalAlignment.Top,
+            //    Margin = ReadonlyLabelMargin
+            //};
+            //Grid.SetColumn(readonlyLabel, 1);
+            //mainContainer.Children.Add(readonlyLabel);
 
             return mainBorder;
         }
