@@ -198,6 +198,7 @@ namespace ToDoCalendarControl
         async void Controller_EditingModeStopped(object sender, EventArgs e)
         {
             EventOptionsControl.Visibility = Visibility.Collapsed;
+            //AnimationHelper.HideWithAnimation(EventOptionsControl);
 
             // Show again the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Visible;
@@ -237,7 +238,8 @@ namespace ToDoCalendarControl
             EventOptionsControl.TextBox = e.TextBox;
             EventOptionsControl.MaxWidth = Math.Min(ActualWidth, MaxOptionsPopupWidth);
             EventOptionsControl.UpdateButtonsVisibility();
-            EventOptionsControl.Visibility = Visibility.Visible;
+            //EventOptionsControl.Visibility = Visibility.Visible;
+            AnimationHelper.ShowWithAnimation(EventOptionsControl);
             OptionsPopup.PlacementTarget = e.TextBox;
             OptionsPopup.IsOpen = true;
 
