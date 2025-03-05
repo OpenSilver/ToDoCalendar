@@ -161,7 +161,11 @@ namespace ToDoCalendarControl
 
             var todayItem = DaysContainer.Children.Cast<Border>()
                 .First(x => x.Child is Panel panel && panel.Background == RenderingHelpers.BackgroundColorForToday);
-            ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
+
+            if (!IsLandscapeMode)
+            {
+                ScrollIntoView(MainScrollViewer, todayItem, InitialTodayTopOffset);
+            }
 
             LoadPrevButtonTransformer.Visibility = Visibility.Visible;
             LoadNextButtonTransformer.Visibility = Visibility.Visible;
@@ -246,7 +250,10 @@ namespace ToDoCalendarControl
             // Hide the button to add new events:
             ButtonsOuterContainer.Visibility = Visibility.Collapsed;
 
-            MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
+            if (!IsLandscapeMode)
+            {
+                MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
+            }
         }
 
         void OnCalendarModified()
@@ -309,7 +316,9 @@ namespace ToDoCalendarControl
 
         private void OnMainScrollViewerLayoutUpdated(object sender, EventArgs e)
         {
-            if (EventOptionsControl.Visibility == Visibility.Visible && EventOptionsControl.TextBox is FrameworkElement element)
+            if (!IsLandscapeMode &&
+                EventOptionsControl.Visibility == Visibility.Visible &&
+                EventOptionsControl.TextBox is FrameworkElement element)
             {
                 MainScrollViewer.ScrollIntoView(element, HorizontalScrollMargin, 0, TimeSpan.Zero);
             }
