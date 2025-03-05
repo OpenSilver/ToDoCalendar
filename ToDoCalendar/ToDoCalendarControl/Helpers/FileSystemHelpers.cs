@@ -29,7 +29,7 @@ namespace ToDoCalendarControl
             }
             else // IsolatedStorage is not supported on Browser
             {
-                Interop.ExecuteJavaScript($"localStorage.setItem('{fileName}', '{fileContent}')");
+                Interop.ExecuteJavaScriptVoid($"localStorage.setItem('{fileName}', `{fileContent}`)");
             }
         }
 
