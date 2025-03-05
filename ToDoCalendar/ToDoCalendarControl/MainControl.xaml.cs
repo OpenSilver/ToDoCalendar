@@ -206,9 +206,6 @@ namespace ToDoCalendarControl
             EventOptionsControl.Visibility = Visibility.Collapsed;
             //AnimationHelper.HideWithAnimation(EventOptionsControl);
 
-            // Show again the button to add new events:
-            ButtonsOuterContainer.Visibility = Visibility.Visible;
-
             try
             {
                 // If the event has an empty title and was created recently (less than 3 minutes ago),
@@ -232,6 +229,10 @@ namespace ToDoCalendarControl
             {
                 MessageBox.Show(ex.ToString(), "Cannot update or delete the event");
             }
+
+            // Show again the button to add new events after a small delay to make sure the virtual keyboard is collapsed:
+            await Task.Delay(1);
+            ButtonsOuterContainer.Visibility = Visibility.Visible;
         }
 
         void Controller_EditingModeStarted(object sender, EditingModeStartedEventArgs e)
