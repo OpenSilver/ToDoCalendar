@@ -36,7 +36,112 @@
             <Setter Property="Padding" Value="10,0"/>
         </Style>
         <Style TargetType="RadioButton">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid Margin="{TemplateBinding Padding}" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="00:00:00.2" To="MouseOver"/>
+                                        <VisualTransition GeneratedDuration="00:00:00.2" From="MouseOver"/>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Hover"
+                                                                           Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                           Duration="00:00:00.001">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ThicknessAnimation Storyboard.TargetName="Hover"
+                                                                Storyboard.TargetProperty="BorderThickness"
+                                                                To="6"
+                                                                Duration="00:00:00"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Hover"
+                                                                           Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                           Duration="00:00:00.001">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BulletBorder"
+                                                                           Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                           Duration="00:00:00.001">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Grid x:Name="Radio"
+                                  Width="16"
+                                  Height="16"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Border x:Name="HasFocus"
+                                        Background="Transparent"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Visibility="Collapsed">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="2"
+                                                          Opacity="1"
+                                                          ShadowDepth="0"
+                                                          Color="{Binding ElementName=HasFocus, Path=BorderBrush.(SolidColorBrush.Color)}"/>
+                                    </Border.Effect>
+                                </Border>
+                                <Border x:Name="Background"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"/>
+
+                                <Grid x:Name="Bullet"
+                                      Width="16"
+                                      Height="16"
+                                      RenderTransformOrigin="0.5,0.5">
+                                    <Border x:Name="Hover"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="3"
+                                            CornerRadius="8"
+                                            Opacity=".7"
+                                            Visibility="Collapsed"/>
+                                    <Border x:Name="BulletBorder"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="5"
+                                            CornerRadius="8"
+                                            Visibility="Collapsed"/>
+                                </Grid>
+                            </Grid>
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Grid.Column="1"
+                                              Margin="8,0,0,2"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <local:LocalizedStrings x:Key="ToDoCalendarControl_LocalizedStrings"/>
     </UserControl.Resources>
