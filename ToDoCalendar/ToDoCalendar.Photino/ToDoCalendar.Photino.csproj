@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Platforms>AnyCPU</Platforms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <None Update="wwwroot\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Photino.NET" Version="3.2.3" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
+  </ItemGroup>
+
+  <!-- Temporary Workaround -->
+  <Target Name="CopyLibsAndResources" BeforeTargets="Build">
+    <ItemGroup>
+      <!-- Include all files from the libs folder -->
+      <LibsFiles Include="..\ToDoCalendar.Browser\wwwroot\libs\**\*.*" />
+      <!-- Include all files from the resources folder -->
+      <ResourcesFiles Include="..\ToDoCalendar.Browser\wwwroot\resources\**\*.*" />
+    </ItemGroup>
+    <!-- Copy the libs files to wwwroot/libs, preserving directory structure -->
+    <Copy
+        SourceFiles="@(LibsFiles)"
+        DestinationFiles="@(LibsFiles -> 'wwwroot\libs\%(RecursiveDir)%(Filename)%(Extension)')"
+        SkipUnchangedFiles="true" />
+    <!-- Copy the resources files to wwwroot/resources, preserving directory structure -->
+    <Copy
+        SourceFiles="@(ResourcesFiles)"
+        DestinationFiles="@(ResourcesFiles -> 'wwwroot\resources\%(RecursiveDir)%(Filename)%(Extension)')"
+        SkipUnchangedFiles="true" />
+  </Target>
+</Project>

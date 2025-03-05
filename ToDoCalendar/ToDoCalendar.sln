@@ -15,6 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoCalendar.MauiHybrid", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Maui.CalendarStore", "Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj", "{C726185E-7CAF-BCB3-CBAE-B6C1FD5794B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoCalendar.Photino", "ToDoCalendar.Photino\ToDoCalendar.Photino.csproj", "{35485AFE-3C73-434D-A8E7-61A8F940E79F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50137700-F9C6-4413-9040-A614DA18E293} = {50137700-F9C6-4413-9040-A614DA18E293}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +50,10 @@ Global
 		{C726185E-7CAF-BCB3-CBAE-B6C1FD5794B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C726185E-7CAF-BCB3-CBAE-B6C1FD5794B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C726185E-7CAF-BCB3-CBAE-B6C1FD5794B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35485AFE-3C73-434D-A8E7-61A8F940E79F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35485AFE-3C73-434D-A8E7-61A8F940E79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35485AFE-3C73-434D-A8E7-61A8F940E79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35485AFE-3C73-434D-A8E7-61A8F940E79F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
