@@ -20,6 +20,8 @@ namespace ToDoCalendarControl
         const int InitialDayCountAfterScreen = 10;
         const int NumberOfAdditionalDaysToLoadBefore = 30;
         const int NumberOfAdditionalDaysToLoadAfter = 30;
+        const int NumberOfAdditionalDaysToLoadBeforeInLandscape = 100;
+        const int NumberOfAdditionalDaysToLoadAfterInLandscape = 150;
         const double DayItemHeight = 16;
         const double InitialTodayTopOffset = 150;
         const int MinLandscapeWidth = 1150;
@@ -177,7 +179,7 @@ namespace ToDoCalendarControl
 
         private async void ButtonLoadMoreDaysBefore_Click(object sender, RoutedEventArgs e)
         {
-            var firstDayToAdd = _firstDayOfCalendar.AddDays(-NumberOfAdditionalDaysToLoadBefore);
+            var firstDayToAdd = _firstDayOfCalendar.AddDays(IsLandscapeMode ? -NumberOfAdditionalDaysToLoadBeforeInLandscape : -NumberOfAdditionalDaysToLoadBefore);
             var lastDayToAdd = _firstDayOfCalendar.AddDays(-1);
 
             RenderingHelpers.AddDaysToContainer(DaysContainer, firstDayToAdd, lastDayToAdd, _controller, insertAtBeginningRatherThanAddToEnd: true);
@@ -190,7 +192,7 @@ namespace ToDoCalendarControl
         private async void ButtonLoadMoreDaysAfter_Click(object sender, RoutedEventArgs e)
         {
             var firstDayToAdd = _lastDayOfCalendar.AddDays(1);
-            var lastDayToAdd = _lastDayOfCalendar.AddDays(NumberOfAdditionalDaysToLoadAfter);
+            var lastDayToAdd = _lastDayOfCalendar.AddDays(IsLandscapeMode ? NumberOfAdditionalDaysToLoadAfterInLandscape : NumberOfAdditionalDaysToLoadAfter);
 
             RenderingHelpers.AddDaysToContainer(DaysContainer, firstDayToAdd, lastDayToAdd, _controller);
 
