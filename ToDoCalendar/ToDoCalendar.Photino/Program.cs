@@ -20,6 +20,7 @@ namespace HelloPhotinoApp
             // Creating a new PhotinoWindow instance with the fluent API
             var window = new PhotinoWindow()
                 .SetTitle(windowTitle)
+                .SetIconFile("wwwroot/favicon.ico")
                 // Resize to a percentage of the main monitor work area
                 .SetUseOsDefaultSize(true)
                 // Center window in the middle of the screen
