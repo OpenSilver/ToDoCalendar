@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Fonts\Inter-VariableFont_slnt,wght.ttf" />
+    <Content Include="Fonts\Inter_VariableFont_slnt_wght.ttf" />
     <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
