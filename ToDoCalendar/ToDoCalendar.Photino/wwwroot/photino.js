@@ -69,7 +69,7 @@ window._photinoRuntime = (function () {
                 stylesheet.setAttribute('type', 'text/css');
                 stylesheet.setAttribute('href', url);
                 stylesheet.onload = () => { resolve(url); };
-                stylesheet.onerror = () => { reject(url); };
+                stylesheet.onerror = () => { reject(`Failed to load: ${url}`); };
                 document.getElementsByTagName('head')[0].appendChild(stylesheet);
             }));
         });
@@ -81,7 +81,7 @@ window._photinoRuntime = (function () {
                 script.setAttribute('type', 'application/javascript');
                 script.setAttribute('src', url);
                 script.onload = () => { resolve(url); };
-                script.onerror = () => { reject(url); };
+                script.onerror = () => { reject(`Failed to load: ${url}`); };
                 document.getElementsByTagName('head')[0].appendChild(script);
             }));
         });
@@ -109,6 +109,7 @@ window._photinoRuntime = (function () {
                 return true;
             } catch (error) {
                 console.error(error);
+                alert(error);
                 return false;
             }
         }
@@ -116,5 +117,5 @@ window._photinoRuntime = (function () {
 })();
 
 window._photinoRuntime.startAsync().then(() => {
-    window.external.sendMessage(JSON.stringify({type: 'start'}));
-})
+    window.external.sendMessage(JSON.stringify({ type: 'start' }));
+});
