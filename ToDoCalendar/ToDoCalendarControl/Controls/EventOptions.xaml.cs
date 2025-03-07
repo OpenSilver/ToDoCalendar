@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ToDoCalendarControl.Resources;
 using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
@@ -118,5 +120,33 @@ namespace ToDoCalendarControl
                 Controller.EditEvent(EventModel, DayModel, Day);
             }
         }
+
+        internal void ShowTypeToDoHint()
+        {
+            if (string.IsNullOrEmpty(PreviousTitle) && TextBox?.Parent is Panel panel)
+            {
+                var hint = new TextBlock
+                {
+                    Text = AppResources.TypeToDoHint,
+                    IsHitTestVisible = false,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Opacity = 0.7,
+                };
+                panel.Children.Add(hint);
+                TextBox.TextChanged += OnTextChanged;
+            }
+        }
+
+        internal void RemoveTypeToDoHint()
+        {
+            if (TextBox?.Parent is Panel panel &&
+                panel.Children.LastOrDefault() is TextBlock hint)
+            {
+                TextBox.TextChanged -= OnTextChanged;
+                panel.Children.Remove(hint);
+            }
+        }
+
+        private void OnTextChanged(object s, TextChangedEventArgs e) => RemoveTypeToDoHint();
     }
 }

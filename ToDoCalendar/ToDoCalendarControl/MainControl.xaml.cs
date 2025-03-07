@@ -206,6 +206,8 @@ namespace ToDoCalendarControl
             EventOptionsControl.Visibility = Visibility.Collapsed;
             //AnimationHelper.HideWithAnimation(EventOptionsControl);
 
+            EventOptionsControl.RemoveTypeToDoHint();
+
             try
             {
                 // If the event has an empty title and was created recently (less than 3 minutes ago),
@@ -237,17 +239,18 @@ namespace ToDoCalendarControl
 
         void Controller_EditingModeStarted(object sender, EditingModeStartedEventArgs e)
         {
+            var textBox = e.TextBox;
             EventOptionsControl.Controller = _controller;
             EventOptionsControl.EventModel = e.EventModel;
             EventOptionsControl.PreviousTitle = e.EventModel.Title;
             EventOptionsControl.DayModel = e.DayModel;
             EventOptionsControl.Day = e.Day;
-            EventOptionsControl.TextBox = e.TextBox;
+            EventOptionsControl.TextBox = textBox;
             EventOptionsControl.MaxWidth = Math.Min(ActualWidth, MaxOptionsPopupWidth);
             EventOptionsControl.UpdateButtonsVisibility();
             //EventOptionsControl.Visibility = Visibility.Visible;
             AnimationHelper.ShowWithAnimation(EventOptionsControl);
-            OptionsPopup.PlacementTarget = e.TextBox;
+            OptionsPopup.PlacementTarget = textBox;
             OptionsPopup.IsOpen = true;
 
             // Hide the button to add new events:
@@ -255,8 +258,10 @@ namespace ToDoCalendarControl
 
             if (!IsLandscapeMode)
             {
-                MainScrollViewer.ScrollIntoView(EventOptionsControl.TextBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
+                MainScrollViewer.ScrollIntoView(textBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
             }
+
+            EventOptionsControl.ShowTypeToDoHint();
         }
 
         void OnCalendarModified()

@@ -191,7 +191,12 @@
   <data name="TrialText3" xml:space="preserve">
     <value>To keep your data,</value>
   </data>
-  <data name="ReadOnly" xml:space="preserve">
-    <value>read-only</value>
+  <data name="TypeToDoHint" xml:space="preserve">
+    <value>Type your ToDo</value>
+    <comment>A hint in editing TextBox when creating a new event</comment>
+  </data>
+  <data name="ClickToTypeToDoHint" xml:space="preserve">
+    <value>Click here to type your ToDo</value>
+    <comment>A hint in editing TextBox when creating a new event and the keyboard is not appeared</comment>
   </data>
 </root>
