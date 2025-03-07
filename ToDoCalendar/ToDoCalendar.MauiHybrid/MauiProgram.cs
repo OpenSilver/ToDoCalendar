@@ -31,11 +31,7 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-#if TEST
-        builder.Services.AddSingleton<ICalendarService, TestCalendarService>();
-#else
         builder.Services.AddSingleton<ICalendarService, CalendarService>();
-#endif
 
 #if ANDROID
         builder.Services.AddSingleton<IKeyboardService, Platforms.Android.KeyboardService>();
