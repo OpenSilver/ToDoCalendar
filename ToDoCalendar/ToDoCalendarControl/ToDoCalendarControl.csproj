@@ -5,6 +5,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <DefineSilverlight>true</DefineSilverlight>
     <LangVersion>12</LangVersion>
+    <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -54,6 +55,7 @@
     <Compile Include="Services\IKeyboardService.cs" />
     <Compile Include="Services\Platform.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\TestCalendarService.cs" />
     <Compile Include="Services\WebServiceProvider.cs" />
   </ItemGroup>
 

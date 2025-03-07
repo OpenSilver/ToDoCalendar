@@ -11,7 +11,11 @@ public class WebServiceProvider : IServiceProvider
     {
         if (serviceType == typeof(ICalendarService))
         {
+#if TEST
+            return _calendarService ??= new TestCalendarService();
+#else
             return _calendarService ??= new FileCalendar();
+#endif
         }
         return null;
     }
