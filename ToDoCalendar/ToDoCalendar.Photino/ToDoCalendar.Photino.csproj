@@ -9,37 +9,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\**" />
-    <None Update="wwwroot\**">
+    <Content Include="wwwroot\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Photino.NET" Version="3.2.3" />
+    <PackageReference Include="OpenSilver.WebAssembly" Version="3.2.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
   </ItemGroup>
 
-  <!-- Temporary Workaround -->
-  <Target Name="CopyLibsAndResources" BeforeTargets="Build">
+  <!-- Temporary -->
+  <Target Name="_CopyAdditionalResources"
+          BeforeTargets="CopyAdditionalFiles"
+          DependsOnTargets="ResolveAssemblyReferences">
+
+    <CallTarget Targets="_CopyWasmResources" />
+
     <ItemGroup>
-      <!-- Include all files from the libs folder -->
-      <LibsFiles Include="..\ToDoCalendar.Browser\wwwroot\libs\**\*.*" />
-      <!-- Include all files from the resources folder -->
-      <ResourcesFiles Include="..\ToDoCalendar.Browser\wwwroot\resources\**\*.*" />
+      <Content Remove="wwwroot\**" />
+      <Content Include="wwwroot\**">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
-    <!-- Copy the libs files to wwwroot/libs, preserving directory structure -->
-    <Copy
-        SourceFiles="@(LibsFiles)"
-        DestinationFiles="@(LibsFiles -> 'wwwroot\libs\%(RecursiveDir)%(Filename)%(Extension)')"
-        SkipUnchangedFiles="true" />
-    <!-- Copy the resources files to wwwroot/resources, preserving directory structure -->
-    <Copy
-        SourceFiles="@(ResourcesFiles)"
-        DestinationFiles="@(ResourcesFiles -> 'wwwroot\resources\%(RecursiveDir)%(Filename)%(Extension)')"
-        SkipUnchangedFiles="true" />
   </Target>
 </Project>

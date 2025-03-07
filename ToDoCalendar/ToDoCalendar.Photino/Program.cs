@@ -1,6 +1,7 @@
 ﻿using ToDoCalendar.Photino.Runner;
 using Photino.NET;
 using ToDoCalendarControl.Services;
+using System.Drawing;
 
 namespace HelloPhotinoApp
 {
@@ -19,15 +20,22 @@ namespace HelloPhotinoApp
 
             // Creating a new PhotinoWindow instance with the fluent API
             var window = new PhotinoWindow()
-                .SetTitle(windowTitle)
-                .SetIconFile("wwwroot/favicon.ico")
-                // Resize to a percentage of the main monitor work area
-                .SetUseOsDefaultSize(true)
-                // Center window in the middle of the screen
-                .Center()
+                .SetTitle(windowTitle);
+
+            if (System.OperatingSystem.IsLinux())
+            {
+                window.SetUseOsDefaultSize(false).SetSize(new Size(1024, 800));
+            }
+            else
+            {
+                window.SetUseOsDefaultSize(true);
+            }
+
+            // Center window in the middle of the screen
+            window.Center()
                 // Users can resize windows by default.
                 // Let's make this one fixed instead.
-                .SetResizable(false)
+                .SetResizable(true)
                 .SetLogVerbosity(0)
                 .Load("wwwroot/index.html"); // Can be used with relative path strings or "new URI()" instance to load a website.
 
