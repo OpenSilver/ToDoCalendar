@@ -34,5 +34,7 @@
     <string>This app requires full access to your calendars to create, update, and delete events.</string>
     <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
     <string>This app requires write-only access to your calendar to schedule events.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
 </dict>
 </plist>
