@@ -329,6 +329,14 @@ partial class CalendarStoreImplementation : ICalendarStore
 
     static EKSource? GetBestPossibleSource()
     {
+        var localSource = EventStore.Sources.Where(
+            s => s.SourceType == EKSourceType.Local).FirstOrDefault();
+
+        if (localSource is not null)
+        {
+            return localSource;
+        }
+
         if (EventStore.DefaultCalendarForNewEvents?.Source is not null)
         {
             return EventStore.DefaultCalendarForNewEvents.Source;
@@ -340,14 +348,6 @@ partial class CalendarStoreImplementation : ICalendarStore
         if (remoteSource is not null)
         {
             return remoteSource;
-        }
-
-        var localSource = EventStore.Sources.Where(
-            s => s.SourceType == EKSourceType.Local).FirstOrDefault();
-
-        if (localSource is not null)
-        {
-            return localSource;
         }
 
         return null;
