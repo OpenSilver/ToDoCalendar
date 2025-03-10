@@ -19,6 +19,7 @@ namespace ToDoCalendarControl
         public EventType EventType { get; set; }
         public Color? CalendarColor { get; set; }
         public DateTime? TemporaryCreationDate { get; set; } // Not intended to be persisted
+        public bool IsDeleted { get; set; }
         public DateTime? DateTime { get; set; }
         public bool IsAllDay { get; set; }
 

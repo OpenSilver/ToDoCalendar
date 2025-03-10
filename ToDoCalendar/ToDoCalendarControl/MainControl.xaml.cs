@@ -208,28 +208,31 @@ namespace ToDoCalendarControl
 
             EventOptionsControl.RemoveTypeToDoHint();
 
-            try
+            if (!EventOptionsControl.EventModel.IsDeleted)
             {
-                // If the event has an empty title and was created recently (less than 3 minutes ago),
-                // then delete it (because it was most likely created by mistake), otherwise save the new title:
-                if (string.IsNullOrEmpty(EventOptionsControl.EventModel.Title)
-                    && EventOptionsControl.EventModel.TemporaryCreationDate.HasValue
-                    && EventOptionsControl.EventModel.TemporaryCreationDate.Value < DateTime.UtcNow
-                    && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3))
+                try
                 {
-                    await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day, false);
-                }
-                else
-                {
-                    if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle)
+                    // If the event has an empty title and was created recently (less than 3 minutes ago),
+                    // then delete it (because it was most likely created by mistake), otherwise save the new title:
+                    if (string.IsNullOrEmpty(EventOptionsControl.EventModel.Title)
+                        && EventOptionsControl.EventModel.TemporaryCreationDate.HasValue
+                        && EventOptionsControl.EventModel.TemporaryCreationDate.Value < DateTime.UtcNow
+                        && (DateTime.UtcNow - EventOptionsControl.EventModel.TemporaryCreationDate.Value) < TimeSpan.FromMinutes(3))
                     {
-                        await _controller.CalendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                        await _controller.DeleteEvent(EventOptionsControl.EventModel, EventOptionsControl.DayModel, EventOptionsControl.Day, false);
+                    }
+                    else
+                    {
+                        if (EventOptionsControl.EventModel.Title != EventOptionsControl.PreviousTitle)
+                        {
+                            await _controller.CalendarService.UpdateCalendarEvent(new DeviceEvent(EventOptionsControl.EventModel, EventOptionsControl.Day));
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Cannot update or delete the event");
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Cannot update or delete the event");
+                }
             }
 
             // Show again the button to add new events after a small delay to make sure the virtual keyboard is collapsed:

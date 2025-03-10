@@ -44,7 +44,7 @@ namespace ToDoCalendarControl
         {
             if (DayModel != null && EventModel != null && Controller != null && Day != default(DateTime))
             {
-                EventModel.TemporaryCreationDate = null;
+                EventModel.IsDeleted = true;
                 await Controller.DeleteEvent(EventModel, DayModel, Day);
             }
         }
