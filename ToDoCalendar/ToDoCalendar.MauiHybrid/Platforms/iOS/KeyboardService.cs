@@ -14,8 +14,8 @@ public class KeyboardService : IKeyboardService
     {
         var notificationCenter = NSNotificationCenter.DefaultCenter;
 
-        notificationCenter.AddObserver(UIKeyboard.DidShowNotification, OnKeyboardShow);
-        notificationCenter.AddObserver(UIKeyboard.DidHideNotification, OnKeyboardHide);
+        notificationCenter.AddObserver(UIKeyboard.WillShowNotification, OnKeyboardShow);
+        notificationCenter.AddObserver(UIKeyboard.WillHideNotification, OnKeyboardHide);
     }
 
     private void OnKeyboardShow(NSNotification notification)

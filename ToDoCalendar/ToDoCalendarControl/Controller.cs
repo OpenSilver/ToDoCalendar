@@ -55,6 +55,7 @@ namespace ToDoCalendarControl
 
         public async Task DeleteEvent(EventModel eventModel, DayModel dayModel, DateTime day, bool showNotification = true)
         {
+            eventModel.IsDeleted = true;
             if (showNotification)
             {
                 await CalendarService.DeleteCalendarEvent(eventModel.Id);
