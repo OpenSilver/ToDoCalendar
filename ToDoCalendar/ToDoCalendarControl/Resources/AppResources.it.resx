@@ -192,9 +192,9 @@
     <value>Per salvarle,</value>
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Digita il tuo ToDo</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Clicca qui per digitare il tuo ToDo</value>
   </data>
 </root>

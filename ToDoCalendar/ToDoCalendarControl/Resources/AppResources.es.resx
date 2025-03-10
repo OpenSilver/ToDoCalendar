@@ -192,9 +192,9 @@
     <value>Para mantenerlos,</value>
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Escribe tu tarea</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Haz clic aquí para escribir tu tarea</value>
   </data>
 </root>

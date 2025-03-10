@@ -192,9 +192,9 @@
     <value />
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Введите задачу</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Нажмите здесь, чтобы ввести задачу</value>
   </data>
 </root>

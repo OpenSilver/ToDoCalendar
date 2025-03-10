@@ -121,19 +121,28 @@ namespace ToDoCalendarControl
             }
         }
 
-        internal void ShowTypeToDoHint()
+        internal void ShowTypeToDoHint(bool isKeyboardAvailable)
         {
             if (string.IsNullOrEmpty(PreviousTitle) && TextBox?.Parent is Panel panel)
             {
                 var hint = new TextBlock
                 {
-                    Text = AppResources.TypeToDoHint,
+                    Text = isKeyboardAvailable ? AppResources.TypeToDoHint : AppResources.ClickToTypeToDoHint,
                     IsHitTestVisible = false,
                     VerticalAlignment = VerticalAlignment.Center,
                     Opacity = 0.7,
                 };
                 panel.Children.Add(hint);
                 TextBox.TextChanged += OnTextChanged;
+            }
+        }
+
+        internal void UpdateTypeToDoHintIfVisible()
+        {
+            if (TextBox?.Parent is Panel panel &&
+                panel.Children.LastOrDefault() is TextBlock hint)
+            {
+                hint.Text = AppResources.TypeToDoHint;
             }
         }
 

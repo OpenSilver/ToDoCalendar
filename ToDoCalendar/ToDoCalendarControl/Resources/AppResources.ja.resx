@@ -192,9 +192,9 @@
     <value />
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>ToDoを入力してください</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>ここをクリックしてToDoを入力してください</value>
   </data>
 </root>

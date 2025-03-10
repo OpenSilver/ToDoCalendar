@@ -261,7 +261,8 @@ namespace ToDoCalendarControl
                 MainScrollViewer.ScrollIntoView(textBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
             }
 
-            EventOptionsControl.ShowTypeToDoHint();
+            var isKeyboardAvailable = _keyboardService == null || _keyboardService.IsKeyboardVisible;
+            EventOptionsControl.ShowTypeToDoHint(isKeyboardAvailable);
         }
 
         void OnCalendarModified()
@@ -346,6 +347,11 @@ namespace ToDoCalendarControl
             if (!isOpen && EventOptionsControl.Visibility == Visibility.Visible)
             {
                 Dispatcher.BeginInvoke(Focus);
+            }
+
+            if (isOpen)
+            {
+                EventOptionsControl.UpdateTypeToDoHintIfVisible();
             }
         }
 

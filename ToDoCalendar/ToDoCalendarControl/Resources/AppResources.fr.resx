@@ -192,9 +192,9 @@
     <value>Pour les sauver,</value>
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Tapez votre tâche</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Cliquez ici pour taper votre tâche</value>
   </data>
 </root>

@@ -192,9 +192,9 @@
     <value />
   </data>
   <data name="TypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Geben Sie Ihre ToDo ein</value>
   </data>
   <data name="ClickToTypeToDoHint" xml:space="preserve">
-    <value />
+    <value>Klicken Sie hier, um Ihr ToDo einzugeben</value>
   </data>
 </root>
