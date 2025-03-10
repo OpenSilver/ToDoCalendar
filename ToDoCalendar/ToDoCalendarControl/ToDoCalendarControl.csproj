@@ -52,7 +52,6 @@
     <Compile Include="Other\HashSet.cs" />
     <Compile Include="Other\Tuple.cs" />
     <Compile Include="Services\IKeyboardService.cs" />
-    <Compile Include="Services\Platform.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\TestCalendarService.cs" />
     <Compile Include="Services\WebServiceProvider.cs" />

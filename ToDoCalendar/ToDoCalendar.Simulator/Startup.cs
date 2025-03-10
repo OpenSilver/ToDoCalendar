@@ -9,7 +9,7 @@ namespace ToDoCalendar.Simulator
         [STAThread]
         static int Main(string[] args)
         {
-            ServiceLocator.Initialize(new WebServiceProvider(), Platform.Simulator);
+            ServiceLocator.Initialize(new WebServiceProvider());
             return SimulatorLauncher.Start(typeof(App));
         }
     }

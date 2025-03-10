@@ -1,7 +1,7 @@
-﻿using ToDoCalendar.Photino.Runner;
-using Photino.NET;
-using ToDoCalendarControl.Services;
+﻿using Photino.NET;
 using System.Drawing;
+using ToDoCalendar.Photino.Runner;
+using ToDoCalendarControl.Services;
 
 namespace HelloPhotinoApp
 {
@@ -16,7 +16,7 @@ namespace HelloPhotinoApp
             // Window title declared here for visibility
             string windowTitle = "ToDoCalendar";
 
-            ServiceLocator.Initialize(new WebServiceProvider(), Platform.Simulator);
+            ServiceLocator.Initialize(new WebServiceProvider());
 
             // Creating a new PhotinoWindow instance with the fluent API
             var window = new PhotinoWindow()
