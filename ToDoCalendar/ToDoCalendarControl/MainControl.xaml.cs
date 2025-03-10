@@ -326,7 +326,7 @@ namespace ToDoCalendarControl
 
             if (isOpen)
             {
-                EventOptionsControl.UpdateTypeToDoHintIfVisible();
+                Dispatcher.BeginInvoke(EventOptionsControl.UpdateTypeToDoHintIfVisible);
             }
         }
     }
