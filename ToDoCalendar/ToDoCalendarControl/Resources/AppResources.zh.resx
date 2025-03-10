@@ -191,4 +191,10 @@
   <data name="TrialText3" xml:space="preserve">
     <value>为了使您的数据，</value>
   </data>
+  <data name="TypeToDoHint" xml:space="preserve">
+    <value>输入您的待办事项</value>
+  </data>
+  <data name="ClickToTypeToDoHint" xml:space="preserve">
+    <value>点击此处输入您的待办事项</value>
+  </data>
 </root>

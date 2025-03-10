@@ -5,6 +5,8 @@ namespace ToDoCalendar.MauiHybrid.Platforms.Android;
 
 public class KeyboardService : IKeyboardService
 {
+    public bool IsKeyboardVisible { get; private set; }
+
     public event Action<bool>? KeyboardStateChanged;
 
     public KeyboardService()
@@ -13,7 +15,12 @@ public class KeyboardService : IKeyboardService
 
         if (rootView != null)
         {
-            var listener = new KeyboardListener(() => rootView.Height, isOpen => KeyboardStateChanged?.Invoke(isOpen));
+            var listener = new KeyboardListener(() => rootView.Height,
+                isOpen =>
+                {
+                    IsKeyboardVisible = isOpen;
+                    KeyboardStateChanged?.Invoke(IsKeyboardVisible);
+                });
             rootView.ViewTreeObserver?.AddOnGlobalLayoutListener(listener);
         }
     }

@@ -125,6 +125,9 @@
     <value>zh-CN</value>
     <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
   </data>
+  <data name="OptionsButtonSendBackupByEmail_Content" xml:space="preserve">
+    <value>通过电子邮件发送的备份副本</value>
+  </data>
   <data name="ActionsDeleteTask_ButtonContent" xml:space="preserve">
     <value>删除</value>
   </data>
@@ -142,9 +145,6 @@
   </data>
   <data name="OptionsButtonRestoreBackup_Content" xml:space="preserve">
     <value>恢复备份</value>
-  </data>
-  <data name="OptionsButtonSendBackupByEmail_Content" xml:space="preserve">
-    <value>通过电子邮件发送的备份副本</value>
   </data>
   <data name="OptionsCheckBoxForDisablingAutoScreenOff_Content" xml:space="preserve">
     <value>防止自动锁屏</value>
@@ -190,5 +190,11 @@
   </data>
   <data name="TrialText3" xml:space="preserve">
     <value>为了使您的数据，</value>
+  </data>
+  <data name="TypeToDoHint" xml:space="preserve">
+    <value>输入您的待办事项</value>
+  </data>
+  <data name="ClickToTypeToDoHint" xml:space="preserve">
+    <value>点击此处输入您的待办事项</value>
   </data>
 </root>

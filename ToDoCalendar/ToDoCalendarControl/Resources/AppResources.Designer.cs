@@ -115,6 +115,15 @@ namespace ToDoCalendarControl.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click here to type your ToDo.
+        /// </summary>
+        public static string ClickToTypeToDoHint {
+            get {
+                return ResourceManager.GetString("ClickToTypeToDoHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DRAG AND DROP TO THE CALENDAR.
         /// </summary>
         public static string ExplanationForDragAndDrop_Text {
@@ -223,15 +232,6 @@ namespace ToDoCalendarControl.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to read-only.
-        /// </summary>
-        public static string ReadOnly {
-            get {
-                return ResourceManager.GetString("ReadOnly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to LeftToRight.
         /// </summary>
         public static string ResourceFlowDirection {
@@ -282,6 +282,15 @@ namespace ToDoCalendarControl.Resources {
         public static string TrialText3 {
             get {
                 return ResourceManager.GetString("TrialText3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type your ToDo.
+        /// </summary>
+        public static string TypeToDoHint {
+            get {
+                return ResourceManager.GetString("TypeToDoHint", resourceCulture);
             }
         }
     }

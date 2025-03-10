@@ -191,4 +191,10 @@
   <data name="TrialText3" xml:space="preserve">
     <value />
   </data>
+  <data name="TypeToDoHint" xml:space="preserve">
+    <value>Geben Sie Ihre ToDo ein</value>
+  </data>
+  <data name="ClickToTypeToDoHint" xml:space="preserve">
+    <value>Klicken Sie hier, um Ihr ToDo einzugeben</value>
+  </data>
 </root>

@@ -6,23 +6,27 @@ namespace ToDoCalendar.MauiHybrid.Platforms.iOS;
 
 public class KeyboardService : IKeyboardService
 {
+    public bool IsKeyboardVisible { get; private set; }
+
     public event Action<bool>? KeyboardStateChanged;
 
     public KeyboardService()
     {
         var notificationCenter = NSNotificationCenter.DefaultCenter;
 
-        notificationCenter.AddObserver(UIKeyboard.DidShowNotification, OnKeyboardWillShow);
-        notificationCenter.AddObserver(UIKeyboard.DidHideNotification, OnKeyboardWillHide);
+        notificationCenter.AddObserver(UIKeyboard.DidShowNotification, OnKeyboardShow);
+        notificationCenter.AddObserver(UIKeyboard.DidHideNotification, OnKeyboardHide);
     }
 
-    private void OnKeyboardWillShow(NSNotification notification)
-    {
-        KeyboardStateChanged?.Invoke(true);
-    }
+    private void OnKeyboardShow(NSNotification notification)
+        => OnKeyboardStateChanged(true);
 
-    private void OnKeyboardWillHide(NSNotification notification)
+    private void OnKeyboardHide(NSNotification notification)
+        => OnKeyboardStateChanged(false);
+
+    private void OnKeyboardStateChanged(bool isVisible)
     {
-        KeyboardStateChanged?.Invoke(false);
+        IsKeyboardVisible = isVisible;
+        KeyboardStateChanged?.Invoke(IsKeyboardVisible);
     }
 }
