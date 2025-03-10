@@ -1,22 +1,10 @@
-﻿// Uncomment the following directive to use the alternative implementation based on the use of a Thumb.
-//#define ALTERNATIVE_IMPLEMENTATON_USING_A_THUMB
-
-#if SILVERLIGHT
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Threading;
-#elif WINRT
-using System;
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Markup;
-#endif
 
 namespace MetroStyleApps
 {
@@ -29,9 +17,6 @@ namespace MetroStyleApps
         // can use a similar system to initiate a drag and drop
         // operation.
         //-------------------------------
-
-
-#if !ALTERNATIVE_IMPLEMENTATON_USING_A_THUMB
 
         DragAndDropRoot _dragAndDropRoot;
         Point _dragDeltaOrigin;
@@ -49,13 +34,11 @@ namespace MetroStyleApps
         public event EventHandler DragAndDropStarted;
         public event EventHandler DragAndDropStopped;
 
-#if OPENSILVER
         private const int MaxDragDelta = 5;
         private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
         private object _mouseLeftButtonDownSender;
         private MouseEventArgs _mouseLeftButtonDownEventArgs;
         private Point _originPosition;
-#endif
 
         public DragAndDropSource()
         {
@@ -73,8 +56,6 @@ namespace MetroStyleApps
             DistanceForDragOperationToBeConsideredIntentional = 10; // in pixels.
             DontCollapseDuringDrag = false;
         }
-
-#if !WINRT
 
         public override void OnApplyTemplate()
         {
@@ -95,32 +76,9 @@ namespace MetroStyleApps
             {
                 _layoutRoot.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown), true);
                 _layoutRoot.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp), true);
-#if !OPENSILVER
-                _layoutRoot.AddHandler(UIElement.HoldEvent, new EventHandler<GestureEventArgs>(LayoutRoot_Hold), true);
-#endif
                 _layoutRoot.MouseMove += LayoutRoot_MouseMove;
-#if !OPENSILVER
-                _layoutRoot.Hold += LayoutRoot_Hold;
-#endif
-
             }
         }
-
-#if !OPENSILVER
-        void LayoutRoot_Hold(object sender, GestureEventArgs e)
-        {
-            if (HoldToStartDrag)
-            {
-                // Initialize the drag and drop operation:
-                StartDragOperation(sender,
-                    e.GetPosition(MetroHelpers.GetRootVisual()),
-                    e.GetPosition((FrameworkElement)sender));
-                OnMouseMove(new Point(_dragDeltaOrigin.X, _dragDeltaOrigin.Y), distanceForDragOperationToBeConsideredIntentional: 0);
-
-                e.Handled = true;
-            }
-        }
-#endif
 
         void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -137,7 +95,6 @@ namespace MetroStyleApps
                         e.GetPosition((FrameworkElement)sender));
                 }
             }
-#if OPENSILVER
             else
             {
                 _mouseLeftButtonDownSender = sender;
@@ -145,10 +102,8 @@ namespace MetroStyleApps
                 _holdTimer.Tick += OnHoldTimerTick;
                 _holdTimer.Start();
             }
-#endif
         }
 
-#if OPENSILVER
         private void OnHoldTimerTick(object sender, EventArgs e)
         {
             ResetHoldTimer();
@@ -167,7 +122,6 @@ namespace MetroStyleApps
             _holdTimer.Tick -= OnHoldTimerTick;
             _holdTimer.Stop();
         }
-#endif
 
         void StartDragOperation(object sender, Point dragDeltaOrigin, Point cursorPositionRelativeToSource)
         {
@@ -197,12 +151,10 @@ namespace MetroStyleApps
                     DragAndDropStopped(this, new EventArgs());
             }
 
-#if OPENSILVER
             if (_holdTimer.IsEnabled)
             {
                 ResetHoldTimer();
             }
-#endif
         }
 
         void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
@@ -253,77 +205,5 @@ namespace MetroStyleApps
         public static bool IsSameSpot(Point originPosition, Point newPosition) =>
             Math.Abs(newPosition.X - originPosition.X) < MaxDragDelta &&
             Math.Abs(newPosition.Y - originPosition.Y) < MaxDragDelta;
-#endif
-
-#else
-
-        DragAndDropRoot _dragAndDropRoot;
-        Point _cumulativeDragDelta;
-        Thumb _mainThumb;
-
-        public object GroupId { get; set; }
-
-        public DragAndDropSource()
-        {
-            this.Template = (ControlTemplate)XamlReader.Load(@"
-                <ControlTemplate TargetType=""ContentControl""
-                    xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
-                    xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
-                        <Grid>
-                            <ContentPresenter/>
-                            <Thumb x:Name=""PART_MainThumb"" Opacity=""0""/>
-                        </Grid>
-                </ControlTemplate>");
-
-            // Set default values for properties:
-            GroupId = "";
-        }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            // Unregister previous events if any:
-            if (_mainThumb != null)
-            {
-                _mainThumb.DragStarted -= MainThumb_DragStarted;
-                _mainThumb.DragDelta -= MainThumb_DragDelta;
-                _mainThumb.DragCompleted -= MainThumb_DragCompleted;
-            }
-
-            // Attempt to get a reference to the objects in the template:
-            _mainThumb = GetTemplateChild("PART_MainThumb") as Thumb;
-
-            // Register events:
-            if (_mainThumb != null)
-            {
-                _mainThumb.DragStarted += MainThumb_DragStarted;
-                _mainThumb.DragDelta += MainThumb_DragDelta;
-                _mainThumb.DragCompleted += MainThumb_DragCompleted;
-            }
-        }
-
-        void MainThumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
-        {
-            _cumulativeDragDelta = new Point(0, 0);
-            _dragAndDropRoot = MetroHelpers.GetParentOfType<DragAndDropRoot>(this);
-            if (_dragAndDropRoot != null)
-                _dragAndDropRoot.StartDragAndDrop(this, groupId: GroupId);
-        }
-        
-        void MainThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-        {
-            _cumulativeDragDelta = new Point(_cumulativeDragDelta.X + e.HorizontalChange, _cumulativeDragDelta.Y + e.VerticalChange);
-            if (_dragAndDropRoot != null)
-                _dragAndDropRoot.UpdateDragAndDrop(_cumulativeDragDelta);
-        }
-
-        void MainThumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            if (_dragAndDropRoot != null)
-                _dragAndDropRoot.StopDragAndDrop();
-        }
-
-#endif
     }
 }

@@ -1,13 +1,7 @@
-﻿#if SILVERLIGHT
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Media.Animation;
-#elif WINRT
-using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Animation;
-#endif
- 
+
 namespace MetroStyleApps
 {
     public static class AnimationsHelper
@@ -42,11 +36,7 @@ namespace MetroStyleApps
                 frame.EasingFunction = easingFunction;
             }
             animation.KeyFrames.Add(frame);
-#if WINRT
-            Storyboard.SetTargetProperty(animation, propertyPath);
-#else
             Storyboard.SetTargetProperty(animation, new PropertyPath(propertyPath));
-#endif
             Storyboard.SetTarget(animation, targetObject);
             return animation;
         }

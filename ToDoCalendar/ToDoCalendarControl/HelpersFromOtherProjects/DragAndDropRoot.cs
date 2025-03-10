@@ -1,26 +1,11 @@
-﻿#if SILVERLIGHT
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using WinRTForSilverlight;
 using static ToDoCalendarControl.RenderingHelpers;
-#elif WINRT
-using System;
-using System.Collections.Generic;
-using Windows.Foundation;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Shapes;
-#endif
 
 namespace MetroStyleApps
 {
@@ -375,21 +360,18 @@ namespace MetroStyleApps
         UIElement CreateGhostFromSource(FrameworkElement source, double sourceWidth, double sourceHeight, bool sourceShouldBeEnlargedDuringDrag)
         {
             UIElement ghostControl;
-#if !WINRT
             const bool useRectangle = false;
             if (useRectangle) // note: we keep this section for compatibility with systems where writableBitmap.Render is not available (like Windows 8.0).
             {
-#endif
-                var rect = new Rectangle()
-                {
-                    Fill = new SolidColorBrush(Colors.Purple),
-                    Width = sourceWidth,
-                    Height = sourceHeight,
-                    RenderTransform = null,
-                    Opacity = GhostOpacityDuringDragAndDrop
-                };
-                ghostControl = rect;
-#if !WINRT
+                //var rect = new Rectangle()
+                //{
+                //    Fill = new SolidColorBrush(Colors.Purple),
+                //    Width = sourceWidth,
+                //    Height = sourceHeight,
+                //    RenderTransform = null,
+                //    Opacity = GhostOpacityDuringDragAndDrop
+                //};
+                //ghostControl = rect;
             }
             else
             {
@@ -411,7 +393,6 @@ namespace MetroStyleApps
                 };
                 ghostControl = image;
             }
-#endif
             MetroHelpers.AttachPointerPressedEventHandler(ghostControl, Ghest_PointerPressed, false);
             return ghostControl;
         }

@@ -1,20 +1,10 @@
-﻿#if SILVERLIGHT
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
-#elif WINRT
-using System;
-using System.Collections.Generic;
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
-#endif
 
 
 namespace MetroStyleApps
@@ -93,7 +83,7 @@ namespace MetroStyleApps
             }
             _detectionIsRunning = false;
         }
-        
+
         void StartDetection(DetectionType detectionType)
         {
             _detectionType = detectionType;
@@ -137,11 +127,7 @@ namespace MetroStyleApps
             }
         }
 
-#if WINRT
-        void DispatcherTimer_Tick(object sender, object e)
-#else
         void DispatcherTimer_Tick(object sender, EventArgs e)
-#endif
         {
             if (_positionHasChanged)
             {
@@ -163,14 +149,12 @@ namespace MetroStyleApps
             actionToScroll = null;
 
             // First, look at the popups (Silverlight only, and useful only if the tree is on a popup such as a ChildWindow):
-#if SILVERLIGHT
             foreach (var popup in VisualTreeHelper.GetOpenPopups()) //todo: verify that, in case of a popup, the "position" variable is correct (in fact, if the popup is not in position (0,0), the call to "VisualTreeHelper.FindElementsInHostCoordinates" may be wrong)
             {
                 scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, popup, _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
                 if (scrollShouldTakePlace)
                     break;
             }
-#endif
 
             // If not found in the popups, look at the rest of the application:
             if (!scrollShouldTakePlace)

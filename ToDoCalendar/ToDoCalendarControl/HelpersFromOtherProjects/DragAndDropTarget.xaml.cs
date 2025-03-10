@@ -1,12 +1,6 @@
-﻿#if SILVERLIGHT
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-#elif WINRT
-using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#endif
 
 namespace MetroStyleApps
 {

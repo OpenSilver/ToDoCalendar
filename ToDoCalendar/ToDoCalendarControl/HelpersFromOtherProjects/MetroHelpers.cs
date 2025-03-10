@@ -1,28 +1,14 @@
 /* <License>The source code below is the property of Userware and is strictly confidential. It is licensed to OP.SERV under agreement 'USE-200-CLM-OPS'</License> */
 
-#if SILVERLIGHT
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using WinRTForSilverlight;
-#elif WINRT
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-#endif
 
 namespace MetroStyleApps
 {
@@ -30,14 +16,7 @@ namespace MetroStyleApps
     {
         public static UIElement GetRootVisual()
         {
-#if WINRT
-        return Window.Current.Content;
-#else
-#if SILVERLIGHT
             return Application.Current.RootVisual;
-#endif
-#endif
-            return null;
         }
 
         public static FrameworkElement GetParentRoot(FrameworkElement parent)
@@ -75,11 +54,7 @@ namespace MetroStyleApps
 
         public static bool DoesResourceDictionaryContainKey(ResourceDictionary resourceDictionary, object key)
         {
-#if WINRT
-    return resourceDictionary.ContainsKey(key);
-#else
             return resourceDictionary.Contains(key);
-#endif
         }
 
         public static void ApplyStyleIfFoundInResources(string style, FrameworkElement element)
@@ -108,20 +83,12 @@ namespace MetroStyleApps
 
         public static Point TransformPoint(GeneralTransform generalTransform, Point point)
         {
-#if WINRT
-            return generalTransform.TransformPoint(point);
-#else
             return generalTransform.Transform(point);
-#endif
         }
 
         public static bool CanFirstTypeBeCastedToSecondType(Type firstType, Type secondType)
         {
-#if WINRT
-            return secondType.GetTypeInfo().IsAssignableFrom(firstType.GetTypeInfo());
-#else
             return firstType.IsAssignableFrom(secondType);
-#endif
         }
 
         public static void DispatcherRunAsync(DependencyObject dependencyObject, Action action)
@@ -132,15 +99,7 @@ namespace MetroStyleApps
             if (action == null)
                 throw new ArgumentNullException("action");
 
-#if WINRT
-        dependencyObject.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-        () =>
-        {
-            action();
-        });
-#else
             dependencyObject.Dispatcher.BeginInvoke(action);
-#endif
         }
 
 
@@ -150,44 +109,22 @@ namespace MetroStyleApps
             if (action == null)
                 throw new ArgumentNullException("action");
 
-#if WINRT
-        Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,
-        () =>
-        {
-            action();
-        });
-#else
             Deployment.Current.Dispatcher.BeginInvoke(action);
-#endif
         }
 
 
 
         public static void SetFocus(Control control)
         {
-#if WINRT
-            control.Focus(Windows.UI.Xaml.FocusState.Programmatic);
-#else
             control.Focus();
-#endif
         }
 
-#if WINRT
-        public static async
-#else
-        public static 
-#endif
-                void RunAfterDelay(Action myMethod, int delayInMilliseconds)
+        public static void RunAfterDelay(Action myMethod, int delayInMilliseconds)
         {
-#if WINRT
-            await Task.Delay(delayInMilliseconds); //todo: test this line.
-            myMethod();
-#else
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) => Thread.Sleep(delayInMilliseconds);
             worker.RunWorkerCompleted += (s, e) => myMethod.Invoke();
             worker.RunWorkerAsync();
-#endif
         }
 
 
@@ -199,22 +136,14 @@ namespace MetroStyleApps
         {
             MouseButtonHandlerClass handlerClass = CreateHandlerForAttachingEvent(uielement, handler);
 
-#if WINRT
-        uielement.AddHandler(FrameworkElement.PointerPressedEvent, new PointerEventHandler(handler), handledEventsToo);
-#else
             uielement.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton), handledEventsToo);
-#endif
         }
 
         public static void AttachPointerReleasedEventHandler(UIElement uielement, MetroHelpers.PointerEventHandler handler, bool handledEventsToo)
         {
             MouseButtonHandlerClass handlerClass = CreateHandlerForAttachingEvent(uielement, handler);
 
-#if WINRT
-        uielement.AddHandler(FrameworkElement.PointerReleasedEvent, new PointerEventHandler(handler), handledEventsToo);
-#else
             uielement.AddHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton), handledEventsToo);
-#endif
         }
 
         static MouseButtonHandlerClass CreateHandlerForAttachingEvent(UIElement uielement, MetroHelpers.PointerEventHandler handler)
@@ -234,11 +163,7 @@ namespace MetroStyleApps
             MouseButtonHandlerClass handlerClass = GetMouseButtonHandlerAndRemoveIt(uielement, handler);
             if (handlerClass != null)
             {
-#if WINRT
-            uielement.RemoveHandler(FrameworkElement.PointerPressedEvent, new PointerEventHandler(handler));
-#else
                 uielement.RemoveHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton));
-#endif
             }
         }
 
@@ -247,11 +172,7 @@ namespace MetroStyleApps
             MouseButtonHandlerClass handlerClass = GetMouseButtonHandlerAndRemoveIt(uielement, handler);
             if (handlerClass != null)
             {
-#if WINRT
-            uielement.RemoveHandler(FrameworkElement.PointerReleasedEvent, new PointerEventHandler(handler));
-#else
                 uielement.RemoveHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton));
-#endif
             }
         }
 
@@ -276,16 +197,10 @@ namespace MetroStyleApps
         public delegate void PointerEventHandler(object sender, PointerRoutedEventArgs e);
 
 
-#if WINRT
-    // No helper needed
-#else
-#if SILVERLIGHT
         public static PointerRoutedEventArgs CreateNewPointerRoutedEventArgs(MouseButtonEventArgs mouseArgs)
         {
             return new PointerRoutedEventArgs(mouseArgs);
         }
-#endif
-#endif
 
         public class MouseButtonHandlerClass
         {
@@ -296,10 +211,6 @@ namespace MetroStyleApps
                 _handler = handler;
             }
 
-#if WINRT
-    // No handler needed
-#else
-#if SILVERLIGHT
             public void UIElement_MouseButton(object sender, MouseButtonEventArgs mouseArgs) // Works with "MouseLeftButtonDown", "MouseLeftButtonUp", and all other similar mouse events...
             {
                 // For silverlight, convert the "MouseButtonEventArgs" into the "PointerRoutedEventArgs" and then back to the "MouseButtonEventArgs":
@@ -307,14 +218,8 @@ namespace MetroStyleApps
                 _handler(sender, pointerArgs);
                 mouseArgs.Handled = pointerArgs.Handled;
             }
-#endif
-#endif
         }
 
         #endregion //-----------------------------------------------------------
-
-
-
-
     }
 }
