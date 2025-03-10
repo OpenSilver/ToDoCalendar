@@ -401,3 +401,7 @@ FodyWeavers.xsd
 
 # Folder view configuration files
 .DS_Store
+
+# Miscellaneious
+build-ios.sh
+upload-ipa.sh
