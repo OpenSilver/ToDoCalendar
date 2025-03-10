@@ -20,7 +20,8 @@ namespace HelloPhotinoApp
 
             // Creating a new PhotinoWindow instance with the fluent API
             var window = new PhotinoWindow()
-                .SetTitle(windowTitle);
+                .SetTitle(windowTitle)
+                .SetIconFile("wwwroot/favicon.ico");
 
             if (System.OperatingSystem.IsLinux())
             {
