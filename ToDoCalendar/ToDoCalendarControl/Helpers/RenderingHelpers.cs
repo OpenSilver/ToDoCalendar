@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using ToDoCalendarControl.Resources;
 
 namespace ToDoCalendarControl
 {
@@ -61,7 +60,7 @@ namespace ToDoCalendarControl
         static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
         static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
         static readonly Thickness EventMargin = new Thickness(1);
-        static readonly Thickness EventMarginIfToday = new Thickness(6,3,1,3);
+        static readonly Thickness EventMarginIfToday = new Thickness(6, 3, 1, 3);
         static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, 0);
         static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
 
@@ -446,12 +445,6 @@ namespace ToDoCalendarControl
             dragAndDropSource.DragAndDropStarted += (object sender, EventArgs e) =>
             {
                 controller.QuitEditingMode();
-                controller.LockMainScrollViewer();
-            };
-
-            dragAndDropSource.DragAndDropStopped += (object sender, EventArgs e) =>
-            {
-                controller.UnlockMainScrollViewer();
             };
 
             //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
@@ -507,7 +500,7 @@ namespace ToDoCalendarControl
 
             var eventTitle = new TextBlock()
             {
-                Text = (isShowEventTime ? ConvertToShortTime(eventModel.DateTime.Value) + ": ": "") + eventModel.Title,
+                Text = (isShowEventTime ? ConvertToShortTime(eventModel.DateTime.Value) + ": " : "") + eventModel.Title,
                 Foreground = eventModel.CalendarColor.HasValue ? new SolidColorBrush(eventModel.CalendarColor.Value) : EventTextColor,
                 Margin = new Thickness(12, 0, 12, 0),
                 Padding = new Thickness(0),

@@ -2,10 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:uwp="LEGACY_UNUSED"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ToDoCalendarControl"
-    mc:Ignorable="d uwp"
+    mc:Ignorable="d"
     xmlns:metrostyleapps="clr-namespace:MetroStyleApps"
     xmlns:converters="clr-namespace:ToDoCalendarControl.Converters"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -60,8 +59,8 @@
         <metrostyleapps:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
             <Grid Background="White">
                 <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
-                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" uwp:ManipulationMode="Control">
-                    <Grid x:Name="MainContainer" uwp:ManipulationDelta="MainContainer_ManipulationDelta" Margin="0,0,2,0">
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="MainContainer" Margin="0,0,2,0">
                         <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-2,0">
                             <LayoutTransformer x:Name="LoadPrevButtonTransformer" Visibility="Collapsed">
                                 <Button FontSize="14" Padding="20,10,20,10" Background="#FF444444" Foreground="#FFCCCCCC" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" FontWeight="Bold"/>
@@ -69,7 +68,7 @@
 
                             <Border BorderThickness="2,0,0,0" BorderBrush="#FF888888">
                                 <WrapPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"
-                                       ItemWidth="{Binding ActualWidth, ElementName=MainContainer, Converter={StaticResource PositiveNumberConverter}}"/>
+                                           ItemWidth="{Binding ActualWidth, ElementName=MainContainer, Converter={StaticResource PositiveNumberConverter}}"/>
                             </Border>
 
                             <LayoutTransformer x:Name="LoadNextButtonTransformer" Visibility="Collapsed">

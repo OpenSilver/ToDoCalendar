@@ -15,8 +15,6 @@ namespace ToDoCalendarControl
         public event EventHandler<EditingModeStartedEventArgs> EditingModeStarted;
         public event EventHandler EditingModeStopped;
         public event EventHandler QuitEditingModeRequested;
-        public event EventHandler LockMainScrollViewerRequested;
-        public event EventHandler UnlockMainScrollViewerRequested;
 
         public Controller(CalendarServiceSaver calendarService)
         {
@@ -143,18 +141,6 @@ namespace ToDoCalendarControl
         {
             if (QuitEditingModeRequested != null)
                 QuitEditingModeRequested(this, new EventArgs());
-        }
-
-        public void LockMainScrollViewer()
-        {
-            if (LockMainScrollViewerRequested != null)
-                LockMainScrollViewerRequested(this, new EventArgs());
-        }
-
-        public void UnlockMainScrollViewer()
-        {
-            if (UnlockMainScrollViewerRequested != null)
-                UnlockMainScrollViewerRequested(this, new EventArgs());
         }
     }
 }
