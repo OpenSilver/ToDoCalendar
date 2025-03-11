@@ -5,7 +5,7 @@ namespace ToDoCalendarControl.Controls
 {
     public class DragAndDropEventArgs : EventArgs
     {
-        public readonly FrameworkElement Source;
+        public FrameworkElement Source { get; }
 
         public DragAndDropEventArgs(FrameworkElement source)
         {

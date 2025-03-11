@@ -116,32 +116,27 @@ namespace ToDoCalendarControl
 
         public void EditEvent(EventModel eventModel, DayModel dayModel, DateTime day)
         {
-            if (EditEventRequested != null)
-                EditEventRequested(this, new EditEventRequestedEventArgs(eventModel, dayModel, day));
+            EditEventRequested?.Invoke(this, new EditEventRequestedEventArgs(eventModel, dayModel, day));
         }
 
         public void RequestRefreshOfDay(DateTime day, bool setFocusToLastEventOfTheDay = false)
         {
-            if (RefreshDayRequested != null)
-                RefreshDayRequested(this, new RefreshDayRequestedEventArgs(day, setFocusToLastEventOfTheDay: setFocusToLastEventOfTheDay));
+            RefreshDayRequested?.Invoke(this, new RefreshDayRequestedEventArgs(day, setFocusToLastEventOfTheDay: setFocusToLastEventOfTheDay));
         }
 
         public void SignalThatEditingModeStarted(EditingModeStartedEventArgs args)
         {
-            if (EditingModeStarted != null)
-                EditingModeStarted(this, args);
+            EditingModeStarted?.Invoke(this, args);
         }
 
         public void SignalThatEditingModeStopped()
         {
-            if (EditingModeStopped != null)
-                EditingModeStopped(this, new EventArgs());
+            EditingModeStopped?.Invoke(this, new EventArgs());
         }
 
         public void QuitEditingMode()
         {
-            if (QuitEditingModeRequested != null)
-                QuitEditingModeRequested(this, new EventArgs());
+            QuitEditingModeRequested?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -19,8 +19,8 @@ namespace ToDoCalendarControl
 
         public string Text
         {
-            get { return MainText.Text; }
-            set { MainText.Text = value; }
+            get => MainText.Text;
+            set => MainText.Text = value;
         }
 
         public void Show()
@@ -31,10 +31,9 @@ namespace ToDoCalendarControl
             _storyboard.Begin();
         }
 
-        void storyboard_Completed(object sender, EventArgs e)
+        private void storyboard_Completed(object sender, EventArgs e)
         {
-            if (NotificationCompleted != null)
-                NotificationCompleted(this, new EventArgs());
+            NotificationCompleted?.Invoke(this, new EventArgs());
         }
     }
 }

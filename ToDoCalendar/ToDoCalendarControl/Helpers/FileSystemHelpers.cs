@@ -4,26 +4,20 @@ using System.IO.IsolatedStorage;
 
 namespace ToDoCalendarControl
 {
-    static class FileSystemHelpers
+    internal static class FileSystemHelpers
     {
         public static void WriteTextToFile(string fileName, string fileContent)
         {
             if (Interop.IsRunningInTheSimulator)
             {
-                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+                using IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
+                IsolatedStorageFileStream fs = null;
+                using (fs = storage.CreateFile(fileName))
                 {
-                    IsolatedStorageFileStream fs = null;
-                    using (fs = storage.CreateFile(fileName))
+                    if (fs != null)
                     {
-                        if (fs != null)
-                        {
-                            using (StreamWriter sw = new StreamWriter(fs))
-                            {
-                                sw.Write(fileContent);
-                            }
-                            //byte[] bytes = System.BitConverter.GetBytes(number);
-                            //fs.Write(bytes, 0, bytes.Length);
-                        }
+                        using StreamWriter sw = new(fs);
+                        sw.Write(fileContent);
                     }
                 }
             }
@@ -37,27 +31,14 @@ namespace ToDoCalendarControl
         {
             if (Interop.IsRunningInTheSimulator)
             {
-                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+                using IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication();
+                if (storage.FileExists(fileName))
                 {
-                    if (storage.FileExists(fileName))
+                    using IsolatedStorageFileStream fs = storage.OpenFile(fileName, FileMode.Open);
+                    if (fs != null)
                     {
-                        using (IsolatedStorageFileStream fs = storage.OpenFile(fileName, System.IO.FileMode.Open))
-                        {
-                            if (fs != null)
-                            {
-                                using (StreamReader sr = new StreamReader(fs))
-                                {
-                                    return sr.ReadToEnd();
-                                }
-
-                                //byte[] saveBytes = new byte[4];
-                                //int count = fs.Read(saveBytes, 0, 4);
-                                //if (count > 0)
-                                //{
-                                //    number = System.BitConverter.ToInt32(saveBytes, 0);
-                                //}
-                            }
-                        }
+                        using StreamReader sr = new(fs);
+                        return sr.ReadToEnd();
                     }
                 }
             }

@@ -19,11 +19,11 @@ namespace ToDoCalendarControl.Controls
         // operation.
         //-------------------------------
 
-        DragAndDropRoot _dragAndDropRoot;
-        Point _dragDeltaOrigin;
-        Point _cursorPositionRelativeToSource;
-        bool _dragAndDropStarted;
-        FrameworkElement _layoutRoot;
+        private DragAndDropRoot _dragAndDropRoot;
+        private Point _dragDeltaOrigin;
+        private Point _cursorPositionRelativeToSource;
+        private bool _dragAndDropStarted;
+        private FrameworkElement _layoutRoot;
 
         public object GroupId { get; set; }
         public double DistanceForDragOperationToBeConsideredIntentional { get; set; } // in pixels.
@@ -36,7 +36,7 @@ namespace ToDoCalendarControl.Controls
         public event EventHandler DragAndDropStopped;
 
         private const int MaxDragDelta = 5;
-        private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+        private readonly DispatcherTimer _holdTimer = new() { Interval = TimeSpan.FromMilliseconds(200) };
         private object _mouseLeftButtonDownSender;
         private MouseEventArgs _mouseLeftButtonDownEventArgs;
         private Point _originPosition;
@@ -81,7 +81,7 @@ namespace ToDoCalendarControl.Controls
             }
         }
 
-        void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _originPosition = e.GetPosition(Application.Current.RootVisual);
 
@@ -124,7 +124,7 @@ namespace ToDoCalendarControl.Controls
             _holdTimer.Stop();
         }
 
-        void StartDragOperation(object sender, Point dragDeltaOrigin, Point cursorPositionRelativeToSource)
+        private void StartDragOperation(object sender, Point dragDeltaOrigin, Point cursorPositionRelativeToSource)
         {
             // Initialize the drag and drop operation:
             _dragDeltaOrigin = dragDeltaOrigin;
@@ -134,22 +134,20 @@ namespace ToDoCalendarControl.Controls
             _dragAndDropStarted = false; // Note: we start drag and drop later (in the MouseMove event) so as to not interfere in case the user is just clicking somewhere in the content, with no drag-and-drop intention.
         }
 
-        void LayoutRoot_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void LayoutRoot_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ((UIElement)sender).ReleaseMouseCapture();
-            if (_dragAndDropRoot != null)
-                _dragAndDropRoot.StopDragAndDrop();
+            _dragAndDropRoot?.StopDragAndDrop();
             _dragAndDropRoot = null;
+
             if (!_dragAndDropStarted)
             {
                 // The "Click" event is raised when the user does a simple click or very small unintentional drag (rather than a full drag-and-drop operation).
-                if (Click != null)
-                    Click(this, new EventArgs());
+                Click?.Invoke(this, new EventArgs());
             }
             else
             {
-                if (DragAndDropStopped != null)
-                    DragAndDropStopped(this, new EventArgs());
+                DragAndDropStopped?.Invoke(this, new EventArgs());
             }
 
             if (_holdTimer.IsEnabled)
@@ -158,7 +156,7 @@ namespace ToDoCalendarControl.Controls
             }
         }
 
-        void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
+        private void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
         {
             var pointerPosition = e.GetPosition(Application.Current.RootVisual);
 
@@ -170,7 +168,7 @@ namespace ToDoCalendarControl.Controls
             OnMouseMove(pointerPosition, DistanceForDragOperationToBeConsideredIntentional);
         }
 
-        void OnMouseMove(Point pointerPosition, double distanceForDragOperationToBeConsideredIntentional)
+        private void OnMouseMove(Point pointerPosition, double distanceForDragOperationToBeConsideredIntentional)
         {
             var cumulativeDragDelta = new Point(pointerPosition.X - _dragDeltaOrigin.X, pointerPosition.Y - _dragDeltaOrigin.Y);
             if (_dragAndDropRoot != null)
@@ -191,8 +189,7 @@ namespace ToDoCalendarControl.Controls
                             sourceShouldBeEnlargedDuringDrag: EnlargeSourceDuringDrag);
 
                         _dragAndDropStarted = true;
-                        if (DragAndDropStarted != null)
-                            DragAndDropStarted(this, new EventArgs());
+                        DragAndDropStarted?.Invoke(this, new EventArgs());
                     }
                 }
                 else

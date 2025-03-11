@@ -56,7 +56,8 @@ public static class AnimationHelper
 
     public static void HideWithAnimation(UIElement element)
     {
-        if (element.Visibility != Visibility.Visible) return;
+        if (element.Visibility != Visibility.Visible)
+            return;
 
         var scaleTransform = element.RenderTransform as ScaleTransform ?? new ScaleTransform { ScaleX = 1, ScaleY = 1 };
         element.RenderTransform = scaleTransform;
@@ -110,17 +111,23 @@ public static class AnimationHelper
 
     public static DoubleAnimationUsingKeyFrames CreateAnimation(double durationInSeconds, double targetValue, DependencyObject targetObject, string propertyPath, bool easingIsEnabled, double beginTimeInSeconds = 0)
     {
-        DoubleAnimationUsingKeyFrames animation = new DoubleAnimationUsingKeyFrames();
-        animation.BeginTime = TimeSpan.FromSeconds(beginTimeInSeconds);
-        EasingDoubleKeyFrame frame = new EasingDoubleKeyFrame();
-        frame.Value = targetValue;
-        frame.KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(durationInSeconds));
+        DoubleAnimationUsingKeyFrames animation = new()
+        {
+            BeginTime = TimeSpan.FromSeconds(beginTimeInSeconds)
+        };
+        EasingDoubleKeyFrame frame = new()
+        {
+            Value = targetValue,
+            KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(durationInSeconds))
+        };
         if (easingIsEnabled)
         {
             //BackEase easingFunction = new BackEase();
             //easingFunction.Amplitude = 0.3;
-            ExponentialEase easingFunction = new ExponentialEase();
-            easingFunction.EasingMode = EasingMode.EaseOut;
+            ExponentialEase easingFunction = new()
+            {
+                EasingMode = EasingMode.EaseOut
+            };
             frame.EasingFunction = easingFunction;
         }
         animation.KeyFrames.Add(frame);

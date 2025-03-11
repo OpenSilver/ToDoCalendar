@@ -10,64 +10,64 @@ using ToDoCalendarControl.Controls;
 
 namespace ToDoCalendarControl
 {
-    static class RenderingHelpers
+    internal static class RenderingHelpers
     {
         //----------------
         // SETTINGS
         //----------------
 
         // Rendering a day:
-        const double Column1Width = 25d;
-        const double Column2WidthIfNormalSpaceRequired = 30d;
-        const double Column2WidthIfMoreSpaceRequired = 80d;
-        const double SeparatorHeight = 1d;
-        const double ColumnsSeparatorWidth = 2d;
-        static readonly Brush SeparatorColor = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
-        static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
-        static readonly Brush ColumnsSeparatorColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
-        static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
-        static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
+        private const double Column1Width = 25d;
+        private const double Column2WidthIfNormalSpaceRequired = 30d;
+        private const double Column2WidthIfMoreSpaceRequired = 80d;
+        private const double SeparatorHeight = 1d;
+        private const double ColumnsSeparatorWidth = 2d;
+        private static readonly Brush SeparatorColor = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
+        private static readonly Brush SeparatorColorIfFirstDayOfWeek = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        private static readonly Brush ColumnsSeparatorColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
+        private static readonly Brush BackgroundColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 250, 250, 250));
+        private static readonly Brush BackgroundColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 220, 220, 220));
         internal static readonly Brush BackgroundColorForToday = (Brush)Application.Current.Resources["PhoneAccentBrush"];
-        static readonly Brush DayNumberColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
-        static readonly Brush DayNumberColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
-        static readonly Brush DayNumberColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
-        static readonly Brush DayOfWeekColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
-        static readonly Brush DayOfWeekColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
-        static readonly Brush DayOfWeekColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
+        private static readonly Brush DayNumberColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        private static readonly Brush DayNumberColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
+        private static readonly Brush DayNumberColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
+        private static readonly Brush DayOfWeekColorForWorkDays = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+        private static readonly Brush DayOfWeekColorForHolidays = new SolidColorBrush(Color.FromArgb(255, 100, 100, 100));
+        private static readonly Brush DayOfWeekColorForToday = new SolidColorBrush(Color.FromArgb(180, 255, 255, 255));
 
         // Rendering an event:
-        const double EventFontSize = 12;
-        const double EventFontSizeWhenEditing = 18;
-        const double EventFontSizeWhenToday = 14;
-        const double StrikethroughLineHeight = 5;
-        const double StrikethroughLineHeightIfToday = 9;
-        const double MaxWidthWhenEventIsMarkedAsDone = 80;
-        const double EventOpacityWhenDone = 0.5;
-        const double EventOpacityWhenLowPriority = 0.3;
-        const double EventOpacityWhenLowPriorityIfToday = 0.6;
-        static readonly Thickness StrikethroughMargin = new Thickness(-5, 2, -5, 0);
-        static readonly Brush StrikethroughLineColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
-        static readonly Brush EventBackgroundColorDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
-        static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
-        static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
-        static readonly Brush EventBackgroundColorWhenInfo = (Brush)Application.Current.Resources["PhoneAccentBrushLowerOpacity"];
-        static readonly Brush EventBackgroundColorWhenUnspecifiedPriority = new SolidColorBrush(Colors.Transparent);
-        static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
-        static readonly Brush EventTextBackgroundWhenEditingDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"];
-        static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
-        static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.White);
-        static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
-        static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
-        static readonly CornerRadius EventCornerRadius = new CornerRadius(10);
-        static readonly Thickness EventMargin = new Thickness(1);
-        static readonly Thickness EventMarginIfToday = new Thickness(6, 3, 1, 3);
-        static readonly Thickness EventTextBoxMarginWhenNotEditing = new Thickness(-6, 0, -6, 0);
-        static readonly Thickness EventTextBoxMarginWhenEditing = new Thickness(-2, 5, -2, 4);
+        private const double EventFontSize = 12;
+        private const double EventFontSizeWhenEditing = 18;
+        private const double EventFontSizeWhenToday = 14;
+        private const double StrikethroughLineHeight = 5;
+        private const double StrikethroughLineHeightIfToday = 9;
+        private const double MaxWidthWhenEventIsMarkedAsDone = 80;
+        private const double EventOpacityWhenDone = 0.5;
+        private const double EventOpacityWhenLowPriority = 0.3;
+        private const double EventOpacityWhenLowPriorityIfToday = 0.6;
+        private static readonly Thickness StrikethroughMargin = new(-5, 2, -5, 0);
+        private static readonly Brush StrikethroughLineColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+        private static readonly Brush EventBackgroundColorDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"]; //new SolidColorBrush(Color.FromArgb(255, 210, 210, 210));
+        private static readonly Brush EventBackgroundColorWhenHighPriority = new SolidColorBrush(Colors.Black);
+        private static readonly Brush EventBackgroundColorWhenDone = new SolidColorBrush(Color.FromArgb(255, 160, 160, 160));
+        private static readonly Brush EventBackgroundColorWhenInfo = (Brush)Application.Current.Resources["PhoneAccentBrushLowerOpacity"];
+        private static readonly Brush EventBackgroundColorWhenUnspecifiedPriority = new SolidColorBrush(Colors.Transparent);
+        private static readonly Brush EventTextBackgroundWhenNotEditing = new SolidColorBrush(Colors.Transparent);
+        private static readonly Brush EventTextBackgroundWhenEditingDefault = (Brush)Application.Current.Resources["PhoneAccentBrush"];
+        private static readonly Brush EventTextColor = new SolidColorBrush(Colors.White);
+        private static readonly Brush EventTextColorWhenEditing = new SolidColorBrush(Colors.White);
+        private static readonly Brush EventTextColorWhenInfoBeforeCurrentDate = new SolidColorBrush(Color.FromArgb(120, 0, 0, 0));
+        private static readonly Brush EventTextColorWhenInfoAfterCurrentDate = (Brush)Application.Current.Resources["PhoneAccentBrush"];
+        private static readonly CornerRadius EventCornerRadius = new(10);
+        private static readonly Thickness EventMargin = new(1);
+        private static readonly Thickness EventMarginIfToday = new(6, 3, 1, 3);
+        private static readonly Thickness EventTextBoxMarginWhenNotEditing = new(-6, 0, -6, 0);
+        private static readonly Thickness EventTextBoxMarginWhenEditing = new(-2, 5, -2, 4);
 
         // Rendering the month header:
-        const double LeftMarginOfMonthName = 5d; // in pixels
-        static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
-        static readonly Brush MonthHeaderForegroundColor = new SolidColorBrush(Colors.White);
+        private const double LeftMarginOfMonthName = 5d; // in pixels
+        private static readonly Brush MonthHeaderBackgroundColor = new SolidColorBrush(Color.FromArgb(255, 136, 136, 136));
+        private static readonly Brush MonthHeaderForegroundColor = new SolidColorBrush(Colors.White);
 
         private static Point _originPosition;
 
@@ -148,9 +148,9 @@ namespace ToDoCalendarControl
                 Text = day.Day.ToString(),
                 Width = Column1Width,
                 Foreground = (isToday ? DayNumberColorForToday : (isWorkDay ? DayNumberColorForWorkDays : DayNumberColorForHolidays)),
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                TextAlignment = System.Windows.TextAlignment.Right,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Right,
                 Margin = new Thickness(0, 0, 0, 0)
             };
 
@@ -161,9 +161,9 @@ namespace ToDoCalendarControl
                 Text = DatesHelpers.GetLetterFromDayOfWeek(day.DayOfWeek),
                 Width = column2Width,
                 Foreground = (isToday ? DayOfWeekColorForToday : (isWorkDay ? DayOfWeekColorForWorkDays : DayOfWeekColorForHolidays)),
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                TextAlignment = System.Windows.TextAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Column1Width, 0, 0, 0)
             };
 
@@ -190,27 +190,16 @@ namespace ToDoCalendarControl
                 Controller = controller
             };
 
-
             //----------------
             // REGISTER THE CONTROLS EVENTS AND REFRESH THE DAY EVENTS:
             //----------------
 
             dragAndDropTarget.SourceDropped += DragAndDropTarget_SourceDropped;
 
-            //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
-            //Action<RefreshDayRequestedEventArgs> actionToRefreshDay = (e) =>
-            //    {
-            //        if (e.Day == day)
-            //        {
-            //            eventsContainer.Child = RenderDayEvents(day, controller, e.SetFocusToLastEventOfTheDay);
-            //        }
-            //    };
             var refreshDayRequestedHandler = new RefreshDayRequestedHandler(eventsContainer, day, controller);
 
             //todo: test that the following "weak event" is indeed "weak" and does not leak:
-            //controller.RefreshDayRequested += WeakEventsHelpers.MakeWeakHandlerForRefreshDayRequestedEvent(actionToRefreshDay, h => controller.RefreshDayRequested -= h);
             controller.RefreshDayRequested += WeakEventsHelpers.MakeWeakHandler<RefreshDayRequestedEventArgs>(refreshDayRequestedHandler.Controller_RefreshDayRequested, h => controller.RefreshDayRequested -= h);
-            //controller.RefreshDayRequested += WeakEventsHelpers.MakeWeakHandlerForRefreshDayRequestedEvent(refreshDayRequestedHandler.Controller_RefreshDayRequested, h => controller.RefreshDayRequested -= h);
 
             // Refresh the day events once:
             if (renderEvents)
@@ -234,7 +223,7 @@ namespace ToDoCalendarControl
             return rootControl;
         }
 
-        static async void DragAndDropTarget_SourceDropped(object sender, DragAndDropEventArgs e)
+        private static async void DragAndDropTarget_SourceDropped(object sender, DragAndDropEventArgs e)
         {
             var customDragAndDropTarget = (CustomDragAndDropTarget)sender;
 
@@ -312,7 +301,6 @@ namespace ToDoCalendarControl
             //----------------
 
             rootControl.Child = mainContainer;
-
 
             return rootControl;
         }
@@ -500,7 +488,7 @@ namespace ToDoCalendarControl
             return eventTitle;
         }
 
-        static string ConvertToShortTime(DateTime dateTime)
+        private static string ConvertToShortTime(DateTime dateTime)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             if (dateTime.Minute == 0)
@@ -529,7 +517,7 @@ namespace ToDoCalendarControl
                 Foreground = MonthHeaderForegroundColor,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                TextAlignment = System.Windows.TextAlignment.Left,
+                TextAlignment = TextAlignment.Left,
                 TextWrapping = TextWrapping.Wrap,
                 FontWeight = FontWeights.Bold,
                 Margin = new Thickness(LeftMarginOfMonthName, 0, 0, 0)
@@ -546,9 +534,9 @@ namespace ToDoCalendarControl
 
         public class RefreshDayRequestedHandler
         {
-            Border _eventsContainer;
-            DateTime _day;
-            Controller _controller;
+            private Border _eventsContainer;
+            private DateTime _day;
+            private Controller _controller;
             public RefreshDayRequestedHandler(Border eventsContainer, DateTime day, Controller controller)
             {
                 _eventsContainer = eventsContainer;
@@ -557,7 +545,7 @@ namespace ToDoCalendarControl
                 _eventsContainer.Unloaded += _eventsContainer_Unloaded;
             }
 
-            void _eventsContainer_Unloaded(object sender, RoutedEventArgs e)
+            private void _eventsContainer_Unloaded(object sender, RoutedEventArgs e)
             {
                 // This handler is here only to make it so that the lifespan of this class (in terms of garbage collection) is the same as that of the EventsContainer instance. (this is achieved by having a two-directional reference: registering any other event would have worked too)
             }
@@ -573,8 +561,8 @@ namespace ToDoCalendarControl
 
         public class EditEventRequestedRequestedHandler
         {
-            TextBox _eventTitle;
-            EventModel _eventModel;
+            private TextBox _eventTitle;
+            private EventModel _eventModel;
             public EditEventRequestedRequestedHandler(TextBox eventTitle, EventModel eventModel)
             {
                 _eventTitle = eventTitle;
@@ -582,7 +570,7 @@ namespace ToDoCalendarControl
                 _eventTitle.Unloaded += _eventTitle_Unloaded;
             }
 
-            void _eventTitle_Unloaded(object sender, RoutedEventArgs e)
+            private void _eventTitle_Unloaded(object sender, RoutedEventArgs e)
             {
                 // This handler is here only to make it so that the lifespan of this class (in terms of garbage collection) is the same as that of the EventTitle instance. (this is achieved by having a two-directional reference: registering any other event would have worked too)
             }

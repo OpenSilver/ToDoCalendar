@@ -6,57 +6,50 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-
 namespace ToDoCalendarControl.Helpers
 {
     public class AutoScrollIfAtEdgeOfScrollViewer
     {
-        const int TimerIntervalInMilliseconds = 250; // in milliseconds
-        const double SpeedOfScrollViewerAutomaticScroll = 140; // in pixels per automatic scroll
+        private const int TimerIntervalInMilliseconds = 250; // in milliseconds
+        private const double SpeedOfScrollViewerAutomaticScroll = 140; // in pixels per automatic scroll
 
-        DetectionType _detectionType;
-        Thumb _thumb;
-        Point _absolutePosition;
-        DispatcherTimer _dispatcherTimer;
-        bool _positionHasChanged;
-        Action _actionToScroll;
-        bool _detectionIsRunning;
+        private Thumb _thumb;
+        private Point _absolutePosition;
+        private DispatcherTimer _dispatcherTimer;
+        private bool _positionHasChanged;
+        private Action _actionToScroll;
+        private bool _detectionIsRunning;
 
-        enum ScrollDirection
+        private enum ScrollDirection
         {
             Top, Bottom, Left, Right, None
-        }
-
-        public enum DetectionType
-        {
-            ByPassingAThumb, BySettingAbsolutePosition
         }
 
         private double _thresholdForScrollViewerAutomaticScroll = 30; // in pixels
         public double ThresholdForScrollViewerAutomaticScroll
         {
-            get { return _thresholdForScrollViewerAutomaticScroll; }
-            set { _thresholdForScrollViewerAutomaticScroll = value; }
+            get => _thresholdForScrollViewerAutomaticScroll;
+            set => _thresholdForScrollViewerAutomaticScroll = value;
         }
 
         public void StartDetectionByPassingAThumb(Thumb thumb)
         {
             if (_detectionIsRunning)
-                StopDection();
-            _detectionType = DetectionType.ByPassingAThumb;
+                StopDetection();
+
             _thumb = thumb;
             _thumb.DragDelta -= Thumb_DragDelta;
             _thumb.DragDelta += Thumb_DragDelta;
             _thumb.Unloaded -= Thumb_Unloaded;
             _thumb.Unloaded += Thumb_Unloaded;
-            StartDetection(DetectionType.ByPassingAThumb);
+            StartDetection();
         }
 
         public void StartDetectionBySettingAbsolutePositionOnARegularBasis()
         {
             if (_detectionIsRunning)
-                StopDection();
-            StartDetection(DetectionType.BySettingAbsolutePosition);
+                StopDetection();
+            StartDetection();
         }
 
         public void SetAbsolutePosition(Point absolutePosition)
@@ -68,7 +61,7 @@ namespace ToDoCalendarControl.Helpers
             }
         }
 
-        public void StopDection()
+        public void StopDetection()
         {
             if (_dispatcherTimer != null)
             {
@@ -84,9 +77,8 @@ namespace ToDoCalendarControl.Helpers
             _detectionIsRunning = false;
         }
 
-        void StartDetection(DetectionType detectionType)
+        private void StartDetection()
         {
-            _detectionType = detectionType;
             _dispatcherTimer = new DispatcherTimer()
             {
                 Interval = new TimeSpan(0, 0, 0, 0, TimerIntervalInMilliseconds)
@@ -96,12 +88,12 @@ namespace ToDoCalendarControl.Helpers
             _detectionIsRunning = true;
         }
 
-        void Thumb_Unloaded(object sender, RoutedEventArgs e)
+        private void Thumb_Unloaded(object sender, RoutedEventArgs e)
         {
-            StopDection();
+            StopDetection();
         }
 
-        void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             // Calculate thumb position:
             var thumb = (Thumb)sender;
@@ -127,23 +119,21 @@ namespace ToDoCalendarControl.Helpers
             }
         }
 
-        void DispatcherTimer_Tick(object sender, EventArgs e)
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (_positionHasChanged)
             {
                 _positionHasChanged = false;
-                Action actionToScroll;
-                if (DetermineActionToScrollIfAny(out actionToScroll))
+                if (DetermineActionToScrollIfAny(out Action actionToScroll))
                     _actionToScroll = actionToScroll;
                 else
                     _actionToScroll = null;
             }
 
-            if (_actionToScroll != null)
-                _actionToScroll();
+            _actionToScroll?.Invoke();
         }
 
-        bool DetermineActionToScrollIfAny(out Action actionToScroll)
+        private bool DetermineActionToScrollIfAny(out Action actionToScroll)
         {
             bool scrollShouldTakePlace = false;
             actionToScroll = null;
@@ -165,15 +155,14 @@ namespace ToDoCalendarControl.Helpers
             return scrollShouldTakePlace;
         }
 
-        static bool DetermineActionToScrollIfAny(Point mousePointerPosition, UIElement rootControl, double thresholdForScrollViewerAutomaticScroll, out Action actionToScroll)
+        private static bool DetermineActionToScrollIfAny(Point mousePointerPosition, UIElement rootControl, double thresholdForScrollViewerAutomaticScroll, out Action actionToScroll)
         {
             actionToScroll = null;
             bool scrollShouldTakePlace = false;
             foreach (var scrollViewer in FindScrollViewersUnderPointer(mousePointerPosition, rootControl)) //todo: look also in the popups
             {
                 // Check if the thumb is at the edge of the scrollviewer:
-                ScrollDirection scrollDirection;
-                if (IsPointerAtEdgeOfScrollViewer(mousePointerPosition, scrollViewer, thresholdForScrollViewerAutomaticScroll, out scrollDirection))
+                if (IsPointerAtEdgeOfScrollViewer(mousePointerPosition, scrollViewer, thresholdForScrollViewerAutomaticScroll, out ScrollDirection scrollDirection))
                 {
                     // Scroll the ScrollViewer accordingly, if possible:
                     switch (scrollDirection)
@@ -240,7 +229,7 @@ namespace ToDoCalendarControl.Helpers
             return scrollShouldTakePlace;
         }
 
-        static bool IsPointerAtEdgeOfScrollViewer(Point mousePointerPosition, ScrollViewer scrollViewer, double thresholdForScrollViewerAutomaticScroll, out ScrollDirection scrollDirection)
+        private static bool IsPointerAtEdgeOfScrollViewer(Point mousePointerPosition, ScrollViewer scrollViewer, double thresholdForScrollViewerAutomaticScroll, out ScrollDirection scrollDirection)
         {
             // Check that the scrollViewer is initialized in the visual tree:
             if (!double.IsNaN(scrollViewer.ActualWidth) && !double.IsNaN(scrollViewer.ActualHeight))
@@ -276,14 +265,14 @@ namespace ToDoCalendarControl.Helpers
             return false;
         }
 
-        static IEnumerable<ScrollViewer> FindScrollViewersUnderPointer(Point position, UIElement rootControl)
+        private static IEnumerable<ScrollViewer> FindScrollViewersUnderPointer(Point position, UIElement rootControl)
         {
             var list = VisualTreeHelper.FindElementsInHostCoordinates(position, rootControl);
             foreach (UIElement uiElement in list)
             {
-                if (uiElement is ScrollViewer)
+                if (uiElement is ScrollViewer viewer)
                 {
-                    yield return (ScrollViewer)uiElement;
+                    yield return viewer;
                 }
             }
         }

@@ -42,7 +42,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\DeviceEvent.cs" />
+    <Compile Include="Model\DeviceEvent.cs" />
     <Compile Include="Services\ICalendarService.cs" />
     <Compile Include="Model\Model.cs" />
     <Compile Include="Services\IKeyboardService.cs" />

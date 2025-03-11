@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-
 
 namespace ToDoCalendarControl
 {
-    static class DatesHelpers
+    internal static class DatesHelpers
     {
         public static string GetLetterFromDayOfWeek(DayOfWeek dayOfWeek)
         {
@@ -52,7 +48,7 @@ namespace ToDoCalendarControl
         {
             return new DateTime(dateTime.Date.Ticks, DateTimeKind.Unspecified);
         }
-        
+
 
         //-------------------------------------------
         // NOTE: THE CODE BELOW WAS ADAPTED FROM: http://stackoverflow.com/questions/2019098/finding-weekend-days-based-on-culture
@@ -75,30 +71,13 @@ namespace ToDoCalendarControl
             WorkdayMorning
         }
 
-        // Returns the English version of the country name. Extracted from the CultureInfo.EnglishName.
-        public static string GetCountryEnglishName(CultureInfo ci)
-        {
-            string[] parts = ci.EnglishName.Split(new[] {'(', ')'}, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 2)
-                return ci.EnglishName;
-            parts = parts[1].Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
-            return parts[parts.Length - 1].Trim();
-        }
-
-        // Returns the English version of the language name. Extracted from the CultureInfo.EnglishName.
-        public static string GetLanguageEnglishName(CultureInfo ci)
-        {
-            string[] parts = ci.EnglishName.Split(new[] {'('}, StringSplitOptions.RemoveEmptyEntries);
-            return parts[0].Trim();
-        }
-
         // Return if the passed in day of the week is a weekend.
         // note: state pulled from http://en.wikipedia.org/wiki/Workweek_and_weekend
         public static WeekdayState GetWeekdayState(CultureInfo ci, DayOfWeek day)
         {
             if (ci.Name != string.Empty)
             {
-                string[] items = ci.Name.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] items = ci.Name.Split(['-'], StringSplitOptions.RemoveEmptyEntries);
                 switch (items[items.Length - 1])
                 {
                     case "DZ": // Algeria
@@ -121,7 +100,7 @@ namespace ToDoCalendarControl
                     case "SY": // Syria
                     case "AE": // U.A.E.
                     case "YE": // Yemen
-                        return day == DayOfWeek.Thursday || day == DayOfWeek.Friday
+                        return day is DayOfWeek.Thursday or DayOfWeek.Friday
                             ? WeekdayState.Weekend
                             : WeekdayState.Workday;
 
@@ -132,7 +111,7 @@ namespace ToDoCalendarControl
                         return day == DayOfWeek.Friday ? WeekdayState.Weekend : WeekdayState.Workday;
 
                     case "BN": // Brunei Darussalam
-                        return day == DayOfWeek.Friday || day == DayOfWeek.Sunday
+                        return day is DayOfWeek.Friday or DayOfWeek.Sunday
                             ? WeekdayState.Weekend
                             : WeekdayState.Workday;
 
@@ -140,15 +119,15 @@ namespace ToDoCalendarControl
                     case "TH": // Thailand
                         if (day == DayOfWeek.Saturday)
                             return WeekdayState.WorkdayMorning;
-                        return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday
+                        return day is DayOfWeek.Saturday or DayOfWeek.Sunday
                             ? WeekdayState.Weekend
                             : WeekdayState.Workday;
 
                 }
-            }            
+            }
 
             // most common Saturday/Sunday
-            return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday ? WeekdayState.Weekend : WeekdayState.Workday;
+            return day is DayOfWeek.Saturday or DayOfWeek.Sunday ? WeekdayState.Weekend : WeekdayState.Workday;
         }
     }
 }

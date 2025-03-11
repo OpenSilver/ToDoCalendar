@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
-using System.Xml;
-
 namespace ToDoCalendarControl
 {
-    static class SerializationHelpers
+    internal static class SerializationHelpers
     {
         public static ObjectType Deserialize<ObjectType>(string xml) where ObjectType : class
         {
@@ -24,10 +19,8 @@ namespace ToDoCalendarControl
 
                 // ----------- DATA CONTRACT SERIALIZER VERSION: -----------
                 var serializer = new DataContractSerializer(typeof(ObjectType));
-                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
-                {
-                    return (ObjectType)serializer.ReadObject(ms);
-                }
+                using MemoryStream ms = new(Encoding.UTF8.GetBytes(xml));
+                return (ObjectType)serializer.ReadObject(ms);
             }
             else
             {
@@ -46,12 +39,10 @@ namespace ToDoCalendarControl
             //}
 
             // ----------- DATA CONTRACT SERIALIZER VERSION: -----------
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var serializer = new DataContractSerializer(objectToSerialize.GetType());
-                serializer.WriteObject(ms, objectToSerialize);
-                return Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)ms.Position);
-            }
+            using MemoryStream ms = new();
+            var serializer = new DataContractSerializer(objectToSerialize.GetType());
+            serializer.WriteObject(ms, objectToSerialize);
+            return Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)ms.Position);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using ToDoCalendarControl.Helpers;
 
-namespace ToDoCalendarControl.Services;
+namespace ToDoCalendarControl;
 
 public class DeviceEvent
 {

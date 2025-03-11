@@ -19,30 +19,24 @@ namespace ToDoCalendarControl.Controls
         // 3) Place an instance of the "DragAndDropSource" around the elements that you want to be draggable. Alternatively, you can copy the code of "DragAndDropSource" into your own control to adapt it to your needs (for example if you wish to use a method other than UIElement.CaptureMouse()/MouseMove or Thumb_DragDelta).
         //--------------------------------------------------------------------
 
-        const string DefaultGroupId = ""; // Note: we use this because "null" cannot be used as the key of a dictionary.
-        const double LowerBoundForMinimumDistanceToConsiderDropTarget = 10d; // in pixels
-        const double GhostOpacityDuringDragAndDrop = 0.7; // This is the opacity that the element being dragged must have during the drag-and-drop operation.
+        private const string DefaultGroupId = ""; // Note: we use this because "null" cannot be used as the key of a dictionary.
+        private const double LowerBoundForMinimumDistanceToConsiderDropTarget = 10d; // in pixels
+        private const double GhostOpacityDuringDragAndDrop = 0.7; // This is the opacity that the element being dragged must have during the drag-and-drop operation.
         public const double DefaultDurationOfAnimations = 0.5d; // in seconds
 
-        InformationAboutElementBeingDragged _informationAboutElementBeingDragged;
-        AutoScrollIfAtEdgeOfScrollViewer _autoScrollIfAtEdgeOfScrollViewer = new AutoScrollIfAtEdgeOfScrollViewer(); // This is used to scroll automatically if the user is dragging the object near the edge of a scrollviewer.
+        private InformationAboutElementBeingDragged _informationAboutElementBeingDragged;
+        private AutoScrollIfAtEdgeOfScrollViewer _autoScrollIfAtEdgeOfScrollViewer = new(); // This is used to scroll automatically if the user is dragging the object near the edge of a scrollviewer.
 
         // The following dictionary is used to keep track of the "targets" so that when the drag & drop operation is initiated, the system knows where the targets are. Note: the targets are grouped by their "GroupId". The "Key" of the dictionary is the GroupId:
-        Dictionary<object, HashSet<DragAndDropTarget>> _dragAndDropTargets = new Dictionary<object, HashSet<DragAndDropTarget>>();
+        private Dictionary<object, HashSet<DragAndDropTarget>> _dragAndDropTargets = [];
 
-        public bool IsDragAndDropOperationTakingPlace
-        {
-            get
-            {
-                return _informationAboutElementBeingDragged != null;
-            }
-        }
+        public bool IsDragAndDropOperationTakingPlace => _informationAboutElementBeingDragged != null;
 
         private double _thresholdForScrollViewerAutomaticScroll = 30; // in pixels
         public double ThresholdForScrollViewerAutomaticScroll
         {
-            get { return _thresholdForScrollViewerAutomaticScroll; }
-            set { _thresholdForScrollViewerAutomaticScroll = value; }
+            get => _thresholdForScrollViewerAutomaticScroll;
+            set => _thresholdForScrollViewerAutomaticScroll = value;
         }
 
         public void RegisterDragAndDropTarget(DragAndDropTarget dragAndDropTarget)
@@ -54,7 +48,7 @@ namespace ToDoCalendarControl.Controls
                 listOfTargets = _dragAndDropTargets[groupId];
             else
             {
-                listOfTargets = new HashSet<DragAndDropTarget>();
+                listOfTargets = [];
                 _dragAndDropTargets.Add(groupId, listOfTargets);
             }
 
@@ -87,8 +81,7 @@ namespace ToDoCalendarControl.Controls
                 target.IsHighlightedForSignalingAvailableTargets = true;
 
             // Show ghost of element being dragged:
-            Rect initialAbsoluteCoordinates;
-            if (TryGetElementRect(source, Application.Current.RootVisual, out initialAbsoluteCoordinates))
+            if (TryGetElementRect(source, Application.Current.RootVisual, out Rect initialAbsoluteCoordinates))
             {
                 // Create a ghost for the dragged control:
                 var popup = new Popup();
@@ -144,11 +137,10 @@ namespace ToDoCalendarControl.Controls
                 }
 
                 // Stop the auto-scroller:
-                _autoScrollIfAtEdgeOfScrollViewer.StopDection();
+                _autoScrollIfAtEdgeOfScrollViewer.StopDetection();
 
                 // Raise the "SourceDropped" event:
-                if (_informationAboutElementBeingDragged.TargetOnWhichTheSourceIsOver != null)
-                    _informationAboutElementBeingDragged.TargetOnWhichTheSourceIsOver.OnSourceDropped(new DragAndDropEventArgs(_informationAboutElementBeingDragged.Source));
+                _informationAboutElementBeingDragged.TargetOnWhichTheSourceIsOver?.OnSourceDropped(new DragAndDropEventArgs(_informationAboutElementBeingDragged.Source));
 
                 // Reset:
                 _informationAboutElementBeingDragged = null;
@@ -160,7 +152,7 @@ namespace ToDoCalendarControl.Controls
             if (_informationAboutElementBeingDragged != null)
             {
                 // Calculate current absolute position:
-                Point absolutePositionOfTopLeftCornerOfSource = new Point(_informationAboutElementBeingDragged.InitialAbsoluteCoordinates.X + cumulativeDragDelta.X, _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Y + cumulativeDragDelta.Y);
+                Point absolutePositionOfTopLeftCornerOfSource = new(_informationAboutElementBeingDragged.InitialAbsoluteCoordinates.X + cumulativeDragDelta.X, _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Y + cumulativeDragDelta.Y);
                 var absolutePositionOfCursorPositionOrOfCenterOfControl =
                     _informationAboutElementBeingDragged.CursorPositionRelativeToSource.HasValue
                     ? new Point(absolutePositionOfTopLeftCornerOfSource.X + _informationAboutElementBeingDragged.CursorPositionRelativeToSource.Value.X, absolutePositionOfTopLeftCornerOfSource.Y + _informationAboutElementBeingDragged.CursorPositionRelativeToSource.Value.Y)
@@ -227,15 +219,15 @@ namespace ToDoCalendarControl.Controls
             }
         }
 
-        HashSet<DragAndDropTarget> GetTargetsWithGiveGroupId(object groupId)
+        private HashSet<DragAndDropTarget> GetTargetsWithGiveGroupId(object groupId)
         {
             if (_dragAndDropTargets.ContainsKey(groupId))
                 return _dragAndDropTargets[groupId];
             else
-                return new HashSet<DragAndDropTarget>();
+                return [];
         }
 
-        void CollapseTheSource()
+        private void CollapseTheSource()
         {
             var source = _informationAboutElementBeingDragged.Source;
 
@@ -250,7 +242,7 @@ namespace ToDoCalendarControl.Controls
             }
         }
 
-        void UncollapseTheSource(bool instantly = false)
+        private void UncollapseTheSource(bool instantly = false)
         {
             var source = _informationAboutElementBeingDragged.Source;
             var sourceWidthBeforeDrag = _informationAboutElementBeingDragged.SourceWidthBeforeDrag;
@@ -277,7 +269,7 @@ namespace ToDoCalendarControl.Controls
             }
         }
 
-        static void ApplyActualSizeToWidthAndHeight(FrameworkElement element)
+        private static void ApplyActualSizeToWidthAndHeight(FrameworkElement element)
         {
             if (double.IsNaN(element.Width) && !double.IsNaN(element.ActualWidth))
                 element.Width = element.ActualWidth;
@@ -285,7 +277,7 @@ namespace ToDoCalendarControl.Controls
                 element.Height = element.ActualHeight;
         }
 
-        static bool TryGetElementRect(FrameworkElement element, UIElement rootControl, out Rect rect)
+        private static bool TryGetElementRect(FrameworkElement element, UIElement rootControl, out Rect rect)
         {
             try
             {
@@ -299,7 +291,7 @@ namespace ToDoCalendarControl.Controls
             return false;
         }
 
-        static double CalculateDistanceToRect(Point point, Rect rect)
+        private static double CalculateDistanceToRect(Point point, Rect rect)
         {
             if (rect.Contains(point))
                 // If the point is inside the Rect, the distance is 0:
@@ -317,7 +309,7 @@ namespace ToDoCalendarControl.Controls
 
         // Calculate the distance between point pt and the segment p1 --> p2.
         // Credits: http://blog.csharphelper.com/2010/03/26/find-the-shortest-distance-between-a-point-and-a-line-segment-in-c.aspx
-        static double CalculateDistanceToSegment(Point point, Point segmentStart, Point segmentEnd)
+        private static double CalculateDistanceToSegment(Point point, Point segmentStart, Point segmentEnd)
         {
             Point closestPoint;
             double dx = segmentEnd.X - segmentStart.X;
@@ -358,7 +350,7 @@ namespace ToDoCalendarControl.Controls
             return Math.Sqrt(dx * dx + dy * dy);
         }
 
-        UIElement CreateGhostFromSource(FrameworkElement source, double sourceWidth, double sourceHeight, bool sourceShouldBeEnlargedDuringDrag)
+        private UIElement CreateGhostFromSource(FrameworkElement source, double sourceWidth, double sourceHeight, bool sourceShouldBeEnlargedDuringDrag)
         {
             UIElement ghostControl;
             const bool useRectangle = false;
@@ -405,7 +397,7 @@ namespace ToDoCalendarControl.Controls
             StopDragAndDrop();
         }
 
-        static double CalculateMinimumDistanceToConsiderDropTarget(double sourceWidth, double sourceHeight)
+        private static double CalculateMinimumDistanceToConsiderDropTarget(double sourceWidth, double sourceHeight)
         {
             var minimumDistanceToConsiderDropTarget = Math.Min(sourceWidth, sourceHeight) / 2;
             if (minimumDistanceToConsiderDropTarget < LowerBoundForMinimumDistanceToConsiderDropTarget)
@@ -413,7 +405,7 @@ namespace ToDoCalendarControl.Controls
             return minimumDistanceToConsiderDropTarget;
         }
 
-        class InformationAboutElementBeingDragged
+        private class InformationAboutElementBeingDragged
         {
             public InformationAboutElementBeingDragged(
                 object groupId,
@@ -454,7 +446,6 @@ namespace ToDoCalendarControl.Controls
             // Properties that are going to change during the drag and drop operation:
             public DragAndDropTarget TargetOnWhichTheSourceIsOver { get; set; }
             public bool SourceHasBeenCollapsed { get; set; } // note: We collapse (ie. reduce the size) the source during the drag and drop animation when the user is dragging over a target.
-
         }
     }
 }

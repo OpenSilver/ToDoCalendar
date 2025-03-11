@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ToDoCalendarControl.Resources;
-using ToDoCalendarControl.Services;
 
 namespace ToDoCalendarControl
 {
@@ -18,8 +17,12 @@ namespace ToDoCalendarControl
         private EventModel _eventModel;
         public EventModel EventModel
         {
-            get { return _eventModel; }
-            set { _eventModel = value; ApplyEventTypeToRadioButtons(); }
+            get => _eventModel;
+            set
+            {
+                _eventModel = value;
+                ApplyEventTypeToRadioButtons();
+            }
         }
 
         public string PreviousTitle { get; set; }
@@ -34,13 +37,12 @@ namespace ToDoCalendarControl
             ButtonOK.Click += ButtonOK_Click;
         }
 
-        void ButtonOK_Click(object sender, RoutedEventArgs e)
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            if (Controller != null)
-                Controller.QuitEditingMode();
+            Controller?.QuitEditingMode();
         }
 
-        async void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             if (DayModel != null && EventModel != null && Controller != null && Day != default(DateTime))
             {
@@ -48,17 +50,17 @@ namespace ToDoCalendarControl
             }
         }
 
-        async void ButtonMarkAsNotDone_Click(object sender, RoutedEventArgs e)
+        private async void ButtonMarkAsNotDone_Click(object sender, RoutedEventArgs e)
         {
             await MarkAsDoneOrUndone(false);
         }
 
-        async void ButtonMarkAsDone_Click(object sender, RoutedEventArgs e)
+        private async void ButtonMarkAsDone_Click(object sender, RoutedEventArgs e)
         {
             await MarkAsDoneOrUndone(true);
         }
 
-        async Task MarkAsDoneOrUndone(bool isDone)
+        private async Task MarkAsDoneOrUndone(bool isDone)
         {
             if (EventModel != null && Controller != null)
             {
@@ -76,7 +78,7 @@ namespace ToDoCalendarControl
             ButtonMarkAsNotDone.Visibility = (EventModel != null && !string.IsNullOrEmpty(PreviousTitle) && EventModel.IsMarkedAsDone ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        void ApplyEventTypeToRadioButtons()
+        private void ApplyEventTypeToRadioButtons()
         {
             if (EventModel != null)
             {
@@ -88,7 +90,7 @@ namespace ToDoCalendarControl
             }
         }
 
-        async Task ApplyRadioButtonsToEventType()
+        private async Task ApplyRadioButtonsToEventType()
         {
             var newEventType = EventType.Normal;
             if (RadioButtonNormal.IsChecked == true)
