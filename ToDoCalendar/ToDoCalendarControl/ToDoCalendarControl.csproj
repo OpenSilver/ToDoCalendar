@@ -33,7 +33,6 @@
     <Compile Include="Helpers\FileCalendar.cs" />
     <Compile Include="Helpers\RenderingHelpers.cs" />
     <Compile Include="Helpers\SerializationHelpers.cs" />
-    <Compile Include="Helpers\TrialHelpers.cs" />
     <Compile Include="Helpers\WeakEventsHelpers.cs" />
     <Compile Include="Helpers\YamlSerializer.cs" />
     <Compile Include="LocalizedStrings.cs" />

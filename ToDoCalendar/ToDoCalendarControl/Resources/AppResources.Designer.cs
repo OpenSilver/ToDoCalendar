@@ -250,42 +250,6 @@ namespace ToDoCalendarControl.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get the Full Version Now.
-        /// </summary>
-        public static string TrialButton_Content {
-            get {
-                return ResourceManager.GetString("TrialButton_Content", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to TRIAL VERSION.
-        /// </summary>
-        public static string TrialText1 {
-            get {
-                return ResourceManager.GetString("TrialText1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Changes are not persisted..
-        /// </summary>
-        public static string TrialText2 {
-            get {
-                return ResourceManager.GetString("TrialText2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To keep your data,.
-        /// </summary>
-        public static string TrialText3 {
-            get {
-                return ResourceManager.GetString("TrialText3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Type your ToDo.
         /// </summary>
         public static string TypeToDoHint {

@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>下のフィールドにバックアップデータをコピーし、「復元」をクリックします。</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>今すぐフルバージョンを取得する</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>デモ</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- 変更が永続化されません。</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value />
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>ToDoを入力してください</value>
   </data>

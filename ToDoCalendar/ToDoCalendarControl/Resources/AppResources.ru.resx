@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>Скопируйте резервные данные в поле ниже, затем нажмите кнопку Восстановить.</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>Получить Полную Версию</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>ДЕМОНСТРАЦИЯ</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>Изменения не сохраняются.</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value />
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>Введите задачу</value>
   </data>

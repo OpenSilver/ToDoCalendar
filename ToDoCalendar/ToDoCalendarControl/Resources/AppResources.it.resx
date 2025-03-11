@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>Copia/incolla i dati di backup nel campo sottostante, quindi clicca su Ripristina.</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>Ottenere la Versione Completa</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>DEMO</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- Le modifiche non vengono salvate.</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value>Per salvarle,</value>
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>Digita il tuo ToDo</value>
   </data>

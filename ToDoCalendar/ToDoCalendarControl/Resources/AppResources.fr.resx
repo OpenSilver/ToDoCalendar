@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>Copiez/collez les données de sauvegarde dans le champ ci-dessous, puis cliquez sur Restaurer:</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>Obtenez la Version Complète</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>DÉMO</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- Les changements ne sont pas sauvés.</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value>Pour les sauver,</value>
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>Tapez votre tâche</value>
   </data>

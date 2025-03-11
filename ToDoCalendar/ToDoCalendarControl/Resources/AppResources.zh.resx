@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>备份数据复制到下面的字段，然后单击“还原”：</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>获得完整版现在</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>试用版</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- 更改不会持久</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value>为了使您的数据，</value>
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>输入您的待办事项</value>
   </data>

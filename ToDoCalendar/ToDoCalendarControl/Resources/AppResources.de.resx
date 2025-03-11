@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>Kopieren Sie die Backup-Daten in das Feld unten ein und klicken Sie auf Wiederherstellen:</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>Holen Sie sich die Vollversion.</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>DEMO</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- Änderungen werden nicht gespeichert.</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value />
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>Geben Sie Ihre ToDo ein</value>
   </data>

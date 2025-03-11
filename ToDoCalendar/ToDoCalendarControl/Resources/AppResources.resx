@@ -179,18 +179,6 @@
   <data name="OptionsRestoreExplanation_Text" xml:space="preserve">
     <value>Copy/paste backup data to the field below, then click RESTORE:</value>
   </data>
-  <data name="TrialButton_Content" xml:space="preserve">
-    <value>Get the Full Version Now</value>
-  </data>
-  <data name="TrialText1" xml:space="preserve">
-    <value>TRIAL VERSION</value>
-  </data>
-  <data name="TrialText2" xml:space="preserve">
-    <value>- Changes are not persisted.</value>
-  </data>
-  <data name="TrialText3" xml:space="preserve">
-    <value>To keep your data,</value>
-  </data>
   <data name="TypeToDoHint" xml:space="preserve">
     <value>Type your ToDo</value>
     <comment>A hint in editing TextBox when creating a new event</comment>
