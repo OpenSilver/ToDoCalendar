@@ -337,6 +337,14 @@ partial class CalendarStoreImplementation : ICalendarStore
             return localSource;
         }
 
+        var icloud = EventStore.Sources.FirstOrDefault(s => s.SourceType == EKSourceType.CalDav &&
+            (s.Title?.Contains("iCloud", StringComparison.OrdinalIgnoreCase) == true));
+
+        if (icloud is not null)
+        {
+            return icloud;
+        }
+
         if (EventStore.DefaultCalendarForNewEvents?.Source is not null)
         {
             return EventStore.DefaultCalendarForNewEvents.Source;
