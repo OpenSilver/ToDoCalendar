@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using WinRTForSilverlight;
 
 namespace MetroStyleApps
 {
@@ -124,99 +121,5 @@ namespace MetroStyleApps
             worker.RunWorkerCompleted += (s, e) => myMethod.Invoke();
             worker.RunWorkerAsync();
         }
-
-
-        #region CONVERTION BETWEEN POINTER AND MOUSE EVENTS //--------------------------------------
-
-        public static Dictionary<Tuple<UIElement, PointerEventHandler>, MouseButtonHandlerClass> PointerHandlers = new Dictionary<Tuple<UIElement, PointerEventHandler>, MouseButtonHandlerClass>(); // "public" because must be in AAC
-
-        public static void AttachPointerPressedEventHandler(UIElement uielement, MetroHelpers.PointerEventHandler handler, bool handledEventsToo)
-        {
-            MouseButtonHandlerClass handlerClass = CreateHandlerForAttachingEvent(uielement, handler);
-
-            uielement.AddHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton), handledEventsToo);
-        }
-
-        public static void AttachPointerReleasedEventHandler(UIElement uielement, MetroHelpers.PointerEventHandler handler, bool handledEventsToo)
-        {
-            MouseButtonHandlerClass handlerClass = CreateHandlerForAttachingEvent(uielement, handler);
-
-            uielement.AddHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton), handledEventsToo);
-        }
-
-        static MouseButtonHandlerClass CreateHandlerForAttachingEvent(UIElement uielement, MetroHelpers.PointerEventHandler handler)
-        {
-            if (!PointerHandlers.ContainsKey(new Tuple<UIElement, PointerEventHandler>(uielement, handler)))
-            {
-                MouseButtonHandlerClass handlerClass = new MouseButtonHandlerClass(handler);
-                PointerHandlers.Add(new Tuple<UIElement, PointerEventHandler>(uielement, handler), handlerClass);
-                return handlerClass;
-            }
-            else
-                throw new InvalidOperationException("The event cannot be registered multiple times.");
-        }
-
-        public static void RemovePointerPressedEventHandler(UIElement uielement, MetroHelpers.PointerEventHandler handler)
-        {
-            MouseButtonHandlerClass handlerClass = GetMouseButtonHandlerAndRemoveIt(uielement, handler);
-            if (handlerClass != null)
-            {
-                uielement.RemoveHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton));
-            }
-        }
-
-        public static void RemovePointerReleasedEventHandler(UIElement uielement, MetroHelpers.PointerEventHandler handler)
-        {
-            MouseButtonHandlerClass handlerClass = GetMouseButtonHandlerAndRemoveIt(uielement, handler);
-            if (handlerClass != null)
-            {
-                uielement.RemoveHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(handlerClass.UIElement_MouseButton));
-            }
-        }
-
-        static MouseButtonHandlerClass GetMouseButtonHandlerAndRemoveIt(UIElement uielement, MetroHelpers.PointerEventHandler handler)
-        {
-            if (PointerHandlers.ContainsKey(new Tuple<UIElement, PointerEventHandler>(uielement, handler)))
-            {
-                MouseButtonHandlerClass handlerClass = PointerHandlers[new Tuple<UIElement, PointerEventHandler>(uielement, handler)];
-                PointerHandlers.Remove(new Tuple<UIElement, PointerEventHandler>(uielement, handler));
-                return handlerClass;
-            }
-            else
-                return null;
-        }
-
-        public static bool IsPointerPressedEventAttached(UIElement uielement, MetroHelpers.PointerEventHandler handler)
-        {
-            return PointerHandlers.ContainsKey(new Tuple<UIElement, PointerEventHandler>(uielement, handler));
-        }
-
-        public delegate void PointerEventHandler(object sender, PointerRoutedEventArgs e);
-
-
-        public static PointerRoutedEventArgs CreateNewPointerRoutedEventArgs(MouseButtonEventArgs mouseArgs)
-        {
-            return new PointerRoutedEventArgs(mouseArgs);
-        }
-
-        public class MouseButtonHandlerClass
-        {
-            PointerEventHandler _handler;
-
-            public MouseButtonHandlerClass(PointerEventHandler handler)
-            {
-                _handler = handler;
-            }
-
-            public void UIElement_MouseButton(object sender, MouseButtonEventArgs mouseArgs) // Works with "MouseLeftButtonDown", "MouseLeftButtonUp", and all other similar mouse events...
-            {
-                // For silverlight, convert the "MouseButtonEventArgs" into the "PointerRoutedEventArgs" and then back to the "MouseButtonEventArgs":
-                PointerRoutedEventArgs pointerArgs = MetroHelpers.CreateNewPointerRoutedEventArgs(mouseArgs);
-                _handler(sender, pointerArgs);
-                mouseArgs.Handled = pointerArgs.Handled;
-            }
-        }
-
-        #endregion //-----------------------------------------------------------
     }
 }

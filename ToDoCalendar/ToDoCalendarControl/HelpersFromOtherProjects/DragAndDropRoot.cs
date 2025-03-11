@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
-using WinRTForSilverlight;
 using static ToDoCalendarControl.RenderingHelpers;
 
 namespace MetroStyleApps
@@ -393,11 +393,12 @@ namespace MetroStyleApps
                 };
                 ghostControl = image;
             }
-            MetroHelpers.AttachPointerPressedEventHandler(ghostControl, Ghest_PointerPressed, false);
+
+            ghostControl.MouseLeftButtonDown += OnGhostControlMouseLeftButtonDown;
             return ghostControl;
         }
 
-        void Ghest_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void OnGhostControlMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // If the user clicks the ghost, it can only be that the ghost was stuck (ie. remained visible on screen) due to an issue with the "MouseButtonUp" not having been raised. This can happen for example in Silverlight if the user starts the drag operation, and right-clicks while dragging, and then presses Esc.
             StopDragAndDrop();
