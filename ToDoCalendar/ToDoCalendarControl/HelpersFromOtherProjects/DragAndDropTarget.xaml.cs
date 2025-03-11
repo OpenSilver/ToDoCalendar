@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using ToDoCalendarControl.Helpers;
 
 namespace MetroStyleApps
 {
@@ -21,7 +22,7 @@ namespace MetroStyleApps
         void DragAndDropTarget_Loaded(object sender, RoutedEventArgs e)
         {
             // Register this control so that when the user initiates the drap & drop operation, the system knows where the targets are:
-            _dragAndDropRoot = MetroHelpers.GetParentOfType<DragAndDropRoot>(this);
+            _dragAndDropRoot = UIHelper.GetParentOfType<DragAndDropRoot>(this);
             if (_dragAndDropRoot != null)
                 _dragAndDropRoot.RegisterDragAndDropTarget(this);
         }

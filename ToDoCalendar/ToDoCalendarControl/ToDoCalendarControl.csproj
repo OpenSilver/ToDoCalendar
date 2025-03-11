@@ -22,7 +22,7 @@
     <Compile Include="HelpersFromOtherProjects\DragAndDropRoot.cs" />
     <Compile Include="HelpersFromOtherProjects\DragAndDropSource.cs" />
     <Compile Include="HelpersFromOtherProjects\DragAndDropTarget.xaml.cs" />
-    <Compile Include="HelpersFromOtherProjects\MetroHelpers.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Helpers\AnimationHelper.cs" />
     <Compile Include="Helpers\CalendarServiceSaver.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />

@@ -394,7 +394,7 @@ namespace ToDoCalendarControl
             {
                 if (DragAndDropSource.IsSameSpot(_originPosition, e.GetPosition(null)))
                 {
-                    MetroHelpers.SetFocus(eventTitle);
+                    eventTitle.Focus();
                 }
             };
 
@@ -458,10 +458,7 @@ namespace ToDoCalendarControl
             if (setFocus)
             {
                 // We use a dispatcher because, in order to set the focus, the control must be in the visual tree:
-                eventTitle.Dispatcher.BeginInvoke(() =>
-                    {
-                        MetroHelpers.SetFocus(eventTitle);
-                    });
+                eventTitle.Dispatcher.BeginInvoke(eventTitle.Focus);
             }
 
             //----------------
@@ -599,7 +596,7 @@ namespace ToDoCalendarControl
             public void Controller_EditEventRequested(EditEventRequestedEventArgs e)
             {
                 if (e.EventModel == _eventModel)
-                    MetroHelpers.SetFocus(_eventTitle);
+                    _eventTitle.Focus();
             }
         }
 

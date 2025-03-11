@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using ToDoCalendarControl.Helpers;
 
 namespace MetroStyleApps
 {
@@ -82,12 +83,12 @@ namespace MetroStyleApps
 
         void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _originPosition = e.GetPosition(MetroHelpers.GetRootVisual());
+            _originPosition = e.GetPosition(Application.Current.RootVisual);
 
             if (!HoldToStartDrag)
             {
                 // Verify that the user is not dragging a scrollbar:
-                if (e.OriginalSource is DependencyObject && MetroHelpers.GetParentOfType<ScrollBar>((DependencyObject)e.OriginalSource) == null)
+                if (e.OriginalSource is DependencyObject && UIHelper.GetParentOfType<ScrollBar>((DependencyObject)e.OriginalSource) == null)
                 {
                     // Initialize the drag and drop operation:
                     StartDragOperation(sender,
@@ -109,7 +110,7 @@ namespace MetroStyleApps
             ResetHoldTimer();
 
             StartDragOperation(_mouseLeftButtonDownSender,
-                    _mouseLeftButtonDownEventArgs.GetPosition(MetroHelpers.GetRootVisual()),
+                    _mouseLeftButtonDownEventArgs.GetPosition(Application.Current.RootVisual),
                     _mouseLeftButtonDownEventArgs.GetPosition((FrameworkElement)_mouseLeftButtonDownSender));
             OnMouseMove(new Point(_dragDeltaOrigin.X, _dragDeltaOrigin.Y), distanceForDragOperationToBeConsideredIntentional: 0);
 
@@ -128,7 +129,7 @@ namespace MetroStyleApps
             // Initialize the drag and drop operation:
             _dragDeltaOrigin = dragDeltaOrigin;
             _cursorPositionRelativeToSource = cursorPositionRelativeToSource;
-            _dragAndDropRoot = MetroHelpers.GetParentOfType<DragAndDropRoot>(this);
+            _dragAndDropRoot = UIHelper.GetParentOfType<DragAndDropRoot>(this);
             ((UIElement)sender).CaptureMouse();
             _dragAndDropStarted = false; // Note: we start drag and drop later (in the MouseMove event) so as to not interfere in case the user is just clicking somewhere in the content, with no drag-and-drop intention.
         }
@@ -159,7 +160,7 @@ namespace MetroStyleApps
 
         void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
         {
-            var pointerPosition = e.GetPosition(MetroHelpers.GetRootVisual());
+            var pointerPosition = e.GetPosition(Application.Current.RootVisual);
 
             if (_holdTimer.IsEnabled && !IsSameSpot(_originPosition, pointerPosition))
             {

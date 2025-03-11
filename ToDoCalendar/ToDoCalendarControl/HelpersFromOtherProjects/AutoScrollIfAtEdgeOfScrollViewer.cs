@@ -110,7 +110,7 @@ namespace MetroStyleApps
             GeneralTransform generalTransform = null;
             try
             {
-                generalTransform = thumb.TransformToVisual(MetroHelpers.GetRootVisual());
+                generalTransform = thumb.TransformToVisual(Application.Current.RootVisual);
             }
             catch (ArgumentException)
             {
@@ -118,7 +118,7 @@ namespace MetroStyleApps
             var newAbsolutePosition = new Point();
             if (generalTransform != null)
             {
-                newAbsolutePosition = MetroHelpers.TransformPoint(generalTransform, new Point(thumbActualWidth / 2, thumbActualHeight / 2));
+                newAbsolutePosition = generalTransform.Transform(new Point(thumbActualWidth / 2, thumbActualHeight / 2));
             }
             if (_absolutePosition != newAbsolutePosition)
             {
@@ -159,7 +159,7 @@ namespace MetroStyleApps
             // If not found in the popups, look at the rest of the application:
             if (!scrollShouldTakePlace)
             {
-                scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, MetroHelpers.GetRootVisual(), _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
+                scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, Application.Current.RootVisual, _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
             }
 
             return scrollShouldTakePlace;
@@ -246,9 +246,9 @@ namespace MetroStyleApps
             if (!double.IsNaN(scrollViewer.ActualWidth) && !double.IsNaN(scrollViewer.ActualHeight))
             {
                 // Get the absolute coordinates of the ScrollViewer:
-                GeneralTransform gt = scrollViewer.TransformToVisual(MetroHelpers.GetRootVisual());
-                Point scrollViewerTopLeftPosition = MetroHelpers.TransformPoint(gt, new Point(0, 0));
-                Point scrollViewerBottomRightPosition = MetroHelpers.TransformPoint(gt, new Point(scrollViewer.ActualWidth, scrollViewer.ActualHeight));
+                GeneralTransform gt = scrollViewer.TransformToVisual(Application.Current.RootVisual);
+                Point scrollViewerTopLeftPosition = gt.Transform(new Point(0, 0));
+                Point scrollViewerBottomRightPosition = gt.Transform(new Point(scrollViewer.ActualWidth, scrollViewer.ActualHeight));
 
                 // Compare the coordinates of the scrollviewer with the position of the mouse pointer:
                 if (mousePointerPosition.Y < scrollViewerBottomRightPosition.Y && mousePointerPosition.Y > scrollViewerBottomRightPosition.Y - thresholdForScrollViewerAutomaticScroll)

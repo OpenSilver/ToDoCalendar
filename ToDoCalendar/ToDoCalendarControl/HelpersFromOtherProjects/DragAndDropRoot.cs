@@ -87,7 +87,7 @@ namespace MetroStyleApps
 
             // Show ghost of element being dragged:
             Rect initialAbsoluteCoordinates;
-            if (TryGetElementRect(source, MetroHelpers.GetRootVisual(), out initialAbsoluteCoordinates))
+            if (TryGetElementRect(source, Application.Current.RootVisual, out initialAbsoluteCoordinates))
             {
                 // Create a ghost for the dragged control:
                 var popup = new Popup();
@@ -186,7 +186,7 @@ namespace MetroStyleApps
                 // Find closest target:
                 DragAndDropTarget closestTarget = null;
                 double closesTargetDistance = double.MaxValue;
-                var rootControl = MetroHelpers.GetRootVisual();
+                var rootControl = Application.Current.RootVisual;
                 foreach (var target in GetTargetsWithGiveGroupId(_informationAboutElementBeingDragged.GroupId))
                 {
                     if (TryGetElementRect(target, rootControl, out Rect targetRect))

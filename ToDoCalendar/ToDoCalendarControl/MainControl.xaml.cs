@@ -1,5 +1,4 @@
-﻿using MetroStyleApps;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -280,7 +279,7 @@ namespace ToDoCalendarControl
         private void Controller_QuitEditingModeRequested(object sender, EventArgs e)
         {
             // By removing the focus of the TextBox, we quit the editing mode:
-            MetroHelpers.SetFocus(this);
+            Focus();
         }
 
         private void DragAndDropSource_Click(object sender, EventArgs e)
