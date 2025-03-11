@@ -1,5 +1,3 @@
-/* <License>The source code below is the property of Userware and is strictly confidential. It is licensed to OP.SERV under agreement 'USE-200-CLM-OPS'</License> */
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
