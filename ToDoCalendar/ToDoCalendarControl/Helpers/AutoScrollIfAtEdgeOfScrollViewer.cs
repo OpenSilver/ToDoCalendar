@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 
-namespace MetroStyleApps
+namespace ToDoCalendarControl.Helpers
 {
     public class AutoScrollIfAtEdgeOfScrollViewer
     {
@@ -105,8 +105,8 @@ namespace MetroStyleApps
         {
             // Calculate thumb position:
             var thumb = (Thumb)sender;
-            var thumbActualWidth = (double.IsNaN(thumb.ActualWidth) ? 0d : thumb.ActualWidth);
-            var thumbActualHeight = (double.IsNaN(thumb.ActualHeight) ? 0d : thumb.ActualHeight);
+            var thumbActualWidth = double.IsNaN(thumb.ActualWidth) ? 0d : thumb.ActualWidth;
+            var thumbActualHeight = double.IsNaN(thumb.ActualHeight) ? 0d : thumb.ActualHeight;
             GeneralTransform generalTransform = null;
             try
             {

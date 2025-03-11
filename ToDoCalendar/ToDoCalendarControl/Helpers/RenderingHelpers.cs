@@ -1,5 +1,4 @@
-﻿using MetroStyleApps;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
@@ -7,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ToDoCalendarControl.Controls;
 
 namespace ToDoCalendarControl
 {
@@ -443,12 +443,6 @@ namespace ToDoCalendarControl
                 controller.QuitEditingMode();
             };
 
-            //// COMMENTED BECAUSE IT DIDN'T WORK ON WINDOWS PHONE 7.1 (though it worked on Win Phone 8) (it seems to be due to the fact that weak references are not supported in WP7)
-            //Action<EditEventRequestedEventArgs> actionToEditEvent = (e) =>
-            //    {
-            //        if (e.EventModel == eventModel)
-            //            MetroHelpers.SetFocus(eventTitle);
-            //    };
             var editEventRequestedHandler = new EditEventRequestedRequestedHandler(eventTitle, eventModel);
 
             //todo: test that the following "weak event" is indeed "weak" and does not leak:

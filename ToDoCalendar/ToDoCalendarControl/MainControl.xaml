@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ToDoCalendarControl"
     mc:Ignorable="d"
-    xmlns:metrostyleapps="clr-namespace:MetroStyleApps"
+    xmlns:controls="clr-namespace:ToDoCalendarControl.Controls"
     xmlns:converters="clr-namespace:ToDoCalendarControl.Converters"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -56,7 +56,7 @@
     </VisualStateManager.VisualStateGroups>
 
     <Grid>
-        <metrostyleapps:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+        <controls:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
             <Grid Background="White">
                 <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
                           HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -83,12 +83,12 @@
                 </ScrollViewer>
                 <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,-10" Visibility="Collapsed">
                     <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="165" Margin="0,0,0,-1"/>
-                    <metrostyleapps:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
+                    <controls:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
                         <Grid Width="80" Height="80" Margin="20,0,20,0" Cursor="Hand">
                             <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
                             <Path Data="M0,-1 V1 M-1,0 H1" Stretch="Fill" StrokeThickness="10" Stroke="White" Width="60" Height="60"/>
                         </Grid>
-                    </metrostyleapps:DragAndDropSource>
+                    </controls:DragAndDropSource>
                 </Grid>
                 <Grid x:Name="ExplanationOverlay" Margin="0,-150,0,150" Visibility="Collapsed" MouseLeftButtonDown="ExplanationOverlay_MouseLeftButtonDown" Background="Transparent">
                     <Grid IsHitTestVisible="False" Background="#BB000000" Margin="0,150,0,-150">
@@ -98,7 +98,7 @@
                 </Grid>
                 <local:NotificationControl x:Name="NotificationControl" Visibility="Collapsed"/>
             </Grid>
-        </metrostyleapps:DragAndDropRoot>
+        </controls:DragAndDropRoot>
 
         <Border Name="LoadingIndicator">
             <Border.Background>

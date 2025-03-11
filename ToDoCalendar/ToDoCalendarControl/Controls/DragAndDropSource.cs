@@ -7,7 +7,7 @@ using System.Windows.Markup;
 using System.Windows.Threading;
 using ToDoCalendarControl.Helpers;
 
-namespace MetroStyleApps
+namespace ToDoCalendarControl.Controls
 {
     public class DragAndDropSource : ContentControl
     {
@@ -64,8 +64,8 @@ namespace MetroStyleApps
             // Unregister previous events if any:
             if (_layoutRoot != null)
             {
-                _layoutRoot.RemoveHandler(FrameworkElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown));
-                _layoutRoot.RemoveHandler(FrameworkElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp));
+                _layoutRoot.RemoveHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonDown));
+                _layoutRoot.RemoveHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(LayoutRoot_MouseLeftButtonUp));
                 _layoutRoot.MouseMove -= LayoutRoot_MouseMove;
             }
 

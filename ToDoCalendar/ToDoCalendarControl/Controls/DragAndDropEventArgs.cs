@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace MetroStyleApps
+namespace ToDoCalendarControl.Controls
 {
     public class DragAndDropEventArgs : EventArgs
     {

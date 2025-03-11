@@ -5,9 +5,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using ToDoCalendarControl.Helpers;
 using static ToDoCalendarControl.RenderingHelpers;
 
-namespace MetroStyleApps
+namespace ToDoCalendarControl.Controls
 {
     public class DragAndDropRoot : ContentControl
     {
@@ -161,9 +162,9 @@ namespace MetroStyleApps
                 // Calculate current absolute position:
                 Point absolutePositionOfTopLeftCornerOfSource = new Point(_informationAboutElementBeingDragged.InitialAbsoluteCoordinates.X + cumulativeDragDelta.X, _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Y + cumulativeDragDelta.Y);
                 var absolutePositionOfCursorPositionOrOfCenterOfControl =
-                    (_informationAboutElementBeingDragged.CursorPositionRelativeToSource.HasValue
+                    _informationAboutElementBeingDragged.CursorPositionRelativeToSource.HasValue
                     ? new Point(absolutePositionOfTopLeftCornerOfSource.X + _informationAboutElementBeingDragged.CursorPositionRelativeToSource.Value.X, absolutePositionOfTopLeftCornerOfSource.Y + _informationAboutElementBeingDragged.CursorPositionRelativeToSource.Value.Y)
-                    : new Point(absolutePositionOfTopLeftCornerOfSource.X + _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Width / 2, absolutePositionOfTopLeftCornerOfSource.Y + _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Height / 2));
+                    : new Point(absolutePositionOfTopLeftCornerOfSource.X + _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Width / 2, absolutePositionOfTopLeftCornerOfSource.Y + _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Height / 2);
 
                 // Update the auto-scroller (to scroll automatically if near the edge of a scrollviewer):
                 _autoScrollIfAtEdgeOfScrollViewer.SetAbsolutePosition(absolutePositionOfCursorPositionOrOfCenterOfControl);
@@ -242,8 +243,8 @@ namespace MetroStyleApps
             {
                 ApplyActualSizeToWidthAndHeight(_informationAboutElementBeingDragged.Source);
 
-                AnimationsHelper.SetPropertyWithAnimation(source, "(FrameworkElement.Width)", 0, DefaultDurationOfAnimations);
-                AnimationsHelper.SetPropertyWithAnimation(source, "(FrameworkElement.Height)", 0, DefaultDurationOfAnimations);
+                AnimationHelper.SetPropertyWithAnimation(source, "(FrameworkElement.Width)", 0, DefaultDurationOfAnimations);
+                AnimationHelper.SetPropertyWithAnimation(source, "(FrameworkElement.Height)", 0, DefaultDurationOfAnimations);
 
                 _informationAboutElementBeingDragged.SourceHasBeenCollapsed = true;
             }
@@ -260,12 +261,12 @@ namespace MetroStyleApps
             {
                 ApplyActualSizeToWidthAndHeight(_informationAboutElementBeingDragged.Source);
 
-                AnimationsHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Width)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Width, (instantly ? 0 : DefaultDurationOfAnimations), actionWhenCompleted: () =>
+                AnimationHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Width)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Width, instantly ? 0 : DefaultDurationOfAnimations, actionWhenCompleted: () =>
                 {
                     source.Width = sourceWidthBeforeDrag;
                 });
 
-                AnimationsHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Height)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Height, (instantly ? 0 : DefaultDurationOfAnimations), actionWhenCompleted: () =>
+                AnimationHelper.SetPropertyWithAnimation(_informationAboutElementBeingDragged.Source, "(FrameworkElement.Height)", _informationAboutElementBeingDragged.InitialAbsoluteCoordinates.Height, instantly ? 0 : DefaultDurationOfAnimations, actionWhenCompleted: () =>
                 {
                     source.Height = sourceHeightBeforeDrag;
                 });
@@ -321,7 +322,7 @@ namespace MetroStyleApps
             Point closestPoint;
             double dx = segmentEnd.X - segmentStart.X;
             double dy = segmentEnd.Y - segmentStart.Y;
-            if ((dx == 0) && (dy == 0))
+            if (dx == 0 && dy == 0)
             {
                 // It's a point not a line segment.
                 closestPoint = segmentStart;
