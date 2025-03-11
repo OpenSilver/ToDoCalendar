@@ -193,7 +193,6 @@ namespace MetroStyleApps
             return PointerHandlers.ContainsKey(new Tuple<UIElement, PointerEventHandler>(uielement, handler));
         }
 
-        //todo: when supported by the compiler, put the following delegate in a file on its own and place that file to the "WinRTForSilverlight" project
         public delegate void PointerEventHandler(object sender, PointerRoutedEventArgs e);
 
 

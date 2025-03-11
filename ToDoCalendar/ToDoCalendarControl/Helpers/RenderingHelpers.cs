@@ -369,11 +369,7 @@ namespace ToDoCalendarControl
                 Text = eventModel.Title,
                 Background = EventTextBackgroundWhenNotEditing,
                 Foreground = functionToDetermineEventForeground(),
-#if !OPENSILVER
-                InputScope = new InputScope() { Names = { new InputScopeName() { NameValue = InputScopeNameValue.Text } } }, // This will enable spell check and word auto-completion.
-#else
                 IsSpellCheckEnabled = true,
-#endif
                 BorderThickness = new Thickness(0),
                 Margin = EventTextBoxMarginWhenNotEditing,
                 Padding = new Thickness(0),
