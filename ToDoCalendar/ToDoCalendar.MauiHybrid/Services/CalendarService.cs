@@ -38,6 +38,15 @@ public class CalendarService : ICalendarService
         });
     }
 
+    private async Task<string> CreateCalendar(string name, Color? color = null)
+    {
+        var res = await _calendarStore.CreateCalendar(name, color);
+
+        _calendars = null;
+
+        return res;
+    }
+
     public async Task<string> CreateCalendarEvent(DeviceEvent calendarEvent)
     {
         var calendars = await GetCalendars();
@@ -46,7 +55,7 @@ public class CalendarService : ICalendarService
         {
             var calendar = calendars.Values.FirstOrDefault(x => x.Name == CalendarName);
             var color = calendar?.Color ?? Colors.Purple;
-            var calendarId = calendar?.Id ?? await _calendarStore.CreateCalendar(CalendarName, color);
+            var calendarId = calendar?.Id ?? await CreateCalendar(CalendarName, color);
 
             calendarEvent.SetCalendarColor(color.Alpha, color.Red, color.Green, color.Blue);
 
