@@ -23,7 +23,7 @@ namespace ToDoCalendarControl
         private const int NumberOfAdditionalDaysToLoadAfterInLandscape = 150;
         private const double DayItemHeight = 16;
         private const double InitialTodayTopOffset = 150;
-        private const int MinLandscapeWidth = 1150;
+        private const int MinLandscapeWidth = 740;
         private const int HorizontalScrollMargin = 67;
         private const int MaxOptionsPopupWidth = 450;
 
