@@ -1,0 +1,36 @@
+name: Deploy ToDoCalendar to Azure
+
+on:
+  push:
+    branches: [ publish-web ]
+  workflow_dispatch:    # Allows manual triggering
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'  # Using .NET 8 for the app
+    
+    - name: Restore dependencies
+      run: dotnet restore ToDoCalendar/ToDoCalendar.Browser/ToDoCalendar.Browser.csproj
+    
+    - name: Build
+      run: dotnet build ToDoCalendar/ToDoCalendar.Browser/ToDoCalendar.Browser.csproj --configuration Release --no-restore
+    
+    - name: Publish
+      run: dotnet publish ToDoCalendar/ToDoCalendar.Browser/ToDoCalendar.Browser.csproj -c Release -o ${{github.workspace}}/publish
+    
+    - name: Deploy to Azure Web App
+      id: deploy-to-azure
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'todocalendar'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{github.workspace}}/publish
