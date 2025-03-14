@@ -405,3 +405,6 @@ FodyWeavers.xsd
 # Miscellaneious
 build-ios.sh
 upload-ipa.sh
+build-mac.sh
+upload-mac.sh
+build-mac-self-distrib.sh

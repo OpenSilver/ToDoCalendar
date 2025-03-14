@@ -19,6 +19,8 @@
     <array>
         <string>arm64</string>
     </array>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
