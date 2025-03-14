@@ -61,12 +61,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AndroidResource Remove="Components\Pages\**" />
-      <Compile Remove="Components\Pages\**" />
-      <Content Remove="Components\Pages\**" />
-      <EmbeddedResource Remove="Components\Pages\**" />
-      <MauiXaml Remove="Components\Pages\**" />
-      <None Remove="Components\Pages\**" />
+        <AndroidResource Remove="Components\Pages\**" />
+        <Compile Remove="Components\Pages\**" />
+        <Content Remove="Components\Pages\**" />
+        <EmbeddedResource Remove="Components\Pages\**" />
+        <MauiXaml Remove="Components\Pages\**" />
+        <None Remove="Components\Pages\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -77,8 +77,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj" />
-      <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
+        <ProjectReference Include="..\Plugin.Maui.CalendarStore\Plugin.Maui.CalendarStore.csproj" />
+        <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
     </ItemGroup>
 
+    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
+        <RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+    </PropertyGroup>
 </Project>

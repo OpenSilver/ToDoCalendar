@@ -408,3 +408,4 @@ upload-ipa.sh
 build-mac.sh
 upload-mac.sh
 build-mac-self-distrib.sh
+build-windows.bat
