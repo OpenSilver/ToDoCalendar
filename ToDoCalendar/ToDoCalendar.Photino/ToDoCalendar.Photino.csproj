@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="Photino.NET" Version="3.2.3" />
-    <PackageReference Include="OpenSilver.WebAssembly" Version="3.2.1" />
+    <PackageReference Include="OpenSilver.WebAssembly" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>

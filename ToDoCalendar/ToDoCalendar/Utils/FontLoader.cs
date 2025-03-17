@@ -10,7 +10,7 @@ namespace ToDoCalendar.Utils
         /// </summary>
         public static async Task LoadAppFonts()
         {
-            await FontFamily.LoadFontAsync("ms-appx:///ToDoCalendar/Fonts/Inter_VariableFont_slnt_wght.ttf");
+            await FontFamily.LoadFontAsync("ms-appx:///Fonts/Inter_VariableFont_slnt_wght.ttf");
         }
     }
 }

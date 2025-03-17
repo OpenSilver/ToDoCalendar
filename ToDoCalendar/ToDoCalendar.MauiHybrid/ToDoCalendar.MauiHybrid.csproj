@@ -58,6 +58,8 @@
 
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
         <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+        <MauiAsset Include="wwwroot\**\*" />
     </ItemGroup>
 
     <ItemGroup>
@@ -73,7 +75,7 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-        <PackageReference Include="OpenSilver.MauiHybrid" Version="3.2.2" />
+        <PackageReference Include="OpenSilver.MauiHybrid" Version="3.2.0" />
     </ItemGroup>
 
     <ItemGroup>

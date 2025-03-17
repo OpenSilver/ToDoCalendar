@@ -409,3 +409,4 @@ build-mac.sh
 upload-mac.sh
 build-mac-self-distrib.sh
 build-windows.bat
+build-windows-self-distrib.bat
