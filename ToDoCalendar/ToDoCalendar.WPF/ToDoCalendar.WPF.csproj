@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">  
+
+ <PropertyGroup>  
+   <OutputType>WinExe</OutputType>  
+   <TargetFramework>net8.0-windows</TargetFramework>  
+   <Nullable>enable</Nullable>  
+   <ImplicitUsings>enable</ImplicitUsings>  
+   <UseWPF>true</UseWPF>  
+   <EnableDefaultItems>false</EnableDefaultItems>
+ </PropertyGroup>  
+
+ <ItemGroup>
+   <Compile Include="App.WPF.xaml.cs">
+     <DependentUpon>App.xaml</DependentUpon>
+   </Compile>
+   <Compile Include="AssemblyInfo.cs" />
+   <Compile Include="..\ToDoCalendar\MainPage.xaml.cs" />
+ </ItemGroup>  
+
+ <ItemGroup>
+   <ApplicationDefinition Include="..\ToDoCalendar\App.xaml">
+     <Generator>MSBuild:Compile</Generator>
+     <Link>App.xaml</Link>
+   </ApplicationDefinition>
+   <None Include="..\ToDoCalendar\MainPage.xaml" />
+   <Page Include="..\ToDoCalendar\MainPage.xaml">  
+     <Generator>MSBuild:Compile</Generator>
+   </Page>  
+ </ItemGroup>  
+
+ <ItemGroup>  
+   <Content Include="..\ToDoCalendar\Fonts\Inter_VariableFont_slnt_wght.ttf">  
+     <Link>Fonts\Inter_VariableFont_slnt_wght.ttf</Link>  
+   </Content>  
+   <Content Include="appicon.ico">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+   </Content>  
+ </ItemGroup>  
+
+ <ItemGroup>  
+   <ProjectReference Include="..\ToDoCalendarControl\ToDoCalendarControl.WPF.csproj" />  
+ </ItemGroup>  
+
+</Project>

@@ -357,7 +357,6 @@ namespace ToDoCalendarControl
                 Text = eventModel.Title,
                 Background = EventTextBackgroundWhenNotEditing,
                 Foreground = functionToDetermineEventForeground(),
-                IsSpellCheckEnabled = true,
                 BorderThickness = new Thickness(0),
                 Margin = EventTextBoxMarginWhenNotEditing,
                 Padding = new Thickness(0),
@@ -369,6 +368,12 @@ namespace ToDoCalendarControl
                 Height = double.NaN,
                 IsHitTestVisible = false
             };
+
+#if OPENSILVER
+            eventTitle.IsSpellCheckEnabled = true;
+#elif WINDOWS
+            eventTitle.SpellCheck.IsEnabled = true;
+#endif
 
             var borderToStartEditingOnMouseUpRatherThanMouseDown = new Border()
             {

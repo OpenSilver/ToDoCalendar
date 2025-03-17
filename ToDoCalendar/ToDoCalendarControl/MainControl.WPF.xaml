@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="ToDoCalendarControl.MainControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ToDoCalendarControl"
+    mc:Ignorable="d"
+    xmlns:controls="clr-namespace:ToDoCalendarControl.Controls"
+    xmlns:converters="clr-namespace:ToDoCalendarControl.Converters"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="White"
+    d:DesignHeight="932" d:DesignWidth="430">
+
+    <UserControl.Resources>
+        <local:LocalizedStrings x:Key="ToDoCalendarControl_LocalizedStrings"/>
+        <converters:PositiveNumberConverter x:Key="PositiveNumberConverter"/>
+    </UserControl.Resources>
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup>
+            <VisualState Name="DefaultState"/>
+            <VisualState Name="LandscapeState">
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainScrollViewer" Storyboard.TargetProperty="HorizontalScrollBarVisibility">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Auto"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainScrollViewer" Storyboard.TargetProperty="VerticalScrollBarVisibility">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Disabled"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainStackPanel" Storyboard.TargetProperty="Orientation">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <DoubleAnimation Storyboard.TargetName="DaysContainer" Storyboard.TargetProperty="ItemWidth"
+                                     From="0" To="{x:Static local:MainControl.LandscapeColumnWidth}" Duration="0"/>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadPrevButtonTransformer" Storyboard.TargetProperty="LayoutTransform">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <RotateTransform Angle="-90"/>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadNextButtonTransformer" Storyboard.TargetProperty="LayoutTransform">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <RotateTransform Angle="90"/>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadNextButtonTransformer" Storyboard.TargetProperty="HorizontalContentAlignment">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Center"/>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid>
+        <controls:DragAndDropRoot ThresholdForScrollViewerAutomaticScroll="90" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <Grid Background="White">
+                <ScrollViewer x:Name="MainScrollViewer" Grid.Row="0" BorderThickness="0" LayoutUpdated="OnMainScrollViewerLayoutUpdated" MouseWheel="OnMainScrollViewerMouseWheel"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="MainContainer" Margin="0,0,2,0">
+                        <StackPanel x:Name="MainStackPanel" Orientation="Vertical" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,-2,0">
+                            <Button x:Name="LoadPrevButtonTransformer" Visibility="Collapsed" FontSize="14" Padding="20,10,20,10" Background="#FF444444" Foreground="#FFCCCCCC" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysBefore_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Up_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" FontWeight="Bold"/>
+
+                            <Border BorderThickness="2,0,0,0" BorderBrush="#FF888888">
+                                <WrapPanel x:Name="DaysContainer" Orientation="Vertical" Background="White"
+                                           ItemWidth="{Binding ActualWidth, ElementName=MainContainer, Converter={StaticResource PositiveNumberConverter}}"/>
+                            </Border>
+
+                            <Button x:Name="LoadNextButtonTransformer" Visibility="Collapsed" FontSize="14" Padding="20,10,20,10" Margin="0,2,0,0" Foreground="#FFCCCCCC" HorizontalContentAlignment="Left" VerticalAlignment="Center" BorderThickness="0" Click="ButtonLoadMoreDaysAfter_Click" Content="{Binding LocalizedResources.ButtonClickToSeeMore_Down_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" Background="#FF444444" FontWeight="Bold"/>
+                        </StackPanel>
+
+                        <Popup Name="OptionsPopup" Placement="Top" VerticalOffset="-5">
+                            <local:EventOptions x:Name="EventOptionsControl" Visibility="Collapsed"/>
+                        </Popup>
+                    </Grid>
+                </ScrollViewer>
+                <Grid x:Name="ButtonsOuterContainer" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,0,0,-10" Visibility="Collapsed">
+                    <Image Visibility="Visible" Source="Images/main_button_background.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Height="165" Margin="0,0,0,-1"/>
+                    <controls:DragAndDropSource x:Name="DRAGSOURCE_NewEvent" DontCollapseDuringDrag="True" HorizontalAlignment="Center" VerticalAlignment="Bottom" DistanceForDragOperationToBeConsideredIntentional="50" Click="DragAndDropSource_Click" Margin="0,0,0,42">
+                        <Grid Width="80" Height="80" Margin="20,0,20,0" Cursor="Hand">
+                            <Ellipse Fill="{StaticResource PhoneAccentBrush}"/>
+                            <Path Data="M0,-1 V1 M-1,0 H1" Stretch="Fill" StrokeThickness="10" Stroke="White" Width="60" Height="60"/>
+                        </Grid>
+                    </controls:DragAndDropSource>
+                </Grid>
+                <Grid x:Name="ExplanationOverlay" Margin="0,-150,0,150" Visibility="Collapsed" MouseLeftButtonDown="ExplanationOverlay_MouseLeftButtonDown" Background="Transparent">
+                    <Grid IsHitTestVisible="False" Background="#BB000000" Margin="0,150,0,-150">
+                        <Image Source="Images/arrow_for_explanation.png" Stretch="Fill" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="224" Height="512" Margin="0,0,0,-1"/>
+                        <TextBlock MaxWidth="160" Margin="100,0,0,250" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding LocalizedResources.ExplanationForDragAndDrop_Text, Source={StaticResource ToDoCalendarControl_LocalizedStrings}}" />
+                    </Grid>
+                </Grid>
+                <local:NotificationControl x:Name="NotificationControl" Visibility="Collapsed"/>
+            </Grid>
+        </controls:DragAndDropRoot>
+
+        <Border Name="LoadingIndicator">
+            <Border.Background>
+                <SolidColorBrush Color="#512BD4" Opacity="0.3"/>
+            </Border.Background>
+            <TextBlock Text="Loading..." FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>

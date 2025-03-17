@@ -43,8 +43,12 @@ namespace ToDoCalendarControl.Controls
 
         public DragAndDropSource()
         {
-            Template = (ControlTemplate)XamlReader.Load(@"
-                <ControlTemplate TargetType=""ContentControl""
+#if OPENSILVER
+            Template = (ControlTemplate)XamlReader.Load(
+#elif WINDOWS
+            Template = (ControlTemplate)XamlReader.Parse(
+#endif
+            @"<ControlTemplate TargetType=""ContentControl""
                     xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
                     xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">
                         <Border x:Name=""PART_LayoutRoot"" Background=""Transparent"">
@@ -83,7 +87,7 @@ namespace ToDoCalendarControl.Controls
 
         private void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _originPosition = e.GetPosition(Application.Current.RootVisual);
+            _originPosition = e.GetPosition(Application.Current.MainWindow);
 
             if (!HoldToStartDrag)
             {
@@ -110,7 +114,7 @@ namespace ToDoCalendarControl.Controls
             ResetHoldTimer();
 
             StartDragOperation(_mouseLeftButtonDownSender,
-                    _mouseLeftButtonDownEventArgs.GetPosition(Application.Current.RootVisual),
+                    _mouseLeftButtonDownEventArgs.GetPosition(Application.Current.MainWindow),
                     _mouseLeftButtonDownEventArgs.GetPosition((FrameworkElement)_mouseLeftButtonDownSender));
             OnMouseMove(new Point(_dragDeltaOrigin.X, _dragDeltaOrigin.Y), distanceForDragOperationToBeConsideredIntentional: 0);
 
@@ -158,7 +162,7 @@ namespace ToDoCalendarControl.Controls
 
         private void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
         {
-            var pointerPosition = e.GetPosition(Application.Current.RootVisual);
+            var pointerPosition = e.GetPosition(Application.Current.MainWindow);
 
             if (_holdTimer.IsEnabled && !IsSameSpot(_originPosition, pointerPosition))
             {

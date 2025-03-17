@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AssemblyName>ToDoCalendarControl</AssemblyName>
+    <RootNamespace>ToDoCalendarControl</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Controller.cs" />
+    <Compile Include="Controls\EventOptions.xaml.cs" />
+    <Compile Include="Controls\NotificationControl.xaml.cs" />
+    <Compile Include="Converters\PositiveNumberConverter.cs" />
+    <Compile Include="Controls\CustomDragAndDropTarget.cs" />
+    <Compile Include="EventArgs\EditEventRequestedEventArgs.cs" />
+    <Compile Include="EventArgs\EditingModeStartedEventArgs.cs" />
+    <Compile Include="EventArgs\RefreshDayRequestedEventArgs.cs" />
+    <Compile Include="Helpers\AutoScrollIfAtEdgeOfScrollViewer.cs" />
+    <Compile Include="Controls\DragAndDropEventArgs.cs" />
+    <Compile Include="Controls\DragAndDropRoot.cs" />
+    <Compile Include="Controls\DragAndDropSource.cs" />
+    <Compile Include="Controls\DragAndDropTarget.xaml.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="Helpers\AnimationHelper.cs" />
+    <Compile Include="Helpers\CalendarServiceSaver.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
+    <Compile Include="Helpers\DatesHelpers.cs" />
+    <Compile Include="Helpers\FileSystemHelpers.cs" />
+    <Compile Include="Helpers\FileCalendar.cs" />
+    <Compile Include="Helpers\RenderingHelpers.cs" />
+    <Compile Include="Helpers\SerializationHelpers.cs" />
+    <Compile Include="Helpers\WeakEventsHelpers.cs" />
+    <Compile Include="Helpers\YamlSerializer.cs" />
+    <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="MainControl.xaml.cs">
+      <DependentUpon>MainControl.WPF.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DayModel.cs" />
+    <Compile Include="Model\EventModel.cs" />
+    <Compile Include="Model\EventType.cs" />
+    <Compile Include="Resources\AppResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DeviceEvent.cs" />
+    <Compile Include="Services\ICalendarService.cs" />
+    <Compile Include="Model\Model.cs" />
+    <Compile Include="Services\IKeyboardService.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\TestCalendarService.cs" />
+    <Compile Include="Services\WebServiceProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\arrow_for_explanation.png" />
+    <Resource Include="Images\main_button_background.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AppResources.de.resx" />
+    <EmbeddedResource Include="Resources\AppResources.en.resx" />
+    <EmbeddedResource Include="Resources\AppResources.es.resx" />
+    <EmbeddedResource Include="Resources\AppResources.fr.resx" />
+    <EmbeddedResource Include="Resources\AppResources.it.resx" />
+    <EmbeddedResource Include="Resources\AppResources.ja.resx" />
+    <EmbeddedResource Include="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.ru.resx" />
+    <EmbeddedResource Include="Resources\AppResources.zh-CN.resx" />
+    <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx" />
+    <EmbeddedResource Include="Resources\AppResources.zh.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Controls\EventOptions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NotificationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainControl.WPF.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+</Project>

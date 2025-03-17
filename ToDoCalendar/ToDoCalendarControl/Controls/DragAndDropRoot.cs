@@ -81,7 +81,7 @@ namespace ToDoCalendarControl.Controls
                 target.IsHighlightedForSignalingAvailableTargets = true;
 
             // Show ghost of element being dragged:
-            if (TryGetElementRect(source, Application.Current.RootVisual, out Rect initialAbsoluteCoordinates))
+            if (TryGetElementRect(source, Application.Current.MainWindow, out Rect initialAbsoluteCoordinates))
             {
                 // Create a ghost for the dragged control:
                 var popup = new Popup();
@@ -179,7 +179,7 @@ namespace ToDoCalendarControl.Controls
                 // Find closest target:
                 DragAndDropTarget closestTarget = null;
                 double closesTargetDistance = double.MaxValue;
-                var rootControl = Application.Current.RootVisual;
+                var rootControl = Application.Current.MainWindow;
                 foreach (var target in GetTargetsWithGiveGroupId(_informationAboutElementBeingDragged.GroupId))
                 {
                     if (TryGetElementRect(target, rootControl, out Rect targetRect))

@@ -1,4 +1,5 @@
 ﻿using OpenSilver;
+using OpenSilver.Themes.Modern;
 using System.Windows;
 using ToDoCalendar.Utils;
 
@@ -10,6 +11,7 @@ namespace ToDoCalendar
         {
             InitializeComponent();
 
+            Theme = new ModernTheme();
             Startup += App_Startup;
         }
 
@@ -18,7 +20,7 @@ namespace ToDoCalendar
             await FontLoader.LoadAppFonts();
 
             var mainPage = new MainPage();
-            Window.Current.Content = mainPage;
+            MainWindow.Content = mainPage;
 
             // prevent text selection
             Interop.ExecuteJavaScriptVoidAsync("$0.classList.add('opensilver-pointer-captured')", Interop.GetDiv(mainPage));

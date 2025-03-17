@@ -9,9 +9,10 @@
     Foreground="White"
     d:DesignHeight="480" d:DesignWidth="480"
     Background="{x:Null}">
+    
 	<UserControl.Resources>
-		<Storyboard x:Name="FadeInFadeOutStoryboard">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="border">
+        <Storyboard x:Key="FadeInFadeOutStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="X" Storyboard.TargetName="translateTransform">
 				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
 					<EasingDoubleKeyFrame.EasingFunction>
 						<QuarticEase EasingMode="EaseOut"/>
@@ -32,7 +33,7 @@
     <Grid x:Name="LayoutRoot" Background="{x:Null}">
         <Border x:Name="border" Margin="0,50,0,0" Background="Black" Padding="13,8,25,8" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Opacity="0">
         	<Border.RenderTransform>
-        		<CompositeTransform TranslateX="150"/>
+                <TranslateTransform x:Name="translateTransform" X="150"/>
         	</Border.RenderTransform>
             <TextBlock x:Name="MainText" Text="Notification"/>
         </Border>

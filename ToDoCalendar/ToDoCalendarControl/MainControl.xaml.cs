@@ -42,7 +42,7 @@ namespace ToDoCalendarControl
             InitializeComponent();
 
             // If we are not at Design Time:
-            if (!DesignerProperties.IsInDesignTool)
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 _keyboardService = ServiceLocator.Provider.GetService<IKeyboardService>();
 
@@ -53,7 +53,7 @@ namespace ToDoCalendarControl
                 _controller.CalendarService.CalendarModified += OnCalendarModified;
             }
 
-            this.InvokeOnLayoutUpdated(async () => await RefreshAll());
+            LayoutUpdated += OnLayoutUpdated;
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
@@ -64,18 +64,35 @@ namespace ToDoCalendarControl
             }
         }
 
+        private async void OnLayoutUpdated(object sender, EventArgs e)
+        {
+            LayoutUpdated -= OnLayoutUpdated;
+            await RefreshAll();
+        }
+
         protected override void OnRenderSizeChanged(SizeChangedInfo info)
         {
             base.OnRenderSizeChanged(info);
 
             var stateName = IsLandscapeMode ? "LandscapeState" : "DefaultState";
-            VisualStateManager.GoToState(Parent as Control, stateName, false);
+#if OPENSILVER
+            var control = Parent as Control;
+#elif WINDOWS
+            var control = Parent as FrameworkElement;
+#endif
+            VisualStateManager.GoToState(control, stateName, false);
         }
 
         private static void ScrollIntoView(ScrollViewer viewer, FrameworkElement element, double verticalMargin)
         {
+#if OPENSILVER
             if (element.GetBoundsRelativeTo(viewer) is not Rect itemRect)
                 return;
+#elif WINDOWS
+            if (element.TransformToVisual(viewer) is not System.Windows.Media.GeneralTransform transform)
+                return;
+            var itemRect = transform.TransformBounds(new Rect(element.RenderSize));
+#endif
 
             if (itemRect.Top - verticalMargin < 0 || itemRect.Bottom + verticalMargin > viewer.ViewportHeight)
             {
@@ -250,7 +267,10 @@ namespace ToDoCalendarControl
 
             if (!IsLandscapeMode)
             {
+#if OPENSILVER
                 MainScrollViewer.ScrollIntoView(textBox, HorizontalScrollMargin, 0, TimeSpan.Zero);
+#elif WINDOWS // todo
+#endif
             }
 
             var isKeyboardAvailable = _keyboardService == null || _keyboardService.IsKeyboardVisible;
@@ -303,7 +323,10 @@ namespace ToDoCalendarControl
                 EventOptionsControl.Visibility == Visibility.Visible &&
                 EventOptionsControl.TextBox is FrameworkElement element)
             {
+#if OPENSILVER
                 MainScrollViewer.ScrollIntoView(element, HorizontalScrollMargin, 0, TimeSpan.Zero);
+#elif WINDOWS // todo
+#endif
             }
         }
 

@@ -141,7 +141,7 @@ namespace ToDoCalendarControl
         internal void UpdateTypeToDoHintIfVisible()
         {
             if (TextBox?.Parent is Panel panel &&
-                panel.Children.LastOrDefault() is TextBlock hint)
+                panel.Children.Cast<UIElement>().LastOrDefault() is TextBlock hint)
             {
                 hint.Text = AppResources.TypeToDoHint;
             }
@@ -150,7 +150,7 @@ namespace ToDoCalendarControl
         internal void RemoveTypeToDoHint()
         {
             if (TextBox?.Parent is Panel panel &&
-                panel.Children.LastOrDefault() is TextBlock hint)
+                panel.Children.Cast<UIElement>().LastOrDefault() is TextBlock hint)
             {
                 TextBox.TextChanged -= OnTextChanged;
                 panel.Children.Remove(hint);

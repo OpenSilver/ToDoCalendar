@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -102,7 +103,7 @@ namespace ToDoCalendarControl.Helpers
             GeneralTransform generalTransform = null;
             try
             {
-                generalTransform = thumb.TransformToVisual(Application.Current.RootVisual);
+                generalTransform = thumb.TransformToVisual(Application.Current.MainWindow);
             }
             catch (ArgumentException)
             {
@@ -138,18 +139,20 @@ namespace ToDoCalendarControl.Helpers
             bool scrollShouldTakePlace = false;
             actionToScroll = null;
 
-            // First, look at the popups (Silverlight only, and useful only if the tree is on a popup such as a ChildWindow):
+#if OPENSILVER
+            // First, look at the popups (OpenSilver only, and useful only if the tree is on a popup such as a ChildWindow):
             foreach (var popup in VisualTreeHelper.GetOpenPopups()) //todo: verify that, in case of a popup, the "position" variable is correct (in fact, if the popup is not in position (0,0), the call to "VisualTreeHelper.FindElementsInHostCoordinates" may be wrong)
             {
                 scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, popup, _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
                 if (scrollShouldTakePlace)
                     break;
             }
+#endif
 
             // If not found in the popups, look at the rest of the application:
             if (!scrollShouldTakePlace)
             {
-                scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, Application.Current.RootVisual, _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
+                scrollShouldTakePlace = DetermineActionToScrollIfAny(_absolutePosition, Application.Current.MainWindow, _thresholdForScrollViewerAutomaticScroll, out actionToScroll);
             }
 
             return scrollShouldTakePlace;
@@ -235,7 +238,7 @@ namespace ToDoCalendarControl.Helpers
             if (!double.IsNaN(scrollViewer.ActualWidth) && !double.IsNaN(scrollViewer.ActualHeight))
             {
                 // Get the absolute coordinates of the ScrollViewer:
-                GeneralTransform gt = scrollViewer.TransformToVisual(Application.Current.RootVisual);
+                GeneralTransform gt = scrollViewer.TransformToVisual(Application.Current.MainWindow);
                 Point scrollViewerTopLeftPosition = gt.Transform(new Point(0, 0));
                 Point scrollViewerBottomRightPosition = gt.Transform(new Point(scrollViewer.ActualWidth, scrollViewer.ActualHeight));
 
@@ -267,6 +270,7 @@ namespace ToDoCalendarControl.Helpers
 
         private static IEnumerable<ScrollViewer> FindScrollViewersUnderPointer(Point position, UIElement rootControl)
         {
+#if OPENSILVER
             var list = VisualTreeHelper.FindElementsInHostCoordinates(position, rootControl);
             foreach (UIElement uiElement in list)
             {
@@ -275,6 +279,9 @@ namespace ToDoCalendarControl.Helpers
                     yield return viewer;
                 }
             }
+#elif WINDOWS // todo
+            return Enumerable.Empty<ScrollViewer>();
+#endif
         }
     }
 }
