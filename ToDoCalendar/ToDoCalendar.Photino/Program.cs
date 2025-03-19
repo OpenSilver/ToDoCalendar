@@ -1,6 +1,6 @@
-﻿using Photino.NET;
+﻿using OpenSilver.Photino.Runner;
+using Photino.NET;
 using System.Drawing;
-using ToDoCalendar.Photino.Runner;
 using ToDoCalendarControl.Services;
 
 namespace HelloPhotinoApp
@@ -22,7 +22,7 @@ namespace HelloPhotinoApp
             var window = new PhotinoWindow()
                 .SetTitle(windowTitle);
 
-            if (System.OperatingSystem.IsLinux())
+            if (OperatingSystem.IsLinux())
             {
                 window.SetUseOsDefaultSize(false).SetSize(new Size(1024, 800));
             }

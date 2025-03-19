@@ -37,26 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="OpenSilver.Photino" Version="3.3.0-private-2025-03-20-105259" />
     <PackageReference Include="Photino.NET" Version="3.2.3" />
-    <PackageReference Include="OpenSilver.WebAssembly" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ToDoCalendar\ToDoCalendar.csproj" />
   </ItemGroup>
-
-  <!-- Temporary -->
-  <Target Name="_CopyAdditionalResources"
-          BeforeTargets="CopyAdditionalFiles"
-          DependsOnTargets="ResolveAssemblyReferences">
-
-    <CallTarget Targets="_CopyWasmResources" />
-
-    <ItemGroup>
-      <Content Remove="wwwroot\**" />
-      <Content Include="wwwroot\**">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-  </Target>
 </Project>
