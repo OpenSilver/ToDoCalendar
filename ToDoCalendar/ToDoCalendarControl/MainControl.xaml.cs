@@ -51,9 +51,9 @@ namespace ToDoCalendarControl
                 _controller.EditingModeStopped += Controller_EditingModeStopped;
                 _controller.QuitEditingModeRequested += Controller_QuitEditingModeRequested;
                 _controller.CalendarService.CalendarModified += OnCalendarModified;
-            }
 
-            LayoutUpdated += OnLayoutUpdated;
+                LayoutUpdated += OnLayoutUpdated;
+            }
 
             // Register other events:
             ButtonsOuterContainer.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(ButtonsOuterContainer_MouseLeftButtonDown), true);
@@ -62,6 +62,10 @@ namespace ToDoCalendarControl
             {
                 _keyboardService.KeyboardStateChanged += OnKeyboardStateChanged;
             }
+
+#if WINDOWS        
+            OptionsPopup.AllowsTransparency = true;
+#endif
         }
 
         private async void OnLayoutUpdated(object sender, EventArgs e)
@@ -258,7 +262,11 @@ namespace ToDoCalendarControl
             EventOptionsControl.TextBox = textBox;
             EventOptionsControl.MaxWidth = Math.Min(ActualWidth, MaxOptionsPopupWidth);
             EventOptionsControl.UpdateButtonsVisibility();
+#if OPENSILVER
             AnimationHelper.ShowWithAnimation(EventOptionsControl);
+#elif WINDOWS
+            EventOptionsControl.Visibility = Visibility.Visible;
+#endif
             OptionsPopup.PlacementTarget = textBox;
             OptionsPopup.IsOpen = true;
 
@@ -298,8 +306,12 @@ namespace ToDoCalendarControl
 
         private void Controller_QuitEditingModeRequested(object sender, EventArgs e)
         {
+#if OPENSILVER
             // By removing the focus of the TextBox, we quit the editing mode:
             Focus();
+#elif WINDOWS
+            Controller_EditingModeStopped(sender, e);
+#endif
         }
 
         private void DragAndDropSource_Click(object sender, EventArgs e)
