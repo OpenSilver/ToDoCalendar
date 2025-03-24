@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenSilver" Version="3.3.0-private-2025-03-21-112354" />
+    <PackageReference Include="OpenSilver" Version="3.3.0-preview-2025-03-21-090109-91d1a7de" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 

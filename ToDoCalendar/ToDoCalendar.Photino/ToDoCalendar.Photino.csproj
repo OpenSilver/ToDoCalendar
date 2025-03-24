@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenSilver.Photino" Version="3.3.0-private-2025-03-21-112354" />
+    <PackageReference Include="OpenSilver.Photino" Version="3.3.0-preview-2025-03-21-090109-91d1a7de" />
     <PackageReference Include="Photino.NET" Version="3.2.3" />
   </ItemGroup>
 
