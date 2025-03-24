@@ -1,6 +1,6 @@
-﻿using Photino.NET;
+﻿using OpenSilver.Photino;
+using Photino.NET;
 using System.Drawing;
-using ToDoCalendar.Photino.Runner;
 using ToDoCalendarControl.Services;
 
 namespace HelloPhotinoApp
@@ -22,7 +22,7 @@ namespace HelloPhotinoApp
             var window = new PhotinoWindow()
                 .SetTitle(windowTitle);
 
-            if (System.OperatingSystem.IsLinux())
+            if (OperatingSystem.IsLinux())
             {
                 window.SetUseOsDefaultSize(false).SetSize(new Size(1024, 800));
             }
@@ -37,9 +37,8 @@ namespace HelloPhotinoApp
                 // Let's make this one fixed instead.
                 .SetResizable(true)
                 .SetLogVerbosity(0)
+                .ConfigureOpenSilver<ToDoCalendar.App>()
                 .Load("wwwroot/index.html"); // Can be used with relative path strings or "new URI()" instance to load a website.
-
-            _ = new PhotinoRunner(window).RunApplicationAsync<ToDoCalendar.App>();
 
             window.WaitForClose(); // Starts the application event loop
         }
