@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
-    <PackageReference Include="OpenSilver.WebAssembly" Version="3.3.0-preview-2025-03-21-090109-91d1a7de" />
+    <PackageReference Include="OpenSilver.WebAssembly" Version="3.3.0-preview-2025-05-09-165151-7c797cdd" />
   </ItemGroup>
 
   <PropertyGroup>

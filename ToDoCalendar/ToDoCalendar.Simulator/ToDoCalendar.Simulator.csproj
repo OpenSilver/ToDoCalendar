@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenSilver.Simulator" Version="3.3.0-preview-2025-03-21-090109-91d1a7de" Condition="'$(OS)' == 'Windows_NT'" />
+    <PackageReference Include="OpenSilver.Simulator" Version="3.3.0-preview-2025-05-09-165151-7c797cdd" Condition="'$(OS)' == 'Windows_NT'" />
   </ItemGroup>
 
   <ItemGroup>
