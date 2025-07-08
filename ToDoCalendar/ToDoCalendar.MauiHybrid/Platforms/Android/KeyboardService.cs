@@ -1,52 +1,52 @@
 ﻿using ToDoCalendarControl.Services;
-using Platform = Microsoft.Maui.ApplicationModel.Platform;
+using Rect = Android.Graphics.Rect;
 
 namespace ToDoCalendar.MauiHybrid.Platforms.Android;
 
 public class KeyboardService : IKeyboardService
 {
-    public bool IsKeyboardVisible { get; private set; }
+    private bool _isKeyboardVisible;
+
+    private Action<Rect>? _getWindowVisibleDisplayFrame;
+    private Func<int>? _getScreenHeight;
 
     public event Action<bool>? KeyboardStateChanged;
 
+    public bool IsKeyboardVisible => _isKeyboardVisible;
+
     public KeyboardService()
     {
-        var rootView = Platform.CurrentActivity?.Window?.DecorView.FindViewById(global::Android.Resource.Id.Content);
+        SetupKeyboardListener();
+    }
 
-        if (rootView != null)
+    private void SetupKeyboardListener()
+    {
+        var activity = Platform.CurrentActivity;
+        if (activity?.Window?.DecorView?.RootView?.ViewTreeObserver != null)
         {
-            var listener = new KeyboardListener(() => rootView.Height,
-                isOpen =>
-                {
-                    IsKeyboardVisible = isOpen;
-                    KeyboardStateChanged?.Invoke(IsKeyboardVisible);
-                });
-            rootView.ViewTreeObserver?.AddOnGlobalLayoutListener(listener);
+            var rootView = activity.Window.DecorView.RootView;
+            rootView.ViewTreeObserver.GlobalLayout += OnGlobalLayout;
+            _getWindowVisibleDisplayFrame = rootView.GetWindowVisibleDisplayFrame;
+            _getScreenHeight = () => rootView.Height;
         }
     }
 
-    private class KeyboardListener : Java.Lang.Object, global::Android.Views.ViewTreeObserver.IOnGlobalLayoutListener
+    private void OnGlobalLayout(object? sender, EventArgs e)
     {
-        private readonly Func<int> _getViewHeight;
-        private readonly Action<bool> _stateChanged;
+        if (_getWindowVisibleDisplayFrame == null || _getScreenHeight == null) return;
 
-        private int _previousHeight;
+        var rect = new Rect();
+        _getWindowVisibleDisplayFrame(rect);
 
-        public KeyboardListener(Func<int> getViewHeight, Action<bool> stateChanged)
+        var screenHeight = _getScreenHeight();
+        var keypadHeight = screenHeight - rect.Bottom;
+
+        var isKeyboardVisible = keypadHeight > screenHeight * 0.15;
+
+        if (_isKeyboardVisible != isKeyboardVisible)
         {
-            _getViewHeight = getViewHeight;
-            _stateChanged = stateChanged;
-            _previousHeight = _getViewHeight();
-        }
-
-        public void OnGlobalLayout()
-        {
-            var height = _getViewHeight();
-            int heightDiff = _previousHeight - height;
-            bool isKeyboardOpen = heightDiff > 200; // Threshold to detect keyboard
-
-            _stateChanged(isKeyboardOpen);
-            _previousHeight = height;
+            _isKeyboardVisible = isKeyboardVisible;
+            KeyboardStateChanged?.Invoke(isKeyboardVisible);
         }
     }
 }
