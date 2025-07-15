@@ -74,7 +74,7 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-        <PackageReference Include="OpenSilver.MauiHybrid" Version="3.3.0-preview-2025-07-07-132018-3a1ef60c" />
+        <PackageReference Include="OpenSilver.MauiHybrid" Version="3.3.0-preview-2025-07-15-080914-073dd903" />
     </ItemGroup>
 
     <ItemGroup>

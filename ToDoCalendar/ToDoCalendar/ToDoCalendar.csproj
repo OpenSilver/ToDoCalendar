@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenSilver" Version="3.3.0-preview-2025-07-07-132018-3a1ef60c" />
+    <PackageReference Include="OpenSilver" Version="3.3.0-preview-2025-07-15-080914-073dd903" />
     <PackageReference Include="OpenSilver.Themes.Modern" Version="3.3.0-preview-2025-06-26-091043-9aad8feb" />
   </ItemGroup>
 
